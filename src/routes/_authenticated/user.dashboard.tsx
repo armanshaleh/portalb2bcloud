@@ -8,7 +8,6 @@ import {
   ExternalLink,
   FileText,
   Landmark,
-  Loader2,
   LogOut,
   Server,
 } from "lucide-react";
@@ -52,7 +51,6 @@ function statusBadge(status: string) {
 function UserDashboard() {
   const queryClient = useQueryClient();
   const overview = Route.useLoaderData();
-  const refreshFn = useServerFn(getMyCustomerOverview);
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
@@ -68,11 +66,6 @@ function UserDashboard() {
     if (data) window.open(data.signedUrl, "_blank", "noopener");
   }
 
-  async function refresh() {
-    const fresh = await refreshFn();
-    void queryClient.setQueryData(["overview"], fresh);
-    window.location.reload();
-  }
 
   const customer = overview.customer;
 
