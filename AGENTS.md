@@ -38,3 +38,8 @@
   monitor only via an explicit `monitor_assignments` row (`can_view_monitor` RLS) — never by default.
 - UI shell: shared `AppShell` (collapsible sidebar) for all signed-in pages; theme tokens
   in `src/styles.css`, light by default with `.dark` toggle persisted in localStorage.
+- Billing documents/items are written only through server functions (`billing.functions.ts`) with the service-role client after role checks; totals are computed server-side by `computeTotals`, numbers by the `assign_billing_number` trigger. Clients only see APPROVED/SENT/PAID docs (RLS).
+- Approve/reject of billing documents is superuser-only; send/paid requires prior approval.
+- Billing lifecycle runs daily via the `/api/public/cron/billing-lifecycle` route (cron Bearer auth); stage rules live in `src/lib/lifecycle.ts` and `lifecycle_stage` prevents repeats.
+- Tickets: clients insert via `createTicket` (RLS owner insert); staff change status/E-Pass directly via RLS. Private files (KYC, payment proofs, ticket letters) all live in `legal-documents` under `{user_id}/` and are read via short signed URLs.
+- Notifications are created by DB triggers / server code only; clients can read/mark their own.
