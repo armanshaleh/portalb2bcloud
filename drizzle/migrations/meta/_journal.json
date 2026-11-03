@@ -15,6 +15,13 @@
       "when": 1793686162365,
       "tag": "0001_invitations_and_uptime_monitors",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793689662966,
+      "tag": "0002_announcements_notifications",
+      "breakpoints": true
     }
   ]
 }
