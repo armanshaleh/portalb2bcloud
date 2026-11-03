@@ -153,6 +153,63 @@ export type Database = {
           },
         ]
       }
+      billing_attachments: {
+        Row: {
+          created_at: string
+          customer_id: string
+          document_id: string
+          file_size: number
+          id: string
+          kind: Database["public"]["Enums"]["payment_kind"]
+          mime_type: string
+          original_name: string
+          status: Database["public"]["Enums"]["legal_doc_status"]
+          storage_path: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          document_id: string
+          file_size: number
+          id?: string
+          kind: Database["public"]["Enums"]["payment_kind"]
+          mime_type: string
+          original_name: string
+          status?: Database["public"]["Enums"]["legal_doc_status"]
+          storage_path: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          document_id?: string
+          file_size?: number
+          id?: string
+          kind?: Database["public"]["Enums"]["payment_kind"]
+          mime_type?: string
+          original_name?: string
+          status?: Database["public"]["Enums"]["legal_doc_status"]
+          storage_path?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billing_attachments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "billing_attachments_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "billing_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       billing_doc_counters: {
         Row: {
           customer_type: Database["public"]["Enums"]["customer_type"]
@@ -190,6 +247,7 @@ export type Database = {
           due_date: string | null
           id: string
           issue_date: string
+          lifecycle_stage: string | null
           notes: string | null
           paid_at: string | null
           revision_note: string | null
@@ -211,6 +269,7 @@ export type Database = {
           due_date?: string | null
           id?: string
           issue_date?: string
+          lifecycle_stage?: string | null
           notes?: string | null
           paid_at?: string | null
           revision_note?: string | null
@@ -232,6 +291,7 @@ export type Database = {
           due_date?: string | null
           id?: string
           issue_date?: string
+          lifecycle_stage?: string | null
           notes?: string | null
           paid_at?: string | null
           revision_note?: string | null
@@ -383,6 +443,51 @@ export type Database = {
             columns: ["customer_id"]
             isOneToOne: false
             referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_prices: {
+        Row: {
+          customer_id: string
+          id: string
+          product_id: string
+          setup_fee: number
+          unit_price: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          customer_id: string
+          id?: string
+          product_id: string
+          setup_fee?: number
+          unit_price: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          customer_id?: string
+          id?: string
+          product_id?: string
+          setup_fee?: number
+          unit_price?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_prices_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_prices_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
             referencedColumns: ["id"]
           },
         ]
@@ -682,6 +787,112 @@ export type Database = {
         }
         Relationships: []
       }
+      ticket_counters: {
+        Row: {
+          last_seq: number
+          yr: number
+        }
+        Insert: {
+          last_seq?: number
+          yr: number
+        }
+        Update: {
+          last_seq?: number
+          yr?: number
+        }
+        Relationships: []
+      }
+      ticket_messages: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          is_staff: boolean
+          ticket_id: string
+        }
+        Insert: {
+          author_id?: string
+          body: string
+          created_at?: string
+          id?: string
+          is_staff?: boolean
+          ticket_id: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          is_staff?: boolean
+          ticket_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tickets: {
+        Row: {
+          attachment_path: string | null
+          category: Database["public"]["Enums"]["ticket_category"]
+          created_at: string
+          created_by: string | null
+          customer_id: string
+          description: string | null
+          details: Json
+          epass_code: string | null
+          id: string
+          status: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          ticket_no: string | null
+          updated_at: string
+        }
+        Insert: {
+          attachment_path?: string | null
+          category?: Database["public"]["Enums"]["ticket_category"]
+          created_at?: string
+          created_by?: string | null
+          customer_id: string
+          description?: string | null
+          details?: Json
+          epass_code?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["ticket_status"]
+          subject: string
+          ticket_no?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attachment_path?: string | null
+          category?: Database["public"]["Enums"]["ticket_category"]
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string
+          description?: string | null
+          details?: Json
+          epass_code?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["ticket_status"]
+          subject?: string
+          ticket_no?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tickets_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -816,6 +1027,10 @@ export type Database = {
         | "AUTHORIZATION_LETTER"
         | "OTHER"
       monitor_status: "UP" | "DOWN" | "DEGRADED" | "MAINTENANCE" | "PENDING"
+      payment_kind:
+        | "PROOF_OF_TRANSFER"
+        | "PPH23_CERTIFICATE"
+        | "SIGNED_DOCUMENT"
       product_category:
         | "COLOCATION"
         | "DEDICATED_INTERNET"
@@ -826,6 +1041,15 @@ export type Database = {
         | "ACTIVE"
         | "SUSPENDED"
         | "TERMINATED"
+      ticket_category:
+        | "GENERAL"
+        | "TECHNICAL"
+        | "VISIT_DC"
+        | "GOODS_IN"
+        | "GOODS_OUT"
+        | "REACTIVATION"
+        | "BILLING"
+      ticket_status: "OPEN" | "IN_PROGRESS" | "APPROVED" | "REJECTED" | "CLOSED"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -993,6 +1217,11 @@ export const Constants = {
         "OTHER",
       ],
       monitor_status: ["UP", "DOWN", "DEGRADED", "MAINTENANCE", "PENDING"],
+      payment_kind: [
+        "PROOF_OF_TRANSFER",
+        "PPH23_CERTIFICATE",
+        "SIGNED_DOCUMENT",
+      ],
       product_category: [
         "COLOCATION",
         "DEDICATED_INTERNET",
@@ -1005,6 +1234,16 @@ export const Constants = {
         "SUSPENDED",
         "TERMINATED",
       ],
+      ticket_category: [
+        "GENERAL",
+        "TECHNICAL",
+        "VISIT_DC",
+        "GOODS_IN",
+        "GOODS_OUT",
+        "REACTIVATION",
+        "BILLING",
+      ],
+      ticket_status: ["OPEN", "IN_PROGRESS", "APPROVED", "REJECTED", "CLOSED"],
     },
   },
 } as const

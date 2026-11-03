@@ -29,6 +29,13 @@
       "when": 1793690115753,
       "tag": "0003_billing_documents",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793690508788,
+      "tag": "0004_tickets_payments_lifecycle",
+      "breakpoints": true
     }
   ]
 }
