@@ -58,13 +58,13 @@ function StaffAnnouncements() {
   const refresh = () => qc.invalidateQueries({ queryKey: ["announcements"] });
 
   async function publish(published: boolean) {
-    if (title.trim().length < 3 || body.trim().length < 3) return toast.error("Title and message are required.");
+    if (title.trim().length < 3 || body.trim().length < 3) { toast.error("Title and message are required."); return; }
     setSaving(true);
     const { error } = await supabase
       .from("announcements")
       .insert({ title: title.trim(), body: body.trim(), category, is_published: published });
     setSaving(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(published ? "Announcement published to all verified customers." : "Saved as draft.");
     setTitle("");
     setBody("");
@@ -73,13 +73,13 @@ function StaffAnnouncements() {
 
   async function togglePublish(a: Announcement) {
     const { error } = await supabase.from("announcements").update({ is_published: !a.is_published }).eq("id", a.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void refresh();
   }
   async function remove(a: Announcement) {
     if (!confirm(`Delete "${a.title}"?`)) return;
     const { error } = await supabase.from("announcements").delete().eq("id", a.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     void refresh();
   }
 
