@@ -43,3 +43,5 @@
 - Billing lifecycle runs daily via the `/api/public/cron/billing-lifecycle` route (cron Bearer auth); stage rules live in `src/lib/lifecycle.ts` and `lifecycle_stage` prevents repeats.
 - Tickets: clients insert via `createTicket` (RLS owner insert); staff change status/E-Pass directly via RLS. Private files (KYC, payment proofs, ticket letters) all live in `legal-documents` under `{user_id}/` and are read via short signed URLs.
 - Notifications are created by DB triggers / server code only; clients can read/mark their own.
+- Pre-orders: clients insert PENDING_APPROVAL rows via RLS; only `reviewPreOrder` (superuser) changes status and creates the linked QUO via `preOrderLines` + `computeTotals`.
+- Contracts: staff upload via `uploadContract` into the customer's `{user_id}/` folder; viewed only through `ContractViewer` (blob URL + identity watermark, no download control).
