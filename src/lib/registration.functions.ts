@@ -30,6 +30,7 @@ const contactSchema = z.object({
 });
 
 export const registerCustomerSchema = z.object({
+  inviteToken: z.string().regex(/^[a-f0-9]{64}$/, "A valid invitation is required."),
   customerType: z.enum(["ENT", "IND"]),
   email: z.string().trim().email().max(255),
   password: z.string().min(8, "Password must be at least 8 characters").max(72),
@@ -85,6 +86,25 @@ export const registerCustomer = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }): Promise<RegisterCustomerResult> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { hashInviteToken } = await import("@/lib/invitation.functions");
+
+    // Invitation-only: the token must be open, unexpired, and match the email + type
+    const tokenHash = await hashInviteToken(data.inviteToken);
+    const { data: invite } = await supabaseAdmin
+      .from("client_invitations")
+      .select("id, email, customer_type, expires_at, accepted_at, revoked_at")
+      .eq("token_hash", tokenHash)
+      .maybeSingle();
+    if (
+      !invite ||
+      invite.accepted_at ||
+      invite.revoked_at ||
+      new Date(invite.expires_at).getTime() < Date.now() ||
+      invite.email !== data.email.toLowerCase() ||
+      invite.customer_type !== data.customerType
+    ) {
+      return { ok: false, error: "This invitation is not valid. Ask our team for a new link." };
+    }
 
     // Required document policy per entity format
     const requiredDocs: string[] = data.customerType === "ENT" ? ["AKTA", "KTP_DIRECTOR"] : ["KTP"];
@@ -214,6 +234,11 @@ export const registerCustomer = createServerFn({ method: "POST" })
         entity_id: customerId,
         details: { customer_code: customer.customer_code, customer_type: data.customerType },
       });
+
+      await supabaseAdmin
+        .from("client_invitations")
+        .update({ accepted_at: new Date().toISOString() })
+        .eq("id", invite.id);
 
       return { ok: true, customerCode: customer.customer_code as string };
     } catch {
