@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { getMyIdentity } from "@/lib/identity.functions";
+import { bootstrapSuperuser } from "@/lib/registration.functions";
 import { BRAND } from "@/lib/brand";
 import { setRememberFlag } from "@/lib/session-pref";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,7 @@ export const Route = createFileRoute("/auth")({
 
 function AuthPage() {
   const identityFn = useServerFn(getMyIdentity);
+  const bootstrapFn = useServerFn(bootstrapSuperuser);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,6 +48,8 @@ function AuthPage() {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
+    // One-time owner provisioning; the server fn no-ops once a superuser exists.
+    void bootstrapFn().catch(() => undefined);
     let cancelled = false;
     (async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -66,7 +70,7 @@ function AuthPage() {
     return () => {
       cancelled = true;
     };
-  }, [identityFn, navigate]);
+  }, [bootstrapFn, identityFn, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

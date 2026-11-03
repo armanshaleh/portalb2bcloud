@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import type { Database } from "@/integrations/supabase/types";
 
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const ALLOWED_MIME = ["image/jpeg", "image/png", "application/pdf"] as const;
@@ -105,9 +106,13 @@ export const registerCustomer = createServerFn({ method: "POST" })
       email_confirm: true, // staff verification gates real use; user logs in to a restricted dashboard
     });
     if (createError || !created.user) {
+      console.error("[registerCustomer] createUser failed:", createError?.status, createError?.message, createError?.code);
       const msg = (createError?.message ?? "").toLowerCase();
       if (msg.includes("already") || msg.includes("duplicate")) {
         return { ok: false, error: "This email is already registered." };
+      }
+      if (createError?.code === "weak_password") {
+        return { ok: false, error: createError.message };
       }
       return { ok: false, error: "Could not create the account. Please try again." };
     }
@@ -115,13 +120,7 @@ export const registerCustomer = createServerFn({ method: "POST" })
 
     try {
       // Upload documents under the user's own folder with UUID names
-      const docRows: Array<{
-        doc_type: string;
-        storage_path: string;
-        original_name: string;
-        mime_type: string;
-        file_size: number;
-      }> = [];
+      const docRows: Database["public"]["Tables"]["legal_documents"]["Insert"][] = [];
       for (const doc of data.documents) {
         const path = `${user.id}/${crypto.randomUUID()}.${mimeExtension(doc.mimeType)}`;
         const bytes = base64ToBytes(doc.dataBase64);
@@ -130,6 +129,7 @@ export const registerCustomer = createServerFn({ method: "POST" })
           .upload(path, bytes, { contentType: doc.mimeType, upsert: false });
         if (uploadError) throw new Error("upload");
         docRows.push({
+          customer_id: "", // set after the customer row is created
           doc_type: doc.docType,
           storage_path: path,
           original_name: doc.originalName.slice(0, 255),
@@ -142,6 +142,8 @@ export const registerCustomer = createServerFn({ method: "POST" })
         .from("customers")
         .insert({
           user_id: user.id,
+          // assigned by the assign_customer_code trigger before the row is stored
+          customer_code: "AUTO",
           customer_type: data.customerType,
           status: "PENDING_VERIFICATION",
           company_name: data.companyName ?? null,
@@ -159,33 +161,41 @@ export const registerCustomer = createServerFn({ method: "POST" })
       if (customerError || !customer) throw new Error("customer");
 
       const customerId = customer.id as string;
-      await supabaseAdmin
-        .from("legal_documents")
-        .insert(docRows.map((row) => ({ ...row, customer_id: customerId })));
+      await supabaseAdmin.from("legal_documents").insert(
+        docRows.map((row) => ({ ...row, customer_id: customerId })),
+      );
 
-      const contacts =
-        data.customerType === "ENT"
-          ? [
-              { customer_id: customerId, contact_type: "BILLING", ...data.billingContact },
-              data.technicalContact
-                ? {
-                    customer_id: customerId,
-                    contact_type: "TECHNICAL",
-                    ...data.technicalContact,
-                  }
-                : null,
-            ].filter(Boolean)
-          : [
-              {
-                customer_id: customerId,
-                contact_type: "BILLING",
-                name: data.fullName ?? "",
-                email: data.email.toLowerCase(),
-                phone: data.billingContact?.phone ?? null,
-                position: "Owner",
-              },
-            ];
-      await supabaseAdmin.from("customer_contacts").insert(contacts);
+      const contactRows: Database["public"]["Tables"]["customer_contacts"]["Insert"][] = [];
+      if (data.customerType === "ENT") {
+        contactRows.push({
+          customer_id: customerId,
+          contact_type: "BILLING",
+          name: data.billingContact.name,
+          email: data.billingContact.email,
+          phone: data.billingContact.phone ?? null,
+          position: data.billingContact.position ?? null,
+        });
+        if (data.technicalContact) {
+          contactRows.push({
+            customer_id: customerId,
+            contact_type: "TECHNICAL",
+            name: data.technicalContact.name,
+            email: data.technicalContact.email,
+            phone: data.technicalContact.phone ?? null,
+            position: data.technicalContact.position ?? null,
+          });
+        }
+      } else {
+        contactRows.push({
+          customer_id: customerId,
+          contact_type: "BILLING",
+          name: data.fullName ?? "",
+          email: data.email.toLowerCase(),
+          phone: data.billingContact.phone ?? null,
+          position: "Owner",
+        });
+      }
+      await supabaseAdmin.from("customer_contacts").insert(contactRows);
 
       await supabaseAdmin.from("bank_accounts").insert({
         customer_id: customerId,
