@@ -118,7 +118,7 @@ export function AppShell({
 
   return (
     <TooltipProvider delayDuration={120}>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen ">
         <aside
           className={cn(
             "fixed inset-y-3 left-3 z-30 hidden flex-col rounded-3xl border border-sidebar-border glass md:flex",
