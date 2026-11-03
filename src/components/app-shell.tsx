@@ -97,7 +97,7 @@ export function AppShell({
     cn(
       "group flex items-center gap-3 rounded-2xl text-sm font-medium",
       SPRING,
-      "hover:scale-[1.01] active:scale-[0.98]",
+      "liquid shadow-none",
       collapsed ? "h-12 w-12 justify-center" : "h-11 px-3",
       active
         ? "bg-gradient-brand text-primary-foreground shadow-elevated"
