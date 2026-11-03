@@ -60,7 +60,7 @@ function BackendContracts() {
   });
 
   async function submit() {
-    if (!file || !form.customerId || form.title.trim().length < 2) return toast.error("Choose a customer, title and file.");
+    if (!file || !form.customerId || form.title.trim().length < 2) { toast.error("Choose a customer, title and file."); return; }
     setBusy(true);
     try {
       await uploadFn({
@@ -85,7 +85,7 @@ function BackendContracts() {
   async function remove(id: string) {
     if (!confirm("Delete this contract?")) return;
     const { error } = await supabase.from("contracts").delete().eq("id", id);
-    if (error) return toast.error("Could not delete.");
+    if (error) { toast.error("Could not delete."); return; }
     void qc.invalidateQueries({ queryKey: ["contracts"] });
   }
 

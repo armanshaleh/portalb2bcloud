@@ -55,7 +55,7 @@ function Reports() {
   });
   const customers = useQuery({
     queryKey: ["report-customers"],
-    queryFn: async () => (await supabase.from("customers").select("customer_code,customer_type,status,company_name,full_name,email,created_at").order("customer_code")).data ?? [],
+    queryFn: async () => (await supabase.from("customers").select("customer_code,customer_type,status,company_name,full_name,created_at").order("customer_code")).data ?? [],
   });
 
   const stats = useMemo(() => {
@@ -87,10 +87,10 @@ function Reports() {
         }),
       ];
       const custRows = [
-        ["Code", "Type", "Status", "Name", "Email", "Joined"].map(h),
-        ...(customers.data ?? []).map((c) => [c.customer_code, c.customer_type, c.status, c.company_name ?? c.full_name ?? "", c.email ?? "", c.created_at.slice(0, 10)].map((v) => ({ value: String(v) }))),
+        ["Code", "Type", "Status", "Name", "Joined"].map(h),
+        ...(customers.data ?? []).map((c) => [c.customer_code, c.customer_type, c.status, c.company_name ?? c.full_name ?? "", c.created_at.slice(0, 10)].map((v) => ({ value: String(v) }))),
       ];
-      const blob = (await writeXlsxFile([docRows, custRows] as never, { sheets: ["Billing documents", "Customers"], fontFamily: "Arial", fontSize: 10 })) as unknown as Blob;
+      const blob = (await (writeXlsxFile as any)([docRows, custRows], { sheets: ["Billing documents", "Customers"], fontFamily: "Arial", fontSize: 10 })) as unknown as Blob;
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;

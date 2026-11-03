@@ -59,14 +59,14 @@ function UserOrders() {
 
   async function submit() {
     const qty = Number(form.quantity);
-    if (!me.data || !form.product_id || !Number.isInteger(qty) || qty < 1 || qty > 1000) return toast.error("Choose a service and a valid quantity.");
+    if (!me.data || !form.product_id || !Number.isInteger(qty) || qty < 1 || qty > 1000) { toast.error("Choose a service and a valid quantity."); return; }
     setBusy(true);
     const { error } = await supabase.from("pre_orders").insert({
       customer_id: me.data.id, product_id: form.product_id, quantity: qty, billing_cycle: form.billing_cycle,
       notes: form.notes.trim().slice(0, 1000) || null, created_by: identity.userId,
     });
     setBusy(false);
-    if (error) return toast.error("Could not submit the order.");
+    if (error) { toast.error("Could not submit the order."); return; }
     toast.success("Order submitted. We'll review it and send a quotation.");
     setForm({ ...form, notes: "", quantity: "1" });
     void qc.invalidateQueries({ queryKey: ["pre-orders"] });
