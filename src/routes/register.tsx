@@ -1,15 +1,17 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Building2,
   CheckCircle2,
   Loader2,
+  MailCheck,
   UserRound,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import { registerCustomer } from "@/lib/registration.functions";
+import { lookupInvitation } from "@/lib/invitation.functions";
 import type { PreparedFile } from "@/lib/upload";
 import { BRAND } from "@/lib/brand";
 import { Button } from "@/components/ui/button";
@@ -21,18 +23,21 @@ import { UploadField } from "@/components/upload-field";
 import { Captcha } from "@/components/captcha";
 
 export const Route = createFileRoute("/register")({
+  validateSearch: (search: Record<string, unknown>): { token?: string } => ({
+    token: typeof search.token === "string" ? search.token : undefined,
+  }),
   head: () => ({
     meta: [
-      { title: "Create account · Wise Cloud Portal" },
+      { title: "Accept invitation · Wise Cloud Portal" },
       {
         name: "description",
         content:
-          "Register as corporate (ENT/PKP) or personal (IND) customer on the Wise Cloud portal by PT Arta Teletama Teknologi.",
+          "Accept your Wise Cloud invitation from PT Arta Teletama Teknologi: set your password and complete KYC.",
       },
-      { property: "og:title", content: "Create account · Wise Cloud Portal" },
+      { property: "og:title", content: "Accept invitation · Wise Cloud Portal" },
       {
         property: "og:description",
-        content: "Register as corporate or personal customer on the Wise Cloud portal.",
+        content: "Wise Cloud portal access is by invitation only.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -94,6 +99,11 @@ const emptyForm: FormState = {
 };
 
 function RegisterPage() {
+  const { token } = Route.useSearch();
+  const lookupFn = useServerFn(lookupInvitation);
+  const [invite, setInvite] = useState<
+    { state: "loading" } | { state: "invalid"; error: string } | { state: "ok"; displayName: string }
+  >({ state: "loading" });
   const registerFn = useServerFn(registerCustomer);
   const navigate = useNavigate();
   const [type, setType] = useState<"ENT" | "IND">("ENT");
@@ -102,6 +112,27 @@ function RegisterPage() {
   const [captchaOk, setCaptchaOk] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!token || !/^[a-f0-9]{64}$/.test(token)) {
+      setInvite({ state: "invalid", error: "Access to the Wise Cloud portal is by invitation only." });
+      return;
+    }
+    void lookupFn({ data: { token } }).then((res) => {
+      if (!res.ok) {
+        setInvite({ state: "invalid", error: res.error });
+        return;
+      }
+      setType(res.customerType);
+      setForm((f) => ({
+        ...f,
+        email: res.email,
+        companyName: res.customerType === "ENT" ? res.displayName : f.companyName,
+        fullName: res.customerType === "IND" ? res.displayName : f.fullName,
+      }));
+      setInvite({ state: "ok", displayName: res.displayName });
+    });
+  }, [token, lookupFn]);
 
   const set = (key: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -150,6 +181,7 @@ function RegisterPage() {
       }));
     const result = await registerFn({
       data: {
+        inviteToken: token ?? "",
         customerType: type,
         email: form.email.trim(),
         password: form.password,
@@ -190,6 +222,38 @@ function RegisterPage() {
       return;
     }
     setDone(result.customerCode);
+  }
+
+  if (invite.state !== "ok" && !done) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <Card className="w-full max-w-md text-center">
+          <CardHeader>
+            {invite.state === "loading" ? (
+              <Loader2 className="mx-auto h-10 w-10 animate-spin text-primary" />
+            ) : (
+              <MailCheck className="mx-auto h-12 w-12 text-primary" />
+            )}
+            <CardTitle className="font-display text-xl">
+              {invite.state === "loading" ? "Checking your invitation…" : "By invitation only"}
+            </CardTitle>
+            {invite.state === "invalid" && (
+              <CardDescription>
+                {invite.error} New accounts are issued by {BRAND.legalName}. Contact our team to
+                receive an official invitation link.
+              </CardDescription>
+            )}
+          </CardHeader>
+          {invite.state === "invalid" && (
+            <CardContent>
+              <Button className="w-full" onClick={() => void navigate({ to: "/auth" })}>
+                Go to sign in
+              </Button>
+            </CardContent>
+          )}
+        </Card>
+      </div>
+    );
   }
 
   if (done) {
@@ -233,39 +297,22 @@ function RegisterPage() {
         </Link>
       </div>
 
-      <h1 className="font-display text-2xl font-bold">Customer registration (KYC)</h1>
+      <h1 className="font-display text-2xl font-bold">Accept invitation &amp; complete KYC</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         All registrations are verified manually by our team before activation.
       </p>
 
-      {/* Entity type */}
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <button
-          type="button"
-          onClick={() => setType("ENT")}
-          className={`rounded-xl border p-4 text-left transition-colors ${
-            type === "ENT" ? "border-primary bg-accent" : "border-border hover:bg-accent/50"
-          }`}
-        >
-          <Building2 className="h-5 w-5 text-primary" />
-          <p className="mt-2 font-display font-semibold">Corporate / PKP (ENT)</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            PT or CV · ID format ENT-26-00001 · company bank account
+      {/* Entity type (fixed by the invitation) */}
+      <div className="mt-6 flex items-center gap-3 rounded-2xl border bg-accent p-4">
+        {type === "ENT" ? <Building2 className="h-5 w-5 text-primary" /> : <UserRound className="h-5 w-5 text-primary" />}
+        <div>
+          <p className="font-display font-semibold">
+            {type === "ENT" ? "Corporate / PKP (ENT)" : "Individual / Non-PKP (IND)"}
           </p>
-        </button>
-        <button
-          type="button"
-          onClick={() => setType("IND")}
-          className={`rounded-xl border p-4 text-left transition-colors ${
-            type === "IND" ? "border-primary bg-accent" : "border-border hover:bg-accent/50"
-          }`}
-        >
-          <UserRound className="h-5 w-5 text-primary" />
-          <p className="mt-2 font-display font-semibold">Individual / Non-PKP (IND)</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Personal · ID format IND-26-00001 · personal bank account
+          <p className="text-xs text-muted-foreground">
+            Invitation for {invite.state === "ok" ? invite.displayName : ""} · account type set by our team
           </p>
-        </button>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-8" noValidate>
@@ -278,7 +325,7 @@ function RegisterPage() {
           <CardContent className="grid gap-4 sm:grid-cols-3">
             <div className="space-y-2 sm:col-span-3">
               <Label htmlFor="email">Verified email</Label>
-              <Input id="email" type="email" value={form.email} onChange={set("email")} required />
+              <Input id="email" type="email" value={form.email} readOnly disabled required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
