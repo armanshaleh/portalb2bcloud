@@ -16,6 +16,8 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedBackendDashboardRouteImport } from './routes/_authenticated/backend.dashboard'
+import { Route as AuthenticatedBackendInvitationsRouteImport } from './routes/_authenticated/backend.invitations'
+import { Route as AuthenticatedBackendMonitorsRouteImport } from './routes/_authenticated/backend.monitors'
 import { Route as AuthenticatedUserDashboardRouteImport } from './routes/_authenticated/user.dashboard'
 import { Route as AuthenticatedUserNetworkRouteImport } from './routes/_authenticated/user.network'
 import { Route as ApiPublicUptimeWebhookRouteImport } from './routes/api/public/uptime/webhook'
@@ -55,6 +57,18 @@ const AuthenticatedBackendDashboardRoute =
     path: '/backend/dashboard',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedBackendInvitationsRoute =
+  AuthenticatedBackendInvitationsRouteImport.update({
+    id: '/backend/invitations',
+    path: '/backend/invitations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedBackendMonitorsRoute =
+  AuthenticatedBackendMonitorsRouteImport.update({
+    id: '/backend/monitors',
+    path: '/backend/monitors',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedUserDashboardRoute =
   AuthenticatedUserDashboardRouteImport.update({
     id: '/user/dashboard',
@@ -80,6 +94,8 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
+  '/backend/invitations': typeof AuthenticatedBackendInvitationsRoute
+  '/backend/monitors': typeof AuthenticatedBackendMonitorsRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/user/network': typeof AuthenticatedUserNetworkRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
@@ -91,6 +107,8 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
+  '/backend/invitations': typeof AuthenticatedBackendInvitationsRoute
+  '/backend/monitors': typeof AuthenticatedBackendMonitorsRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/user/network': typeof AuthenticatedUserNetworkRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
@@ -104,6 +122,8 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
+  '/_authenticated/backend/invitations': typeof AuthenticatedBackendInvitationsRoute
+  '/_authenticated/backend/monitors': typeof AuthenticatedBackendMonitorsRoute
   '/_authenticated/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/_authenticated/user/network': typeof AuthenticatedUserNetworkRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
@@ -117,6 +137,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/backend/dashboard'
+    | '/backend/invitations'
+    | '/backend/monitors'
     | '/user/dashboard'
     | '/user/network'
     | '/api/public/uptime/webhook'
@@ -128,6 +150,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/backend/dashboard'
+    | '/backend/invitations'
+    | '/backend/monitors'
     | '/user/dashboard'
     | '/user/network'
     | '/api/public/uptime/webhook'
@@ -140,6 +164,8 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/_authenticated/backend/dashboard'
+    | '/_authenticated/backend/invitations'
+    | '/_authenticated/backend/monitors'
     | '/_authenticated/user/dashboard'
     | '/_authenticated/user/network'
     | '/api/public/uptime/webhook'
@@ -206,6 +232,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBackendDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/backend/invitations': {
+      id: '/_authenticated/backend/invitations'
+      path: '/backend/invitations'
+      fullPath: '/backend/invitations'
+      preLoaderRoute: typeof AuthenticatedBackendInvitationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/backend/monitors': {
+      id: '/_authenticated/backend/monitors'
+      path: '/backend/monitors'
+      fullPath: '/backend/monitors'
+      preLoaderRoute: typeof AuthenticatedBackendMonitorsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/user/dashboard': {
       id: '/_authenticated/user/dashboard'
       path: '/user/dashboard'
@@ -232,12 +272,16 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBackendDashboardRoute: typeof AuthenticatedBackendDashboardRoute
+  AuthenticatedBackendInvitationsRoute: typeof AuthenticatedBackendInvitationsRoute
+  AuthenticatedBackendMonitorsRoute: typeof AuthenticatedBackendMonitorsRoute
   AuthenticatedUserDashboardRoute: typeof AuthenticatedUserDashboardRoute
   AuthenticatedUserNetworkRoute: typeof AuthenticatedUserNetworkRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBackendDashboardRoute: AuthenticatedBackendDashboardRoute,
+  AuthenticatedBackendInvitationsRoute: AuthenticatedBackendInvitationsRoute,
+  AuthenticatedBackendMonitorsRoute: AuthenticatedBackendMonitorsRoute,
   AuthenticatedUserDashboardRoute: AuthenticatedUserDashboardRoute,
   AuthenticatedUserNetworkRoute: AuthenticatedUserNetworkRoute,
 }
