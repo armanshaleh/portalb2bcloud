@@ -121,7 +121,11 @@ function BackendDashboard() {
   async function handleStatus(action: StatusAction, note?: string) {
     if (!selectedId) return;
     setActionBusy(true);
-    const res = await statusFn({ data: { customerId: selectedId, action, note } });
+    const payload =
+      note === undefined
+        ? { customerId: selectedId, action }
+        : { customerId: selectedId, action, note };
+    const res = await statusFn({ data: payload });
     setActionBusy(false);
     if (!res.ok) {
       toast.error(res.error ?? "Action failed.");
@@ -447,27 +451,30 @@ function BackendDashboard() {
               <section>
                 <p className="mb-2 font-medium">Documents</p>
                 <div className="space-y-2">
-                  {detail.data.documents.map((doc) => (
-                    <div key={doc.id} className="flex items-center justify-between rounded-md border border-border px-3 py-2">
-                      <span className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-primary" />
-                        <span>{doc.doc_type.replace(/_/g, " ")}</span>
-                        <span className="text-muted-foreground">({doc.original_name})</span>
-                      </span>
-                      {detail.data.documentUrls[doc.id] ? (
-                        <a
-                          href={detail.data.documentUrls[doc.id]}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs font-medium text-primary hover:underline"
-                        >
-                          View
-                        </a>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">Unavailable</span>
-                      )}
-                    </div>
-                  ))}
+                  {detail.data.documents.map((doc) => {
+                    const url = detail.data?.documentUrls[doc.id];
+                    return (
+                      <div key={doc.id} className="flex items-center justify-between rounded-md border border-border px-3 py-2">
+                        <span className="flex items-center gap-2">
+                          <FileText className="h-4 w-4 text-primary" />
+                          <span>{doc.doc_type.replace(/_/g, " ")}</span>
+                          <span className="text-muted-foreground">({doc.original_name})</span>
+                        </span>
+                        {url ? (
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-medium text-primary hover:underline"
+                          >
+                            View
+                          </a>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">Unavailable</span>
+                        )}
+                      </div>
+                    );
+                  })}
                   {detail.data.documents.length === 0 && (
                     <p className="text-muted-foreground">No documents uploaded.</p>
                   )}
