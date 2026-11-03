@@ -400,12 +400,7 @@ function BackendDashboard() {
                 : "Loading…"}
             </DialogTitle>
             <DialogDescription>
-              {selected && (
-                <span className="flex items-center gap-2">
-                  {statusBadge(selected.status)}
-                  <span>{selected.verified_email}</span>
-                </span>
-              )}
+              {selected && <span className="flex items-center gap-2">{selected.verified_email}</span>}
             </DialogDescription>
           </DialogHeader>
 
@@ -415,6 +410,10 @@ function BackendDashboard() {
             </div>
           ) : (
             <div className="space-y-5 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-muted-foreground">Verification status</span>
+                {statusBadge(detail.data.customer.status)}
+              </div>
               <section>
                 <p className="mb-2 font-medium">Identity</p>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-muted-foreground">
