@@ -111,6 +111,9 @@ export const registerCustomer = createServerFn({ method: "POST" })
       if (msg.includes("already") || msg.includes("duplicate")) {
         return { ok: false, error: "This email is already registered." };
       }
+      if (createError?.code === "weak_password") {
+        return { ok: false, error: createError.message };
+      }
       return { ok: false, error: "Could not create the account. Please try again." };
     }
     const user = created.user;
