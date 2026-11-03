@@ -139,20 +139,25 @@ export const setCustomerStatus = createServerFn({ method: "POST" })
     const { supabase, userId } = context as StaffContext;
     const { customerId, action, note } = data;
 
-    const patch: Record<string, unknown> = {};
+    const patch: {
+      status?: string;
+      verified_at?: string;
+      verified_by?: string;
+      rejection_reason?: string | null;
+    } = {};
     if (action === "verify") {
-      patch.status = "VERIFIED";
-      patch.verified_at = new Date().toISOString();
-      patch.verified_by = userId;
-      patch.rejection_reason = null;
+      patch["status"] = "VERIFIED";
+      patch["verified_at"] = new Date().toISOString();
+      patch["verified_by"] = userId;
+      patch["rejection_reason"] = null;
     } else if (action === "reject") {
-      patch.status = "REJECTED";
-      patch.rejection_reason = (note ?? "").trim() || "Registration rejected.";
+      patch["status"] = "REJECTED";
+      patch["rejection_reason"] = (note ?? "").trim() || "Registration rejected.";
     } else if (action === "suspend") {
-      patch.status = "SUSPENDED";
+      patch["status"] = "SUSPENDED";
     } else if (action === "reactivate") {
-      patch.status = "VERIFIED";
-      patch.rejection_reason = null;
+      patch["status"] = "VERIFIED";
+      patch["rejection_reason"] = null;
     } else {
       return { ok: false, error: "Unknown action." };
     }

@@ -49,7 +49,7 @@ export type MyCustomerOverview = {
     service_name: string;
     status: string;
     billing_cycle: string;
-    unit_price: string;
+    unit_price: number;
     activated_at: string | null;
   }>;
 };
