@@ -149,9 +149,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div aria-hidden className="ambient-canvas">
-        <span className="ambient-orb ambient-orb-1" />
-        <span className="ambient-orb ambient-orb-2" />
-        <span className="ambient-orb ambient-orb-3" />
+        <div className="ambient-spin">
+          <span className="ambient-orb ambient-orb-1" />
+          <span className="ambient-orb ambient-orb-2" />
+          <span className="ambient-orb ambient-orb-3" />
+        </div>
       </div>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />

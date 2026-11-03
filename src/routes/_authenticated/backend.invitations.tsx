@@ -170,7 +170,7 @@ function Invitations() {
                     type="button"
                     onClick={() => setType(t)}
                     className={cn(
-                      "rounded-xl py-2 text-sm font-medium transition-all duration-300 ease-spring active:scale-[0.98]",
+                      "rounded-xl py-2 text-sm font-medium transition-all duration-300 ease-spring",
                       type === t ? "bg-card shadow-elevated" : "text-muted-foreground",
                     )}
                   >

@@ -105,9 +105,9 @@
   --glass-alpha: 62%;
   --glass-rim: oklch(1 0 0 / 75%);
   --glass-edge: oklch(1 0 0 / 60%);
-  --orb-1: oklch(0.78 0.13 210 / 55%);
-  --orb-2: oklch(0.62 0.19 260 / 40%);
-  --orb-3: oklch(0.6 0.2 280 / 30%);
+  --orb-1: oklch(0.78 0.13 210 / 22%);
+  --orb-2: oklch(0.62 0.19 260 / 16%);
+  --orb-3: oklch(0.6 0.2 280 / 14%);
   --shine: oklch(1 0 0 / 55%);
 }
 
@@ -163,27 +163,13 @@
   box-shadow: inset 0 1px 1px var(--glass-rim), var(--shadow-bubble);
 }
 
-/* Liquid glass press: diagonal light sweep + water-drop rim + spring squish */
+/* Calm glass press: soft rim, gentle tint fade, no sweep, no scaling */
 @utility liquid {
   position: relative;
-  overflow: hidden;
   isolation: isolate;
-  box-shadow: inset 0 1px 1.5px var(--glass-rim), inset 0 -1px 2px oklch(0 0 0 / 6%), var(--shadow-bubble);
-  transition: transform 450ms var(--ease-spring), box-shadow 300ms var(--ease-spring), background-color 300ms var(--ease-spring);
-  &::after {
-    content: "";
-    position: absolute;
-    inset: -50% auto -50% -60%;
-    width: 45%;
-    background: linear-gradient(105deg, transparent, var(--shine), transparent);
-    transform: translateX(-120%) skewX(-18deg);
-    transition: transform 700ms var(--ease-spring);
-    pointer-events: none;
-    z-index: 1;
-  }
-  &:hover::after { transform: translateX(420%) skewX(-18deg); }
-  &:hover { transform: scale(1.015); }
-  &:active { transform: scale(0.96); box-shadow: inset 0 2px 6px oklch(0 0 0 / 12%); transition-duration: 120ms; }
+  box-shadow: inset 0 1px 1.5px var(--glass-rim), var(--shadow-bubble);
+  transition: background-color 250ms ease-out, color 250ms ease-out, box-shadow 250ms ease-out, opacity 200ms ease-out;
+  &:active { opacity: 0.85; }
 }
 
 .ambient-canvas {
@@ -193,22 +179,35 @@
   overflow: hidden;
   pointer-events: none;
 }
+.ambient-spin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 150vmax;
+  height: 150vmax;
+  margin-left: -75vmax;
+  margin-top: -75vmax;
+  animation: orb-spin 45s linear infinite;
+}
 .ambient-orb {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(100px);
-  animation: orb-float 22s ease-in-out infinite alternate;
+  filter: blur(140px);
+  animation: orb-breathe 18s ease-in-out infinite alternate;
 }
-.ambient-orb-1 { width: 42vw; height: 42vw; top: -10vw; left: -8vw; background: var(--orb-1); }
-.ambient-orb-2 { width: 38vw; height: 38vw; top: 30vh; right: -10vw; background: var(--orb-2); animation-delay: -7s; }
-.ambient-orb-3 { width: 34vw; height: 34vw; bottom: -12vw; left: 25vw; background: var(--orb-3); animation-delay: -14s; }
-@keyframes orb-float {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(4vw, 3vh) scale(1.08); }
-  100% { transform: translate(-3vw, -2vh) scale(0.95); }
+.ambient-orb-1 { width: 55vmax; height: 55vmax; top: 8%; left: 10%; background: var(--orb-1); }
+.ambient-orb-2 { width: 50vmax; height: 50vmax; top: 30%; right: 8%; background: var(--orb-2); animation-delay: -6s; }
+.ambient-orb-3 { width: 45vmax; height: 45vmax; bottom: 8%; left: 30%; background: var(--orb-3); animation-delay: -12s; }
+@keyframes orb-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes orb-breathe {
+  from { transform: scale(0.95); }
+  to { transform: scale(1.05); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ambient-orb { animation: none; }
+  .ambient-spin, .ambient-orb { animation: none; }
 }
 
 @utility ease-spring {
