@@ -106,6 +106,7 @@ export const registerCustomer = createServerFn({ method: "POST" })
       email_confirm: true, // staff verification gates real use; user logs in to a restricted dashboard
     });
     if (createError || !created.user) {
+      console.error("[registerCustomer] createUser failed:", createError?.status, createError?.message, createError?.code);
       const msg = (createError?.message ?? "").toLowerCase();
       if (msg.includes("already") || msg.includes("duplicate")) {
         return { ok: false, error: "This email is already registered." };
