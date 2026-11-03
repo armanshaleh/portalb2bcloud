@@ -141,7 +141,6 @@ export const registerCustomer = createServerFn({ method: "POST" })
           // assigned by the assign_customer_code trigger before the row is stored
           customer_code: "AUTO",
           customer_type: data.customerType,
-          customer_type: data.customerType,
           status: "PENDING_VERIFICATION",
           company_name: data.companyName ?? null,
           npwp_number: data.npwpNumber ?? null,
