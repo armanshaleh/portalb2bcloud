@@ -153,6 +153,142 @@ export type Database = {
           },
         ]
       }
+      billing_doc_counters: {
+        Row: {
+          customer_type: Database["public"]["Enums"]["customer_type"]
+          doc_month: number
+          doc_type: Database["public"]["Enums"]["billing_doc_type"]
+          doc_year: number
+          last_seq: number
+        }
+        Insert: {
+          customer_type: Database["public"]["Enums"]["customer_type"]
+          doc_month: number
+          doc_type: Database["public"]["Enums"]["billing_doc_type"]
+          doc_year: number
+          last_seq?: number
+        }
+        Update: {
+          customer_type?: Database["public"]["Enums"]["customer_type"]
+          doc_month?: number
+          doc_type?: Database["public"]["Enums"]["billing_doc_type"]
+          doc_year?: number
+          last_seq?: number
+        }
+        Relationships: []
+      }
+      billing_documents: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string
+          doc_number: string | null
+          doc_type: Database["public"]["Enums"]["billing_doc_type"]
+          dpp: number
+          due_date: string | null
+          id: string
+          issue_date: string
+          notes: string | null
+          paid_at: string | null
+          revision_note: string | null
+          stamp_duty: number
+          status: Database["public"]["Enums"]["billing_doc_status"]
+          subtotal: number
+          total: number
+          vat: number
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id: string
+          doc_number?: string | null
+          doc_type: Database["public"]["Enums"]["billing_doc_type"]
+          dpp?: number
+          due_date?: string | null
+          id?: string
+          issue_date?: string
+          notes?: string | null
+          paid_at?: string | null
+          revision_note?: string | null
+          stamp_duty?: number
+          status?: Database["public"]["Enums"]["billing_doc_status"]
+          subtotal?: number
+          total?: number
+          vat?: number
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string
+          doc_number?: string | null
+          doc_type?: Database["public"]["Enums"]["billing_doc_type"]
+          dpp?: number
+          due_date?: string | null
+          id?: string
+          issue_date?: string
+          notes?: string | null
+          paid_at?: string | null
+          revision_note?: string | null
+          stamp_duty?: number
+          status?: Database["public"]["Enums"]["billing_doc_status"]
+          subtotal?: number
+          total?: number
+          vat?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billing_documents_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      billing_items: {
+        Row: {
+          amount: number
+          description: string
+          document_id: string
+          id: string
+          quantity: number
+          sort_order: number
+          unit_price: number
+        }
+        Insert: {
+          amount?: number
+          description: string
+          document_id: string
+          id?: string
+          quantity?: number
+          sort_order?: number
+          unit_price?: number
+        }
+        Update: {
+          amount?: number
+          description?: string
+          document_id?: string
+          id?: string
+          quantity?: number
+          sort_order?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billing_items_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "billing_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       client_invitations: {
         Row: {
           accepted_at: string | null
@@ -652,6 +788,14 @@ export type Database = {
       app_role: "superuser" | "admin" | "operator" | "client"
       bank_account_type: "CORPORATE" | "PERSONAL"
       billing_cycle: "MONTHLY" | "QUARTERLY" | "ANNUALLY"
+      billing_doc_status:
+        | "PENDING_APPROVAL"
+        | "APPROVED"
+        | "REJECTED"
+        | "SENT"
+        | "PAID"
+        | "CANCELLED"
+      billing_doc_type: "QUO" | "INV" | "PO" | "FMO" | "REC"
       contact_type: "BILLING" | "TECHNICAL"
       customer_status:
         | "PENDING_VERIFICATION"
@@ -818,6 +962,15 @@ export const Constants = {
       app_role: ["superuser", "admin", "operator", "client"],
       bank_account_type: ["CORPORATE", "PERSONAL"],
       billing_cycle: ["MONTHLY", "QUARTERLY", "ANNUALLY"],
+      billing_doc_status: [
+        "PENDING_APPROVAL",
+        "APPROVED",
+        "REJECTED",
+        "SENT",
+        "PAID",
+        "CANCELLED",
+      ],
+      billing_doc_type: ["QUO", "INV", "PO", "FMO", "REC"],
       contact_type: ["BILLING", "TECHNICAL"],
       customer_status: [
         "PENDING_VERIFICATION",
