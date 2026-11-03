@@ -24,6 +24,7 @@ import { Route as AuthenticatedUserAnnouncementsRouteImport } from './routes/_au
 import { Route as AuthenticatedUserBillingRouteImport } from './routes/_authenticated/user.billing'
 import { Route as AuthenticatedUserDashboardRouteImport } from './routes/_authenticated/user.dashboard'
 import { Route as AuthenticatedUserNetworkRouteImport } from './routes/_authenticated/user.network'
+import { Route as ApiPublicCronBillingLifecycleRouteImport } from './routes/api/public/cron/billing-lifecycle'
 import { Route as ApiPublicUptimeWebhookRouteImport } from './routes/api/public/uptime/webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -109,6 +110,12 @@ const AuthenticatedUserNetworkRoute =
     path: '/user/network',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicCronBillingLifecycleRoute =
+  ApiPublicCronBillingLifecycleRouteImport.update({
+    id: '/api/public/cron/billing-lifecycle',
+    path: '/api/public/cron/billing-lifecycle',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicUptimeWebhookRoute = ApiPublicUptimeWebhookRouteImport.update({
   id: '/api/public/uptime/webhook',
   path: '/api/public/uptime/webhook',
@@ -130,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/user/billing': typeof AuthenticatedUserBillingRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/user/network': typeof AuthenticatedUserNetworkRoute
+  '/api/public/cron/billing-lifecycle': typeof ApiPublicCronBillingLifecycleRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -147,6 +155,7 @@ export interface FileRoutesByTo {
   '/user/billing': typeof AuthenticatedUserBillingRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/user/network': typeof AuthenticatedUserNetworkRoute
+  '/api/public/cron/billing-lifecycle': typeof ApiPublicCronBillingLifecycleRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
 }
 export interface FileRoutesById {
@@ -166,6 +175,7 @@ export interface FileRoutesById {
   '/_authenticated/user/billing': typeof AuthenticatedUserBillingRoute
   '/_authenticated/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/_authenticated/user/network': typeof AuthenticatedUserNetworkRoute
+  '/api/public/cron/billing-lifecycle': typeof ApiPublicCronBillingLifecycleRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
 }
 export interface FileRouteTypes {
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/user/billing'
     | '/user/dashboard'
     | '/user/network'
+    | '/api/public/cron/billing-lifecycle'
     | '/api/public/uptime/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/user/billing'
     | '/user/dashboard'
     | '/user/network'
+    | '/api/public/cron/billing-lifecycle'
     | '/api/public/uptime/webhook'
   id:
     | '__root__'
@@ -220,6 +232,7 @@ export interface FileRouteTypes {
     | '/_authenticated/user/billing'
     | '/_authenticated/user/dashboard'
     | '/_authenticated/user/network'
+    | '/api/public/cron/billing-lifecycle'
     | '/api/public/uptime/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -230,6 +243,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicCronBillingLifecycleRoute: typeof ApiPublicCronBillingLifecycleRoute
   ApiPublicUptimeWebhookRoute: typeof ApiPublicUptimeWebhookRoute
 }
 
@@ -340,6 +354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUserNetworkRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/cron/billing-lifecycle': {
+      id: '/api/public/cron/billing-lifecycle'
+      path: '/api/public/cron/billing-lifecycle'
+      fullPath: '/api/public/cron/billing-lifecycle'
+      preLoaderRoute: typeof ApiPublicCronBillingLifecycleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/uptime/webhook': {
       id: '/api/public/uptime/webhook'
       path: '/api/public/uptime/webhook'
@@ -385,6 +406,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicCronBillingLifecycleRoute: ApiPublicCronBillingLifecycleRoute,
   ApiPublicUptimeWebhookRoute: ApiPublicUptimeWebhookRoute,
 }
 export const routeTree = rootRouteImport
