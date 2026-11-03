@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { BillingAttachments } from "@/components/billing-attachments";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -40,6 +41,22 @@ export const Route = createFileRoute("/_authenticated/backend/billing")({
 });
 
 type DocType = BillingDoc["doc_type"];
+
+/** Coretax-ready CSV of approved/sent/paid invoices (DPP 11/12, PPN 12%). */
+function exportCoretax(docs: BillingDoc[]) {
+  const rows = docs.filter((d) => d.doc_type === "INV" && ["APPROVED", "SENT", "PAID"].includes(d.status));
+  const header = ["doc_number", "issue_date", "customer_code", "customer_type", "customer_name", "subtotal", "dpp", "ppn", "e_meterai", "total", "status"];
+  const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const lines = rows.map((d) =>
+    [d.doc_number, d.issue_date, d.customers?.customer_code, d.customers?.customer_type, d.customers?.company_name ?? d.customers?.full_name, d.subtotal, d.dpp, d.vat, d.stamp_duty, d.total, d.status].map(esc).join(","),
+  );
+  const blob = new Blob([[header.join(","), ...lines].join("\n")], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `coretax-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
 type Line = { description: string; quantity: string; unit_price: string };
 
 function StaffBilling() {
@@ -93,6 +110,7 @@ function StaffBilling() {
           <Button size="sm" variant={tab === "pending" ? "default" : "outline"} onClick={() => setTab("pending")}>
             Pending approval ({pendingCount})
           </Button>
+          <Button size="sm" variant="outline" className="ml-auto" onClick={() => exportCoretax(data)}>Export Coretax CSV</Button>
         </div>
         {isLoading ? (
           <div className="flex justify-center py-16"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
@@ -125,6 +143,7 @@ function StaffBilling() {
           {view && (
             <>
               <BillingDocView doc={view} />
+              <BillingAttachments documentId={view.id} canUpload={false} />
               <div className="flex flex-wrap gap-2 border-t pt-4">
                 {isSuperuser && (view.status === "PENDING_APPROVAL" || view.status === "REJECTED") && (
                   <>

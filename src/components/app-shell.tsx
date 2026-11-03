@@ -9,6 +9,8 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  LifeBuoy,
+  Package,
   Receipt,
   Megaphone,
   Moon,
@@ -23,7 +25,7 @@ import { NotificationBell } from "@/components/notification-bell";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type NavItem = {
-  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements" | "/backend/billing" | "/user/billing";
+  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements" | "/backend/billing" | "/user/billing" | "/backend/tickets" | "/user/tickets" | "/backend/products";
   label: string;
   icon: LucideIcon;
 };
@@ -33,6 +35,8 @@ const STAFF_NAV: NavItem[] = [
   { to: "/backend/invitations", label: "Invitations", icon: Mail },
   { to: "/backend/monitors", label: "Network monitor", icon: Activity },
   { to: "/backend/billing", label: "Billing", icon: Receipt },
+  { to: "/backend/products", label: "Products & pricing", icon: Package },
+  { to: "/backend/tickets", label: "Tickets", icon: LifeBuoy },
   { to: "/backend/announcements", label: "Announcements", icon: Megaphone },
 ];
 
@@ -40,6 +44,7 @@ const CLIENT_NAV: NavItem[] = [
   { to: "/user/dashboard", label: "Overview", icon: LayoutDashboard },
   { to: "/user/network", label: "Network status", icon: Activity },
   { to: "/user/billing", label: "Billing", icon: Receipt },
+  { to: "/user/tickets", label: "Support tickets", icon: LifeBuoy },
   { to: "/user/announcements", label: "Announcements", icon: Megaphone },
 ];
 
