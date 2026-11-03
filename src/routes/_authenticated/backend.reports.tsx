@@ -90,7 +90,7 @@ function Reports() {
         ["Code", "Type", "Status", "Name", "Joined"].map(h),
         ...(customers.data ?? []).map((c) => [c.customer_code, c.customer_type, c.status, c.company_name ?? c.full_name ?? "", c.created_at.slice(0, 10)].map((v) => ({ value: String(v) }))),
       ];
-      const blob = (await (writeXlsxFile as any)([docRows, custRows], { sheets: ["Billing documents", "Customers"], fontFamily: "Arial", fontSize: 10 })) as unknown as Blob;
+      const blob = await writeXlsxFile([{ data: docRows as never, sheet: "Billing documents" }, { data: custRows as never, sheet: "Customers" }], { fontFamily: "Arial", fontSize: 10 } as never).toBlob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
