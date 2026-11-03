@@ -60,7 +60,7 @@ export function NotificationBell() {
             data.map((n) => (
               <Link
                 key={n.id}
-                to={n.link ?? "/user/dashboard"}
+                to={(n.link ?? "/user/dashboard") as "/user/dashboard"}
                 className={cn("block border-b px-4 py-3 last:border-0 hover:bg-card/60", !n.read_at && "bg-primary/5")}
               >
                 <p className="text-sm font-medium">{n.title}</p>
