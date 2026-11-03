@@ -36,6 +36,13 @@
       "when": 1793690508788,
       "tag": "0004_tickets_payments_lifecycle",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793691141393,
+      "tag": "0005_preorders_contracts",
+      "breakpoints": true
     }
   ]
 }
