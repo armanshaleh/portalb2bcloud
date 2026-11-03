@@ -17,6 +17,7 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedBackendDashboardRouteImport } from './routes/_authenticated/backend.dashboard'
 import { Route as AuthenticatedUserDashboardRouteImport } from './routes/_authenticated/user.dashboard'
+import { Route as ApiPublicUptimeWebhookRouteImport } from './routes/api/public/uptime/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -59,6 +60,11 @@ const AuthenticatedUserDashboardRoute =
     path: '/user/dashboard',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ApiPublicUptimeWebhookRoute = ApiPublicUptimeWebhookRouteImport.update({
+  id: '/api/public/uptime/webhook',
+  path: '/api/public/uptime/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
+  '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
+  '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
   '/_authenticated/user/dashboard': typeof AuthenticatedUserDashboardRoute
+  '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/backend/dashboard'
     | '/user/dashboard'
+    | '/api/public/uptime/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/backend/dashboard'
     | '/user/dashboard'
+    | '/api/public/uptime/webhook'
   id:
     | '__root__'
     | '/'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/backend/dashboard'
     | '/_authenticated/user/dashboard'
+    | '/api/public/uptime/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiPublicUptimeWebhookRoute: typeof ApiPublicUptimeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -187,6 +200,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUserDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/uptime/webhook': {
+      id: '/api/public/uptime/webhook'
+      path: '/api/public/uptime/webhook'
+      fullPath: '/api/public/uptime/webhook'
+      preLoaderRoute: typeof ApiPublicUptimeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -210,6 +230,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiPublicUptimeWebhookRoute: ApiPublicUptimeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
