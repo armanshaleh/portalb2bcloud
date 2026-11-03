@@ -19,7 +19,11 @@ import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-type NavItem = { to: string; label: string; icon: LucideIcon };
+type NavItem = {
+  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network";
+  label: string;
+  icon: LucideIcon;
+};
 
 const STAFF_NAV: NavItem[] = [
   { to: "/backend/dashboard", label: "Customers", icon: LayoutDashboard },
