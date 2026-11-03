@@ -107,19 +107,11 @@ export const getCustomerDetail = createServerFn({ method: "POST" })
     if (customerRes.error || !customerRes.data) return null;
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const documentUrls: Record<string, string> = {};
-    for (const doc of docsRes.data ?? []) {
-      const { data: signed } = await supabaseAdmin.storage
-        .from("legal-documents")
-        .createSignedUrl((doc as { storage_path: string }).storage_path ?? "", 3600)
-        .catch(() => ({ data: null }));
-      if (signed) documentUrls[doc.id] = signed.signedUrl;
-    }
-    // storage_path is not projected above; fetch it separately for signing
     const { data: paths } = await context.supabase
       .from("legal_documents")
       .select("id, storage_path")
       .eq("customer_id", customerId);
+    const documentUrls: Record<string, string> = {};
     for (const row of paths ?? []) {
       const { data: signed } = await supabaseAdmin.storage
         .from("legal-documents")
