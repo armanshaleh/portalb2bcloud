@@ -21,7 +21,8 @@ PT Arta Teletama Teknologi ("Wise Cloud — Built with Trust.", document prefix 
 
 ## Phase 2 — Billing & documents
 - Products & custom private prices with audit logs
-- Quotations, invoices, pre-orders (PENDING_APPROVAL workflow, superuser approval tab)
+- [x] Quotations, invoices, POs, FMO, receipts with ATT numbering, PPN/DPP, e-Meterai, superuser approval, client billing page
+- (todo) Pre-orders (PENDING_APPROVAL workflow, superuser approval tab)
 - Document numbering: INV|QUO|FMO|PO|REC-ENT|IND/ATT/<year>/<roman month>/<seq>
 - Wet signature & stamp workflow; payment proofs (max 10MB, auto-compress); PPh 23 upload
 - Dynamic ticket system with colocation conditional UI (Visit DC, Goods In/Out, E-Pass)

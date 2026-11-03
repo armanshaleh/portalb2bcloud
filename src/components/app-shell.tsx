@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  Receipt,
   Megaphone,
   Moon,
   Sun,
@@ -22,7 +23,7 @@ import { NotificationBell } from "@/components/notification-bell";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type NavItem = {
-  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements";
+  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements" | "/backend/billing" | "/user/billing";
   label: string;
   icon: LucideIcon;
 };
@@ -31,12 +32,14 @@ const STAFF_NAV: NavItem[] = [
   { to: "/backend/dashboard", label: "Customers", icon: LayoutDashboard },
   { to: "/backend/invitations", label: "Invitations", icon: Mail },
   { to: "/backend/monitors", label: "Network monitor", icon: Activity },
+  { to: "/backend/billing", label: "Billing", icon: Receipt },
   { to: "/backend/announcements", label: "Announcements", icon: Megaphone },
 ];
 
 const CLIENT_NAV: NavItem[] = [
   { to: "/user/dashboard", label: "Overview", icon: LayoutDashboard },
   { to: "/user/network", label: "Network status", icon: Activity },
+  { to: "/user/billing", label: "Billing", icon: Receipt },
   { to: "/user/announcements", label: "Announcements", icon: Megaphone },
 ];
 
