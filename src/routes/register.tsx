@@ -23,8 +23,8 @@ import { UploadField } from "@/components/upload-field";
 import { Captcha } from "@/components/captcha";
 
 export const Route = createFileRoute("/register")({
-  validateSearch: (search: Record<string, unknown>): { token?: string } => ({
-    token: typeof search.token === "string" ? search.token : undefined,
+  validateSearch: (search: Record<string, unknown>): { token?: string | undefined } => ({
+    token: typeof search["token"] === "string" ? search["token"] : undefined,
   }),
   head: () => ({
     meta: [

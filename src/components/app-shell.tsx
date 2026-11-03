@@ -66,8 +66,8 @@ export function AppShell({
 }: {
   variant: "staff" | "client";
   title: string;
-  subtitle?: string;
-  email?: string;
+  subtitle?: string | undefined;
+  email?: string | undefined;
   actions?: ReactNode;
   children: ReactNode;
 }) {

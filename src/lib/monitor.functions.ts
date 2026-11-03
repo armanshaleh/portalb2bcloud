@@ -26,13 +26,13 @@ export type MonitorView = {
 
 const BEATS_SHOWN = 48;
 
-async function buildViews(supabase: Ctx["supabase"], monitors: Array<Record<string, unknown>>): Promise<MonitorView[]> {
+async function buildViews(supabase: Ctx["supabase"], monitors: Array<{ id: string; name: string; location: string | null; category: string; status: string; last_latency_ms: number | string | null; last_checked_at: string | null }>): Promise<MonitorView[]> {
   if (monitors.length === 0) return [];
   const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
   const { data: beats } = await supabase
     .from("monitor_heartbeats")
     .select("monitor_id, status, latency_ms, checked_at")
-    .in("monitor_id", monitors.map((m) => m.id as string))
+    .in("monitor_id", monitors.map((m) => m.id))
     .gte("checked_at", since)
     .order("checked_at", { ascending: false })
     .limit(5000);
@@ -42,13 +42,13 @@ async function buildViews(supabase: Ctx["supabase"], monitors: Array<Record<stri
     const up = counted.filter((b) => b.status === "UP" || b.status === "DEGRADED").length;
     const lat = own.map((b) => (b.latency_ms === null ? null : Number(b.latency_ms))).filter((v): v is number => v !== null);
     return {
-      id: m.id as string,
-      name: m.name as string,
-      location: (m.location as string | null) ?? null,
-      category: m.category as string,
+      id: m.id,
+      name: m.name,
+      location: m.location ?? null,
+      category: m.category,
       status: m.status as MonitorStatus,
       last_latency_ms: m.last_latency_ms === null ? null : Number(m.last_latency_ms),
-      last_checked_at: (m.last_checked_at as string | null) ?? null,
+      last_checked_at: m.last_checked_at ?? null,
       uptime24h: counted.length ? (up / counted.length) * 100 : null,
       avgLatency24h: lat.length ? lat.reduce((a, b) => a + b, 0) / lat.length : null,
       beats: own
