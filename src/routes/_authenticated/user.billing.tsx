@@ -8,6 +8,7 @@ import { getMyIdentity } from "@/lib/identity.functions";
 import { formatDate, formatIDR } from "@/lib/format";
 import { AppShell } from "@/components/app-shell";
 import { BillingDocView, DOC_LABEL, DOC_SELECT, StatusBadge, type BillingDoc } from "@/components/billing-doc-view";
+import { BillingAttachments } from "@/components/billing-attachments";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/_authenticated/user/billing")({
@@ -77,7 +78,7 @@ function UserBilling() {
       <Dialog open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
         <DialogContent className="max-w-2xl">
           <DialogHeader><DialogTitle>Document</DialogTitle></DialogHeader>
-          {open && <BillingDocView doc={open} />}
+          {open && (<><BillingDocView doc={open} /><BillingAttachments documentId={open.id} canUpload={open.status !== "CANCELLED"} /></>)}
         </DialogContent>
       </Dialog>
     </AppShell>

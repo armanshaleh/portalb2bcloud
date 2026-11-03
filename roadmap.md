@@ -20,17 +20,17 @@ PT Arta Teletama Teknologi ("Wise Cloud — Built with Trust.", document prefix 
 - [ ] Connect the real Uptime Kuma server (waiting on your Kuma instance + publish)
 
 ## Phase 2 — Billing & documents
-- Products & custom private prices with audit logs
+- [x] Products & custom private prices with audit logs
 - [x] Quotations, invoices, POs, FMO, receipts with ATT numbering, PPN/DPP, e-Meterai, superuser approval, client billing page
-- (todo) Pre-orders (PENDING_APPROVAL workflow, superuser approval tab)
+- [ ] Pre-orders (PENDING_APPROVAL workflow, superuser approval tab)
 - Document numbering: INV|QUO|FMO|PO|REC-ENT|IND/ATT/<year>/<roman month>/<seq>
-- Wet signature & stamp workflow; payment proofs (max 10MB, auto-compress); PPh 23 upload
-- Dynamic ticket system with colocation conditional UI (Visit DC, Goods In/Out, E-Pass)
+- [x] Wet signature & stamp workflow; payment proofs (max 10MB, auto-compress); PPh 23 upload
+- [x] Dynamic ticket system with colocation conditional UI (Visit DC, Goods In/Out, E-Pass)
 - [x] Announcements (staff publish, client archive) + Notifications bell (auto: verification, monitor assignment, announcements)
-- Reports & analytics with Excel/CSV export
+- [ ] Reports & analytics with Excel/CSV export
 
 ## Phase 3 — Automation & compliance
-- Billing cycles (monthly/quarterly/annual), one-time setup fee, pro-rata calculator
-- Lifecycle automation: reminders H-7/H-3, overdue H+1, auto-suspend H+7, auto-terminate H+30
-- Coretax DJP: VAT 12% on DPP 11% (11/12 × subtotal), e-Meterai Rp 10.000 when DPP > Rp 10.000.000
-- Coretax CSV export; contracts tab with confidential watermark; uptime monitor
+- [x] Billing cycles (monthly/quarterly/annual), one-time setup fee, pro-rata calculator
+- [x] Lifecycle automation: reminders H-7/H-3, overdue H+1, auto-suspend H+7, auto-terminate H+30
+- [x] Coretax DJP: VAT 12% on DPP 11% (11/12 × subtotal), e-Meterai Rp 10.000 when DPP > Rp 10.000.000
+- [x] Coretax CSV export; contracts tab with confidential watermark; uptime monitor
