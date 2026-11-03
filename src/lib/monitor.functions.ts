@@ -192,3 +192,15 @@ export const setMonitorAssignments = createServerFn({ method: "POST" })
     }
     return { ok: true };
   });
+
+/** Superuser-only: the webhook token to paste into Uptime Kuma's notification headers. */
+export const getKumaWebhookConfig = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ allowed: boolean; token: string | null }> => {
+    const { data: isSuper } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "superuser",
+    });
+    if (!isSuper) return { allowed: false, token: null };
+    return { allowed: true, token: process.env["UPTIME_KUMA_WEBHOOK_SECRET"] ?? null };
+  });
