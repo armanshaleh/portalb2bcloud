@@ -17,6 +17,7 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedBackendDashboardRouteImport } from './routes/_authenticated/backend.dashboard'
 import { Route as AuthenticatedUserDashboardRouteImport } from './routes/_authenticated/user.dashboard'
+import { Route as AuthenticatedUserNetworkRouteImport } from './routes/_authenticated/user.network'
 import { Route as ApiPublicUptimeWebhookRouteImport } from './routes/api/public/uptime/webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -60,6 +61,12 @@ const AuthenticatedUserDashboardRoute =
     path: '/user/dashboard',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedUserNetworkRoute =
+  AuthenticatedUserNetworkRouteImport.update({
+    id: '/user/network',
+    path: '/user/network',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const ApiPublicUptimeWebhookRoute = ApiPublicUptimeWebhookRouteImport.update({
   id: '/api/public/uptime/webhook',
   path: '/api/public/uptime/webhook',
@@ -74,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
+  '/user/network': typeof AuthenticatedUserNetworkRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -84,6 +92,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
+  '/user/network': typeof AuthenticatedUserNetworkRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
 }
 export interface FileRoutesById {
@@ -96,6 +105,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
   '/_authenticated/user/dashboard': typeof AuthenticatedUserDashboardRoute
+  '/_authenticated/user/network': typeof AuthenticatedUserNetworkRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
 }
 export interface FileRouteTypes {
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/backend/dashboard'
     | '/user/dashboard'
+    | '/user/network'
     | '/api/public/uptime/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/backend/dashboard'
     | '/user/dashboard'
+    | '/user/network'
     | '/api/public/uptime/webhook'
   id:
     | '__root__'
@@ -129,6 +141,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/backend/dashboard'
     | '/_authenticated/user/dashboard'
+    | '/_authenticated/user/network'
     | '/api/public/uptime/webhook'
   fileRoutesById: FileRoutesById
 }
@@ -200,6 +213,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUserDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/user/network': {
+      id: '/_authenticated/user/network'
+      path: '/user/network'
+      fullPath: '/user/network'
+      preLoaderRoute: typeof AuthenticatedUserNetworkRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/uptime/webhook': {
       id: '/api/public/uptime/webhook'
       path: '/api/public/uptime/webhook'
@@ -213,11 +233,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBackendDashboardRoute: typeof AuthenticatedBackendDashboardRoute
   AuthenticatedUserDashboardRoute: typeof AuthenticatedUserDashboardRoute
+  AuthenticatedUserNetworkRoute: typeof AuthenticatedUserNetworkRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBackendDashboardRoute: AuthenticatedBackendDashboardRoute,
   AuthenticatedUserDashboardRoute: AuthenticatedUserDashboardRoute,
+  AuthenticatedUserNetworkRoute: AuthenticatedUserNetworkRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
