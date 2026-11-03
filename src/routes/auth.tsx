@@ -70,7 +70,7 @@ function AuthPage() {
     return () => {
       cancelled = true;
     };
-  }, [identityFn, navigate]);
+  }, [bootstrapFn, identityFn, navigate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
