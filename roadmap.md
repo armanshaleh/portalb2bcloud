@@ -25,7 +25,8 @@ PT Arta Teletama Teknologi ("Wise Cloud — Built with Trust.", document prefix 
 - Document numbering: INV|QUO|FMO|PO|REC-ENT|IND/ATT/<year>/<roman month>/<seq>
 - Wet signature & stamp workflow; payment proofs (max 10MB, auto-compress); PPh 23 upload
 - Dynamic ticket system with colocation conditional UI (Visit DC, Goods In/Out, E-Pass)
-- Announcements; reports & analytics with Excel/CSV export
+- [x] Announcements (staff publish, client archive) + Notifications bell (auto: verification, monitor assignment, announcements)
+- Reports & analytics with Excel/CSV export
 
 ## Phase 3 — Automation & compliance
 - Billing cycles (monthly/quarterly/annual), one-time setup fee, pro-rata calculator

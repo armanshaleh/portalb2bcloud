@@ -49,6 +49,36 @@ export type Database = {
           },
         ]
       }
+      announcements: {
+        Row: {
+          author_id: string | null
+          body: string
+          category: Database["public"]["Enums"]["announcement_category"]
+          created_at: string
+          id: string
+          is_published: boolean
+          title: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          category?: Database["public"]["Enums"]["announcement_category"]
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          title: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          category?: Database["public"]["Enums"]["announcement_category"]
+          created_at?: string
+          id?: string
+          is_published?: boolean
+          title?: string
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
@@ -450,6 +480,36 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           category: Database["public"]["Enums"]["product_category"]
@@ -584,6 +644,11 @@ export type Database = {
       owns_customer: { Args: { _customer_id: string }; Returns: boolean }
     }
     Enums: {
+      announcement_category:
+        | "MAINTENANCE"
+        | "NETWORK_UPGRADE"
+        | "INCIDENT"
+        | "GENERAL"
       app_role: "superuser" | "admin" | "operator" | "client"
       bank_account_type: "CORPORATE" | "PERSONAL"
       billing_cycle: "MONTHLY" | "QUARTERLY" | "ANNUALLY"
@@ -744,6 +809,12 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      announcement_category: [
+        "MAINTENANCE",
+        "NETWORK_UPGRADE",
+        "INCIDENT",
+        "GENERAL",
+      ],
       app_role: ["superuser", "admin", "operator", "client"],
       bank_account_type: ["CORPORATE", "PERSONAL"],
       billing_cycle: ["MONTHLY", "QUARTERLY", "ANNUALLY"],
