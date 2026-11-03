@@ -3,15 +3,15 @@
 Enterprise Web Portal, Billing System & Data Center Operations platform for
 PT Arta Teletama Teknologi ("Wise Cloud — Built with Trust.", document prefix ATT).
 
-## Phase 1 — Auth, KYC, Dashboards (in progress)
+## Phase 1 — Auth, KYC, Dashboards (done)
 - [x] Lovable Cloud enabled; Phase 1 schema (customers, contacts, bank accounts, legal documents, admin notes, products, services, audit logs, user roles)
 - [x] Private `legal-documents` storage bucket with 10 MB limit + RLS
-- [ ] Login page (/auth): email+password, CAPTCHA, remember me, forgot password
-- [ ] KYC registration (/register): ENT / IND formats with document uploads
-- [ ] Forgot-password + reset-password pages
-- [ ] Role-based dashboards (/backend/dashboard, /user/dashboard)
-- [ ] Superuser bootstrap (arman@artawise.com)
-- [ ] End-to-end verification
+- [x] Login page (/auth): email+password, CAPTCHA, remember me, forgot password
+- [x] KYC registration (/register): ENT / IND formats with document uploads
+- [x] Forgot-password + reset-password pages
+- [x] Role-based dashboards (/backend/dashboard, /user/dashboard)
+- [x] Superuser bootstrap (arman@artawise.com)
+- [x] End-to-end verification
 
 ## Phase 2 — Billing & documents
 - Products & custom private prices with audit logs
