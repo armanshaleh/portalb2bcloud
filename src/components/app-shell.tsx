@@ -36,7 +36,7 @@ const CLIENT_NAV: NavItem[] = [
   { to: "/user/network", label: "Network status", icon: Activity },
 ];
 
-const SPRING = "transition-all duration-300 ease-spring";
+const SPRING = "transition-all duration-500 ease-spring";
 
 export function useTheme() {
   const [dark, setDark] = useState(false);
@@ -101,7 +101,7 @@ export function AppShell({
       collapsed ? "h-12 w-12 justify-center" : "h-11 px-3",
       active
         ? "bg-gradient-brand text-primary-foreground shadow-elevated"
-        : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+        : "text-muted-foreground hover:bg-card/70 hover:text-sidebar-accent-foreground hover:backdrop-blur-md",
     );
 
   function withTip(label: string, node: ReactNode) {

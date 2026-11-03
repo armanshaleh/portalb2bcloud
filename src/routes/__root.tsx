@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { watchSessionWindow } from "@/lib/session-pref";
 import { Toaster } from "@/components/ui/sonner";
+import { FloatingThemeToggle } from "@/components/floating-theme-toggle";
 
 function NotFoundComponent() {
   return (
@@ -157,6 +158,7 @@ function RootComponent() {
       </div>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <FloatingThemeToggle />
       <Toaster richColors position="top-right" />
     </QueryClientProvider>
   );
