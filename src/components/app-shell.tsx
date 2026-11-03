@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   LogOut,
   Mail,
+  Megaphone,
   Moon,
   Sun,
   type LucideIcon,
@@ -17,10 +18,11 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND } from "@/lib/brand";
 import { cn } from "@/lib/utils";
+import { NotificationBell } from "@/components/notification-bell";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type NavItem = {
-  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network";
+  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements";
   label: string;
   icon: LucideIcon;
 };
@@ -29,11 +31,13 @@ const STAFF_NAV: NavItem[] = [
   { to: "/backend/dashboard", label: "Customers", icon: LayoutDashboard },
   { to: "/backend/invitations", label: "Invitations", icon: Mail },
   { to: "/backend/monitors", label: "Network monitor", icon: Activity },
+  { to: "/backend/announcements", label: "Announcements", icon: Megaphone },
 ];
 
 const CLIENT_NAV: NavItem[] = [
   { to: "/user/dashboard", label: "Overview", icon: LayoutDashboard },
   { to: "/user/network", label: "Network status", icon: Activity },
+  { to: "/user/announcements", label: "Announcements", icon: Megaphone },
 ];
 
 const SPRING = "transition-all duration-500 ease-spring";
@@ -196,6 +200,7 @@ export function AppShell({
               <div className="flex items-center gap-2 text-sm">
                 {email && <span className="hidden text-muted-foreground lg:inline">{email}</span>}
                 {actions}
+                <NotificationBell />
                 <button
                   type="button"
                   onClick={toggle}
