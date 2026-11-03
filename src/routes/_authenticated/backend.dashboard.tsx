@@ -68,11 +68,11 @@ export const Route = createFileRoute("/_authenticated/backend/dashboard")({
 function statusBadge(status: string) {
   switch (status) {
     case "VERIFIED":
-      return <Badge className="bg-success/15 text-success">Verified</Badge>;
+      return <Badge variant="success">Verified</Badge>;
     case "PENDING_VERIFICATION":
-      return <Badge className="bg-warning/15 text-warning">Pending</Badge>;
+      return <Badge variant="warning">Pending</Badge>;
     case "SUSPENDED":
-      return <Badge className="bg-destructive/15 text-destructive">Suspended</Badge>;
+      return <Badge variant="danger">Suspended</Badge>;
     case "REJECTED":
       return <Badge variant="secondary">Rejected</Badge>;
     default:
