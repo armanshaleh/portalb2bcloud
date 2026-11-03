@@ -16,7 +16,8 @@
 - Email + password sign-in only (user decision — no social providers). KYC-created
   accounts are created with `email_confirm: true` because staff verification gates
   real use; the auth-setting global auto-confirm stays off.
-- Registration is a public server function (`registerCustomer`, zod-validated) that
+- Invitation-only: staff create single-use invitations (`client_invitations`, only a SHA-256 hash of the token is stored); `/register?token=` is the only sign-up path and `registerCustomer` rejects any request without an open, matching invitation.
+- Registration is a server function (`registerCustomer`, zod-validated) that
   creates the auth user with the service-role client, re-checks MIME/extension/size
   (10 MB), uploads files under `{user_id}/{uuid}.{ext}` in the private
   `legal-documents` bucket, inserts customer/contact/bank/document rows, and rolls
@@ -32,3 +33,8 @@
 - Phase plan lives in `roadmap.md`. Phase 2 adds billing/document numbering
   (INV|QUO|FMO|PO|REC-<ENT|IND>/ATT/<year>/<roman month>/<seq>, IDR only, VAT 12% on
   DPP 11%, e-Meterai Rp 10.000 when DPP > Rp 10.000.000).
+- Network monitoring: Uptime Kuma is the ping engine; it pushes heartbeats to
+  `/api/public/uptime/webhook` (Bearer `UPTIME_KUMA_WEBHOOK_SECRET`). Clients see a
+  monitor only via an explicit `monitor_assignments` row (`can_view_monitor` RLS) — never by default.
+- UI shell: shared `AppShell` (collapsible sidebar) for all signed-in pages; theme tokens
+  in `src/styles.css`, light by default with `.dark` toggle persisted in localStorage.
