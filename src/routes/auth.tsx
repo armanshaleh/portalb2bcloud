@@ -191,11 +191,8 @@ function AuthPage() {
             </p>
           </form>
 
-          <p className="mt-8 text-center text-sm text-muted-foreground">
-            No account yet?{" "}
-            <Link to="/register" className="font-medium text-primary hover:underline">
-              Register your company
-            </Link>
+          <p className="mt-8 text-center text-xs text-muted-foreground">
+            Portal access is by invitation only. Contact your Wise Cloud account manager.
           </p>
         </div>
       </div>

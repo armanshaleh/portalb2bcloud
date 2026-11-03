@@ -13,6 +13,12 @@ PT Arta Teletama Teknologi ("Wise Cloud — Built with Trust.", document prefix 
 - [x] Superuser bootstrap (arman@artawise.com)
 - [x] End-to-end verification
 
+## Phase 1.5 — Invitations, network monitor, iOS design (done)
+- [x] Public sign-up removed; staff invitation links; KYC via invite
+- [x] Uptime Kuma webhook receiver + per-customer monitor access + status pages
+- [x] iOS-inspired glass design, light default, collapsible sidebar
+- [ ] Connect the real Uptime Kuma server (waiting on your Kuma instance + publish)
+
 ## Phase 2 — Billing & documents
 - Products & custom private prices with audit logs
 - Quotations, invoices, pre-orders (PENDING_APPROVAL workflow, superuser approval tab)

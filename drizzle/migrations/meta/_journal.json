@@ -8,6 +8,13 @@
       "when": 1793682164389,
       "tag": "0000_phase1_identity_kyc",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793686162365,
+      "tag": "0001_invitations_and_uptime_monitors",
+      "breakpoints": true
     }
   ]
 }

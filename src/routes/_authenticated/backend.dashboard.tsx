@@ -29,6 +29,7 @@ import {
   type StatusAction,
 } from "@/lib/staff.functions";
 import { BRAND } from "@/lib/brand";
+import { AppShell } from "@/components/app-shell";
 import { formatDateTime } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -172,58 +173,14 @@ function BackendDashboard() {
   const selected = detail.data?.customer ?? null;
 
   return (
-    <div className="flex min-h-screen bg-background">
-      {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-20 hidden w-60 flex-col border-r border-sidebar-border bg-sidebar md:flex">
-        <div className="flex items-center gap-3 px-5 py-5">
-          <div className="bg-gradient-brand flex h-9 w-9 items-center justify-center rounded-lg">
-            <Building2 className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <div>
-            <p className="font-display text-sm font-bold text-foreground">{BRAND.name}</p>
-            <p className="text-[10px] text-muted-foreground">{BRAND.tagline}</p>
-          </div>
-        </div>
-        <nav className="flex-1 space-y-1 px-3 py-2 text-sm">
-          <span className="flex items-center gap-2 rounded-md bg-sidebar-accent px-3 py-2 font-medium text-sidebar-accent-foreground">
-            <ShieldCheck className="h-4 w-4" /> Dashboard
-          </span>
-          <span className="flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground">
-            <Users className="h-4 w-4" /> Products
-            <Badge variant="outline" className="ml-auto text-[10px]">Phase 2</Badge>
-          </span>
-          <span className="flex items-center gap-2 rounded-md px-3 py-2 text-muted-foreground">
-            <FileText className="h-4 w-4" /> Billing
-            <Badge variant="outline" className="ml-auto text-[10px]">Phase 2</Badge>
-          </span>
-        </nav>
-        <div className="border-t border-sidebar-border p-3">
-          <button
-            type="button"
-            onClick={() => void handleSignOut()}
-            className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
-          >
-            <LogOut className="h-4 w-4" /> Sign out
-          </button>
-        </div>
-      </aside>
-
-      {/* Main */}
-      <main className="flex-1 md:pl-60">
-        <header className="flex items-center justify-between border-b border-border px-6 py-4">
-          <div>
-            <h1 className="font-display text-lg font-bold">Backend dashboard</h1>
-            <p className="text-xs text-muted-foreground">{BRAND.legalName}</p>
-          </div>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="hidden text-muted-foreground sm:inline">{Route.useRouteContext().identity.email}</span>
-            <Button variant="outline" size="sm" onClick={() => void handleSignOut()}>
-              <LogOut className="h-4 w-4" /> Sign out
-            </Button>
-          </div>
-        </header>
-
-        <div className="space-y-6 p-6">
+    <AppShell
+      variant="staff"
+      title="Customers"
+      subtitle={BRAND.legalName}
+      email={Route.useRouteContext().identity.email}
+    >
+      <main>
+        <div className="space-y-6">
           {/* Stats */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Card>
@@ -596,7 +553,7 @@ function BackendDashboard() {
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </AppShell>
   );
 }
 

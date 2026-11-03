@@ -123,6 +123,45 @@ export type Database = {
           },
         ]
       }
+      client_invitations: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          customer_type: Database["public"]["Enums"]["customer_type"]
+          display_name: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string | null
+          revoked_at: string | null
+          token_hash: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          customer_type: Database["public"]["Enums"]["customer_type"]
+          display_name: string
+          email: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          revoked_at?: string | null
+          token_hash: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          customer_type?: Database["public"]["Enums"]["customer_type"]
+          display_name?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string | null
+          revoked_at?: string | null
+          token_hash?: string
+        }
+        Relationships: []
+      }
       customer_code_counters: {
         Row: {
           code_type: Database["public"]["Enums"]["customer_type"]
@@ -301,6 +340,116 @@ export type Database = {
           },
         ]
       }
+      monitor_assignments: {
+        Row: {
+          created_at: string
+          customer_id: string
+          id: string
+          monitor_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          id?: string
+          monitor_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          id?: string
+          monitor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "monitor_assignments_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "monitor_assignments_monitor_id_fkey"
+            columns: ["monitor_id"]
+            isOneToOne: false
+            referencedRelation: "network_monitors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      monitor_heartbeats: {
+        Row: {
+          checked_at: string
+          id: number
+          latency_ms: number | null
+          message: string | null
+          monitor_id: string
+          status: Database["public"]["Enums"]["monitor_status"]
+        }
+        Insert: {
+          checked_at?: string
+          id?: never
+          latency_ms?: number | null
+          message?: string | null
+          monitor_id: string
+          status: Database["public"]["Enums"]["monitor_status"]
+        }
+        Update: {
+          checked_at?: string
+          id?: never
+          latency_ms?: number | null
+          message?: string | null
+          monitor_id?: string
+          status?: Database["public"]["Enums"]["monitor_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "monitor_heartbeats_monitor_id_fkey"
+            columns: ["monitor_id"]
+            isOneToOne: false
+            referencedRelation: "network_monitors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      network_monitors: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          is_active: boolean
+          kuma_monitor_id: number | null
+          last_checked_at: string | null
+          last_latency_ms: number | null
+          location: string | null
+          name: string
+          status: Database["public"]["Enums"]["monitor_status"]
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          kuma_monitor_id?: number | null
+          last_checked_at?: string | null
+          last_latency_ms?: number | null
+          location?: string | null
+          name: string
+          status?: Database["public"]["Enums"]["monitor_status"]
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          kuma_monitor_id?: number | null
+          last_checked_at?: string | null
+          last_latency_ms?: number | null
+          location?: string | null
+          name?: string
+          status?: Database["public"]["Enums"]["monitor_status"]
+        }
+        Relationships: []
+      }
       products: {
         Row: {
           category: Database["public"]["Enums"]["product_category"]
@@ -423,6 +572,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_view_monitor: { Args: { _monitor_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -456,6 +606,7 @@ export type Database = {
         | "PPH23_CERTIFICATE"
         | "AUTHORIZATION_LETTER"
         | "OTHER"
+      monitor_status: "UP" | "DOWN" | "DEGRADED" | "MAINTENANCE" | "PENDING"
       product_category:
         | "COLOCATION"
         | "DEDICATED_INTERNET"
@@ -617,6 +768,7 @@ export const Constants = {
         "AUTHORIZATION_LETTER",
         "OTHER",
       ],
+      monitor_status: ["UP", "DOWN", "DEGRADED", "MAINTENANCE", "PENDING"],
       product_category: [
         "COLOCATION",
         "DEDICATED_INTERNET",
