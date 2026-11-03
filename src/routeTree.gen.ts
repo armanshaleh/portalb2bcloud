@@ -17,15 +17,20 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedBackendAnnouncementsRouteImport } from './routes/_authenticated/backend.announcements'
 import { Route as AuthenticatedBackendBillingRouteImport } from './routes/_authenticated/backend.billing'
+import { Route as AuthenticatedBackendContractsRouteImport } from './routes/_authenticated/backend.contracts'
 import { Route as AuthenticatedBackendDashboardRouteImport } from './routes/_authenticated/backend.dashboard'
 import { Route as AuthenticatedBackendInvitationsRouteImport } from './routes/_authenticated/backend.invitations'
 import { Route as AuthenticatedBackendMonitorsRouteImport } from './routes/_authenticated/backend.monitors'
+import { Route as AuthenticatedBackendOrdersRouteImport } from './routes/_authenticated/backend.orders'
 import { Route as AuthenticatedBackendProductsRouteImport } from './routes/_authenticated/backend.products'
+import { Route as AuthenticatedBackendReportsRouteImport } from './routes/_authenticated/backend.reports'
 import { Route as AuthenticatedBackendTicketsRouteImport } from './routes/_authenticated/backend.tickets'
 import { Route as AuthenticatedUserAnnouncementsRouteImport } from './routes/_authenticated/user.announcements'
 import { Route as AuthenticatedUserBillingRouteImport } from './routes/_authenticated/user.billing'
+import { Route as AuthenticatedUserContractsRouteImport } from './routes/_authenticated/user.contracts'
 import { Route as AuthenticatedUserDashboardRouteImport } from './routes/_authenticated/user.dashboard'
 import { Route as AuthenticatedUserNetworkRouteImport } from './routes/_authenticated/user.network'
+import { Route as AuthenticatedUserOrdersRouteImport } from './routes/_authenticated/user.orders'
 import { Route as AuthenticatedUserTicketsRouteImport } from './routes/_authenticated/user.tickets'
 import { Route as ApiPublicCronBillingLifecycleRouteImport } from './routes/api/public/cron/billing-lifecycle'
 import { Route as ApiPublicUptimeWebhookRouteImport } from './routes/api/public/uptime/webhook'
@@ -71,6 +76,12 @@ const AuthenticatedBackendBillingRoute =
     path: '/backend/billing',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedBackendContractsRoute =
+  AuthenticatedBackendContractsRouteImport.update({
+    id: '/backend/contracts',
+    path: '/backend/contracts',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedBackendDashboardRoute =
   AuthenticatedBackendDashboardRouteImport.update({
     id: '/backend/dashboard',
@@ -89,10 +100,22 @@ const AuthenticatedBackendMonitorsRoute =
     path: '/backend/monitors',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedBackendOrdersRoute =
+  AuthenticatedBackendOrdersRouteImport.update({
+    id: '/backend/orders',
+    path: '/backend/orders',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedBackendProductsRoute =
   AuthenticatedBackendProductsRouteImport.update({
     id: '/backend/products',
     path: '/backend/products',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedBackendReportsRoute =
+  AuthenticatedBackendReportsRouteImport.update({
+    id: '/backend/reports',
+    path: '/backend/reports',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedBackendTicketsRoute =
@@ -113,6 +136,12 @@ const AuthenticatedUserBillingRoute =
     path: '/user/billing',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedUserContractsRoute =
+  AuthenticatedUserContractsRouteImport.update({
+    id: '/user/contracts',
+    path: '/user/contracts',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedUserDashboardRoute =
   AuthenticatedUserDashboardRouteImport.update({
     id: '/user/dashboard',
@@ -125,6 +154,11 @@ const AuthenticatedUserNetworkRoute =
     path: '/user/network',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedUserOrdersRoute = AuthenticatedUserOrdersRouteImport.update({
+  id: '/user/orders',
+  path: '/user/orders',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedUserTicketsRoute =
   AuthenticatedUserTicketsRouteImport.update({
     id: '/user/tickets',
@@ -151,15 +185,20 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/backend/announcements': typeof AuthenticatedBackendAnnouncementsRoute
   '/backend/billing': typeof AuthenticatedBackendBillingRoute
+  '/backend/contracts': typeof AuthenticatedBackendContractsRoute
   '/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
   '/backend/invitations': typeof AuthenticatedBackendInvitationsRoute
   '/backend/monitors': typeof AuthenticatedBackendMonitorsRoute
+  '/backend/orders': typeof AuthenticatedBackendOrdersRoute
   '/backend/products': typeof AuthenticatedBackendProductsRoute
+  '/backend/reports': typeof AuthenticatedBackendReportsRoute
   '/backend/tickets': typeof AuthenticatedBackendTicketsRoute
   '/user/announcements': typeof AuthenticatedUserAnnouncementsRoute
   '/user/billing': typeof AuthenticatedUserBillingRoute
+  '/user/contracts': typeof AuthenticatedUserContractsRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/user/network': typeof AuthenticatedUserNetworkRoute
+  '/user/orders': typeof AuthenticatedUserOrdersRoute
   '/user/tickets': typeof AuthenticatedUserTicketsRoute
   '/api/public/cron/billing-lifecycle': typeof ApiPublicCronBillingLifecycleRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
@@ -172,15 +211,20 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/backend/announcements': typeof AuthenticatedBackendAnnouncementsRoute
   '/backend/billing': typeof AuthenticatedBackendBillingRoute
+  '/backend/contracts': typeof AuthenticatedBackendContractsRoute
   '/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
   '/backend/invitations': typeof AuthenticatedBackendInvitationsRoute
   '/backend/monitors': typeof AuthenticatedBackendMonitorsRoute
+  '/backend/orders': typeof AuthenticatedBackendOrdersRoute
   '/backend/products': typeof AuthenticatedBackendProductsRoute
+  '/backend/reports': typeof AuthenticatedBackendReportsRoute
   '/backend/tickets': typeof AuthenticatedBackendTicketsRoute
   '/user/announcements': typeof AuthenticatedUserAnnouncementsRoute
   '/user/billing': typeof AuthenticatedUserBillingRoute
+  '/user/contracts': typeof AuthenticatedUserContractsRoute
   '/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/user/network': typeof AuthenticatedUserNetworkRoute
+  '/user/orders': typeof AuthenticatedUserOrdersRoute
   '/user/tickets': typeof AuthenticatedUserTicketsRoute
   '/api/public/cron/billing-lifecycle': typeof ApiPublicCronBillingLifecycleRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
@@ -195,15 +239,20 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/backend/announcements': typeof AuthenticatedBackendAnnouncementsRoute
   '/_authenticated/backend/billing': typeof AuthenticatedBackendBillingRoute
+  '/_authenticated/backend/contracts': typeof AuthenticatedBackendContractsRoute
   '/_authenticated/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
   '/_authenticated/backend/invitations': typeof AuthenticatedBackendInvitationsRoute
   '/_authenticated/backend/monitors': typeof AuthenticatedBackendMonitorsRoute
+  '/_authenticated/backend/orders': typeof AuthenticatedBackendOrdersRoute
   '/_authenticated/backend/products': typeof AuthenticatedBackendProductsRoute
+  '/_authenticated/backend/reports': typeof AuthenticatedBackendReportsRoute
   '/_authenticated/backend/tickets': typeof AuthenticatedBackendTicketsRoute
   '/_authenticated/user/announcements': typeof AuthenticatedUserAnnouncementsRoute
   '/_authenticated/user/billing': typeof AuthenticatedUserBillingRoute
+  '/_authenticated/user/contracts': typeof AuthenticatedUserContractsRoute
   '/_authenticated/user/dashboard': typeof AuthenticatedUserDashboardRoute
   '/_authenticated/user/network': typeof AuthenticatedUserNetworkRoute
+  '/_authenticated/user/orders': typeof AuthenticatedUserOrdersRoute
   '/_authenticated/user/tickets': typeof AuthenticatedUserTicketsRoute
   '/api/public/cron/billing-lifecycle': typeof ApiPublicCronBillingLifecycleRoute
   '/api/public/uptime/webhook': typeof ApiPublicUptimeWebhookRoute
@@ -218,15 +267,20 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/backend/announcements'
     | '/backend/billing'
+    | '/backend/contracts'
     | '/backend/dashboard'
     | '/backend/invitations'
     | '/backend/monitors'
+    | '/backend/orders'
     | '/backend/products'
+    | '/backend/reports'
     | '/backend/tickets'
     | '/user/announcements'
     | '/user/billing'
+    | '/user/contracts'
     | '/user/dashboard'
     | '/user/network'
+    | '/user/orders'
     | '/user/tickets'
     | '/api/public/cron/billing-lifecycle'
     | '/api/public/uptime/webhook'
@@ -239,15 +293,20 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/backend/announcements'
     | '/backend/billing'
+    | '/backend/contracts'
     | '/backend/dashboard'
     | '/backend/invitations'
     | '/backend/monitors'
+    | '/backend/orders'
     | '/backend/products'
+    | '/backend/reports'
     | '/backend/tickets'
     | '/user/announcements'
     | '/user/billing'
+    | '/user/contracts'
     | '/user/dashboard'
     | '/user/network'
+    | '/user/orders'
     | '/user/tickets'
     | '/api/public/cron/billing-lifecycle'
     | '/api/public/uptime/webhook'
@@ -261,15 +320,20 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/backend/announcements'
     | '/_authenticated/backend/billing'
+    | '/_authenticated/backend/contracts'
     | '/_authenticated/backend/dashboard'
     | '/_authenticated/backend/invitations'
     | '/_authenticated/backend/monitors'
+    | '/_authenticated/backend/orders'
     | '/_authenticated/backend/products'
+    | '/_authenticated/backend/reports'
     | '/_authenticated/backend/tickets'
     | '/_authenticated/user/announcements'
     | '/_authenticated/user/billing'
+    | '/_authenticated/user/contracts'
     | '/_authenticated/user/dashboard'
     | '/_authenticated/user/network'
+    | '/_authenticated/user/orders'
     | '/_authenticated/user/tickets'
     | '/api/public/cron/billing-lifecycle'
     | '/api/public/uptime/webhook'
@@ -344,6 +408,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBackendBillingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/backend/contracts': {
+      id: '/_authenticated/backend/contracts'
+      path: '/backend/contracts'
+      fullPath: '/backend/contracts'
+      preLoaderRoute: typeof AuthenticatedBackendContractsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/backend/dashboard': {
       id: '/_authenticated/backend/dashboard'
       path: '/backend/dashboard'
@@ -365,11 +436,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBackendMonitorsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/backend/orders': {
+      id: '/_authenticated/backend/orders'
+      path: '/backend/orders'
+      fullPath: '/backend/orders'
+      preLoaderRoute: typeof AuthenticatedBackendOrdersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/backend/products': {
       id: '/_authenticated/backend/products'
       path: '/backend/products'
       fullPath: '/backend/products'
       preLoaderRoute: typeof AuthenticatedBackendProductsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/backend/reports': {
+      id: '/_authenticated/backend/reports'
+      path: '/backend/reports'
+      fullPath: '/backend/reports'
+      preLoaderRoute: typeof AuthenticatedBackendReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/backend/tickets': {
@@ -393,6 +478,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUserBillingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/user/contracts': {
+      id: '/_authenticated/user/contracts'
+      path: '/user/contracts'
+      fullPath: '/user/contracts'
+      preLoaderRoute: typeof AuthenticatedUserContractsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/user/dashboard': {
       id: '/_authenticated/user/dashboard'
       path: '/user/dashboard'
@@ -405,6 +497,13 @@ declare module '@tanstack/react-router' {
       path: '/user/network'
       fullPath: '/user/network'
       preLoaderRoute: typeof AuthenticatedUserNetworkRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/user/orders': {
+      id: '/_authenticated/user/orders'
+      path: '/user/orders'
+      fullPath: '/user/orders'
+      preLoaderRoute: typeof AuthenticatedUserOrdersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/user/tickets': {
@@ -434,15 +533,20 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBackendAnnouncementsRoute: typeof AuthenticatedBackendAnnouncementsRoute
   AuthenticatedBackendBillingRoute: typeof AuthenticatedBackendBillingRoute
+  AuthenticatedBackendContractsRoute: typeof AuthenticatedBackendContractsRoute
   AuthenticatedBackendDashboardRoute: typeof AuthenticatedBackendDashboardRoute
   AuthenticatedBackendInvitationsRoute: typeof AuthenticatedBackendInvitationsRoute
   AuthenticatedBackendMonitorsRoute: typeof AuthenticatedBackendMonitorsRoute
+  AuthenticatedBackendOrdersRoute: typeof AuthenticatedBackendOrdersRoute
   AuthenticatedBackendProductsRoute: typeof AuthenticatedBackendProductsRoute
+  AuthenticatedBackendReportsRoute: typeof AuthenticatedBackendReportsRoute
   AuthenticatedBackendTicketsRoute: typeof AuthenticatedBackendTicketsRoute
   AuthenticatedUserAnnouncementsRoute: typeof AuthenticatedUserAnnouncementsRoute
   AuthenticatedUserBillingRoute: typeof AuthenticatedUserBillingRoute
+  AuthenticatedUserContractsRoute: typeof AuthenticatedUserContractsRoute
   AuthenticatedUserDashboardRoute: typeof AuthenticatedUserDashboardRoute
   AuthenticatedUserNetworkRoute: typeof AuthenticatedUserNetworkRoute
+  AuthenticatedUserOrdersRoute: typeof AuthenticatedUserOrdersRoute
   AuthenticatedUserTicketsRoute: typeof AuthenticatedUserTicketsRoute
 }
 
@@ -450,15 +554,20 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBackendAnnouncementsRoute:
     AuthenticatedBackendAnnouncementsRoute,
   AuthenticatedBackendBillingRoute: AuthenticatedBackendBillingRoute,
+  AuthenticatedBackendContractsRoute: AuthenticatedBackendContractsRoute,
   AuthenticatedBackendDashboardRoute: AuthenticatedBackendDashboardRoute,
   AuthenticatedBackendInvitationsRoute: AuthenticatedBackendInvitationsRoute,
   AuthenticatedBackendMonitorsRoute: AuthenticatedBackendMonitorsRoute,
+  AuthenticatedBackendOrdersRoute: AuthenticatedBackendOrdersRoute,
   AuthenticatedBackendProductsRoute: AuthenticatedBackendProductsRoute,
+  AuthenticatedBackendReportsRoute: AuthenticatedBackendReportsRoute,
   AuthenticatedBackendTicketsRoute: AuthenticatedBackendTicketsRoute,
   AuthenticatedUserAnnouncementsRoute: AuthenticatedUserAnnouncementsRoute,
   AuthenticatedUserBillingRoute: AuthenticatedUserBillingRoute,
+  AuthenticatedUserContractsRoute: AuthenticatedUserContractsRoute,
   AuthenticatedUserDashboardRoute: AuthenticatedUserDashboardRoute,
   AuthenticatedUserNetworkRoute: AuthenticatedUserNetworkRoute,
+  AuthenticatedUserOrdersRoute: AuthenticatedUserOrdersRoute,
   AuthenticatedUserTicketsRoute: AuthenticatedUserTicketsRoute,
 }
 

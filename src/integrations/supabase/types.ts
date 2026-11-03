@@ -388,6 +388,53 @@ export type Database = {
         }
         Relationships: []
       }
+      contracts: {
+        Row: {
+          contract_type: string
+          created_at: string
+          customer_id: string
+          end_date: string | null
+          file_path: string
+          id: string
+          mime_type: string
+          start_date: string | null
+          title: string
+          uploaded_by: string
+        }
+        Insert: {
+          contract_type?: string
+          created_at?: string
+          customer_id: string
+          end_date?: string | null
+          file_path: string
+          id?: string
+          mime_type: string
+          start_date?: string | null
+          title: string
+          uploaded_by: string
+        }
+        Update: {
+          contract_type?: string
+          created_at?: string
+          customer_id?: string
+          end_date?: string | null
+          file_path?: string
+          id?: string
+          mime_type?: string
+          start_date?: string | null
+          title?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contracts_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       customer_code_counters: {
         Row: {
           code_type: Database["public"]["Enums"]["customer_type"]
@@ -750,6 +797,76 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      pre_orders: {
+        Row: {
+          billing_cycle: Database["public"]["Enums"]["billing_cycle"]
+          created_at: string
+          created_by: string
+          customer_id: string
+          id: string
+          notes: string | null
+          product_id: string
+          quantity: number
+          quotation_id: string | null
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          billing_cycle?: Database["public"]["Enums"]["billing_cycle"]
+          created_at?: string
+          created_by: string
+          customer_id: string
+          id?: string
+          notes?: string | null
+          product_id: string
+          quantity?: number
+          quotation_id?: string | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          billing_cycle?: Database["public"]["Enums"]["billing_cycle"]
+          created_at?: string
+          created_by?: string
+          customer_id?: string
+          id?: string
+          notes?: string | null
+          product_id?: string
+          quantity?: number
+          quotation_id?: string | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pre_orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pre_orders_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pre_orders_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: false
+            referencedRelation: "billing_documents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {
