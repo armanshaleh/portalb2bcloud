@@ -38,7 +38,7 @@ export function HeartbeatBar({ beats }: { beats: MonitorView["beats"] }) {
               <TooltipTrigger asChild>
                 <span
                   className={cn(
-                    "h-full flex-1 rounded-full transition-all duration-300 ease-spring hover:scale-y-110",
+                    "h-full flex-1 rounded-full transition-opacity duration-200 hover:opacity-80",
                     STATUS_META[b.status].bar,
                   )}
                 />
