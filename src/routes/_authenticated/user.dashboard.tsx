@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getMyIdentity } from "@/lib/identity.functions";
 import { getMyCustomerOverview } from "@/lib/client.functions";
 import { BRAND } from "@/lib/brand";
+import { AppShell } from "@/components/app-shell";
 import { formatDate, formatFileSize } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -70,30 +71,13 @@ function UserDashboard() {
   const customer = overview.customer;
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <div className="flex items-center gap-3">
-            <div className="bg-gradient-brand flex h-9 w-9 items-center justify-center rounded-lg">
-              <Building2 className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <div>
-              <p className="font-display text-sm font-bold">{BRAND.name}</p>
-              <p className="text-[10px] text-muted-foreground">{BRAND.tagline}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="hidden text-muted-foreground sm:inline">
-              {customer?.verified_email ?? ""}
-            </span>
-            <Button variant="outline" size="sm" onClick={() => void handleSignOut()}>
-              <LogOut className="h-4 w-4" /> Sign out
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-6xl space-y-6 px-6 py-8">
+    <AppShell
+      variant="client"
+      title="Overview"
+      subtitle={customer ? `${customer.customer_code} · ${BRAND.name}` : BRAND.name}
+      email={customer?.verified_email}
+    >
+      <main className="mx-auto max-w-6xl space-y-6">
         {!customer ? (
           <Card>
             <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
@@ -316,6 +300,6 @@ function UserDashboard() {
           </>
         )}
       </main>
-    </div>
+    </AppShell>
   );
 }
