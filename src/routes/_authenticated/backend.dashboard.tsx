@@ -230,7 +230,7 @@ function BackendDashboard() {
               <TabsTrigger value="queue">
                 Verification queue
                 {pending.length > 0 && (
-                  <Badge className="ml-2 bg-warning/15 text-warning">{pending.length}</Badge>
+                  <Badge variant="warning" className="ml-2">{pending.length}</Badge>
                 )}
               </TabsTrigger>
               <TabsTrigger value="users">All users</TabsTrigger>
