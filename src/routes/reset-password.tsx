@@ -62,7 +62,7 @@ function ResetPasswordPage() {
 
   if (!checked) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="flex min-h-screen items-center justify-center ">
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
       </div>
     );
@@ -70,7 +70,7 @@ function ResetPasswordPage() {
 
   if (!isRecovery) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="flex min-h-screen items-center justify-center  px-4">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 font-display text-xl">
@@ -96,7 +96,7 @@ function ResetPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center  px-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="font-display text-xl">Set a new password</CardTitle>

@@ -226,7 +226,7 @@ function RegisterPage() {
 
   if (invite.state !== "ok" && !done) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="flex min-h-screen items-center justify-center  px-4">
         <Card className="w-full max-w-md text-center">
           <CardHeader>
             {invite.state === "loading" ? (
@@ -258,7 +258,7 @@ function RegisterPage() {
 
   if (done) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="flex min-h-screen items-center justify-center  px-4">
         <Card className="w-full max-w-md text-center">
           <CardHeader>
             <CheckCircle2 className="mx-auto h-12 w-12 text-success" />

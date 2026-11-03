@@ -97,7 +97,7 @@ export function AppShell({
     cn(
       "group flex items-center gap-3 rounded-2xl text-sm font-medium",
       SPRING,
-      "hover:scale-[1.01] active:scale-[0.98]",
+      "liquid shadow-none",
       collapsed ? "h-12 w-12 justify-center" : "h-11 px-3",
       active
         ? "bg-gradient-brand text-primary-foreground shadow-elevated"
@@ -118,7 +118,7 @@ export function AppShell({
 
   return (
     <TooltipProvider delayDuration={120}>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen ">
         <aside
           className={cn(
             "fixed inset-y-3 left-3 z-30 hidden flex-col rounded-3xl border border-sidebar-border glass md:flex",

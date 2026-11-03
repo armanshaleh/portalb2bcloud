@@ -107,14 +107,14 @@ function AuthPage() {
 
   if (checking) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="flex min-h-screen items-center justify-center ">
         <Loader2 className="h-6 w-6 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen ">
       {/* Form panel */}
       <div className="flex w-full flex-col justify-center px-6 py-12 lg:w-[46%] lg:px-16">
         <div className="mx-auto w-full max-w-md">
