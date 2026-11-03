@@ -11,6 +11,9 @@ import {
   Mail,
   LifeBuoy,
   Package,
+  ShoppingCart,
+  FileSignature,
+  BarChart3,
   Receipt,
   Megaphone,
   Moon,
@@ -25,7 +28,7 @@ import { NotificationBell } from "@/components/notification-bell";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type NavItem = {
-  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements" | "/backend/billing" | "/user/billing" | "/backend/tickets" | "/user/tickets" | "/backend/products";
+  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements" | "/backend/billing" | "/user/billing" | "/backend/tickets" | "/user/tickets" | "/backend/products" | "/backend/orders" | "/backend/contracts" | "/backend/reports" | "/user/orders" | "/user/contracts";
   label: string;
   icon: LucideIcon;
 };
@@ -36,6 +39,9 @@ const STAFF_NAV: NavItem[] = [
   { to: "/backend/monitors", label: "Network monitor", icon: Activity },
   { to: "/backend/billing", label: "Billing", icon: Receipt },
   { to: "/backend/products", label: "Products & pricing", icon: Package },
+  { to: "/backend/orders", label: "Pre-orders", icon: ShoppingCart },
+  { to: "/backend/contracts", label: "Contracts", icon: FileSignature },
+  { to: "/backend/reports", label: "Reports", icon: BarChart3 },
   { to: "/backend/tickets", label: "Tickets", icon: LifeBuoy },
   { to: "/backend/announcements", label: "Announcements", icon: Megaphone },
 ];
@@ -44,6 +50,8 @@ const CLIENT_NAV: NavItem[] = [
   { to: "/user/dashboard", label: "Overview", icon: LayoutDashboard },
   { to: "/user/network", label: "Network status", icon: Activity },
   { to: "/user/billing", label: "Billing", icon: Receipt },
+  { to: "/user/orders", label: "Order service", icon: ShoppingCart },
+  { to: "/user/contracts", label: "Contracts", icon: FileSignature },
   { to: "/user/tickets", label: "Support tickets", icon: LifeBuoy },
   { to: "/user/announcements", label: "Announcements", icon: Megaphone },
 ];
