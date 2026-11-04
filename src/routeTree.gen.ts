@@ -25,6 +25,7 @@ import { Route as AuthenticatedBackendOrdersRouteImport } from './routes/_authen
 import { Route as AuthenticatedBackendProductsRouteImport } from './routes/_authenticated/backend.products'
 import { Route as AuthenticatedBackendReportsRouteImport } from './routes/_authenticated/backend.reports'
 import { Route as AuthenticatedBackendTicketsRouteImport } from './routes/_authenticated/backend.tickets'
+import { Route as AuthenticatedBackendUsersRouteImport } from './routes/_authenticated/backend.users'
 import { Route as AuthenticatedUserAnnouncementsRouteImport } from './routes/_authenticated/user.announcements'
 import { Route as AuthenticatedUserBillingRouteImport } from './routes/_authenticated/user.billing'
 import { Route as AuthenticatedUserContractsRouteImport } from './routes/_authenticated/user.contracts'
@@ -124,6 +125,12 @@ const AuthenticatedBackendTicketsRoute =
     path: '/backend/tickets',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedBackendUsersRoute =
+  AuthenticatedBackendUsersRouteImport.update({
+    id: '/backend/users',
+    path: '/backend/users',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedUserAnnouncementsRoute =
   AuthenticatedUserAnnouncementsRouteImport.update({
     id: '/user/announcements',
@@ -193,6 +200,7 @@ export interface FileRoutesByFullPath {
   '/backend/products': typeof AuthenticatedBackendProductsRoute
   '/backend/reports': typeof AuthenticatedBackendReportsRoute
   '/backend/tickets': typeof AuthenticatedBackendTicketsRoute
+  '/backend/users': typeof AuthenticatedBackendUsersRoute
   '/user/announcements': typeof AuthenticatedUserAnnouncementsRoute
   '/user/billing': typeof AuthenticatedUserBillingRoute
   '/user/contracts': typeof AuthenticatedUserContractsRoute
@@ -219,6 +227,7 @@ export interface FileRoutesByTo {
   '/backend/products': typeof AuthenticatedBackendProductsRoute
   '/backend/reports': typeof AuthenticatedBackendReportsRoute
   '/backend/tickets': typeof AuthenticatedBackendTicketsRoute
+  '/backend/users': typeof AuthenticatedBackendUsersRoute
   '/user/announcements': typeof AuthenticatedUserAnnouncementsRoute
   '/user/billing': typeof AuthenticatedUserBillingRoute
   '/user/contracts': typeof AuthenticatedUserContractsRoute
@@ -247,6 +256,7 @@ export interface FileRoutesById {
   '/_authenticated/backend/products': typeof AuthenticatedBackendProductsRoute
   '/_authenticated/backend/reports': typeof AuthenticatedBackendReportsRoute
   '/_authenticated/backend/tickets': typeof AuthenticatedBackendTicketsRoute
+  '/_authenticated/backend/users': typeof AuthenticatedBackendUsersRoute
   '/_authenticated/user/announcements': typeof AuthenticatedUserAnnouncementsRoute
   '/_authenticated/user/billing': typeof AuthenticatedUserBillingRoute
   '/_authenticated/user/contracts': typeof AuthenticatedUserContractsRoute
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
     | '/backend/products'
     | '/backend/reports'
     | '/backend/tickets'
+    | '/backend/users'
     | '/user/announcements'
     | '/user/billing'
     | '/user/contracts'
@@ -301,6 +312,7 @@ export interface FileRouteTypes {
     | '/backend/products'
     | '/backend/reports'
     | '/backend/tickets'
+    | '/backend/users'
     | '/user/announcements'
     | '/user/billing'
     | '/user/contracts'
@@ -328,6 +340,7 @@ export interface FileRouteTypes {
     | '/_authenticated/backend/products'
     | '/_authenticated/backend/reports'
     | '/_authenticated/backend/tickets'
+    | '/_authenticated/backend/users'
     | '/_authenticated/user/announcements'
     | '/_authenticated/user/billing'
     | '/_authenticated/user/contracts'
@@ -464,6 +477,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBackendTicketsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/backend/users': {
+      id: '/_authenticated/backend/users'
+      path: '/backend/users'
+      fullPath: '/backend/users'
+      preLoaderRoute: typeof AuthenticatedBackendUsersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/user/announcements': {
       id: '/_authenticated/user/announcements'
       path: '/user/announcements'
@@ -541,6 +561,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedBackendProductsRoute: typeof AuthenticatedBackendProductsRoute
   AuthenticatedBackendReportsRoute: typeof AuthenticatedBackendReportsRoute
   AuthenticatedBackendTicketsRoute: typeof AuthenticatedBackendTicketsRoute
+  AuthenticatedBackendUsersRoute: typeof AuthenticatedBackendUsersRoute
   AuthenticatedUserAnnouncementsRoute: typeof AuthenticatedUserAnnouncementsRoute
   AuthenticatedUserBillingRoute: typeof AuthenticatedUserBillingRoute
   AuthenticatedUserContractsRoute: typeof AuthenticatedUserContractsRoute
@@ -562,6 +583,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBackendProductsRoute: AuthenticatedBackendProductsRoute,
   AuthenticatedBackendReportsRoute: AuthenticatedBackendReportsRoute,
   AuthenticatedBackendTicketsRoute: AuthenticatedBackendTicketsRoute,
+  AuthenticatedBackendUsersRoute: AuthenticatedBackendUsersRoute,
   AuthenticatedUserAnnouncementsRoute: AuthenticatedUserAnnouncementsRoute,
   AuthenticatedUserBillingRoute: AuthenticatedUserBillingRoute,
   AuthenticatedUserContractsRoute: AuthenticatedUserContractsRoute,

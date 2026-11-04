@@ -1,0 +1,2 @@
+ALTER TABLE public.customers ADD COLUMN IF NOT EXISTS archived_at timestamptz, ADD COLUMN IF NOT EXISTS archived_by uuid;
+CREATE INDEX IF NOT EXISTS customers_archived_at_idx ON public.customers(archived_at);

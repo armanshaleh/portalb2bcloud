@@ -45,3 +45,4 @@
 - Notifications are created by DB triggers / server code only; clients can read/mark their own.
 - Pre-orders: clients insert PENDING_APPROVAL rows via RLS; only `reviewPreOrder` (superuser) changes status and creates the linked QUO via `preOrderLines` + `computeTotals`.
 - Contracts: staff upload via `uploadContract` into the customer's `{user_id}/` folder; viewed only through `ContractViewer` (blob URL + identity watermark, no download control).
+- User management (/backend/users) is superuser/admin only via `users.functions.ts`; only superusers create or manage admins. Customers are never hard-deleted: archive sets `archived_at`, bans the login and suspends services so billing history stays intact.
