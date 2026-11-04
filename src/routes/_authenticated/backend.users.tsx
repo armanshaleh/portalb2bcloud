@@ -26,9 +26,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/_authenticated/backend/users")({
-  validateSearch: (s: Record<string, unknown>): { tab?: "staff" | "customers"; view?: "active" | "archived" | "invites" } => ({
-    tab: s.tab === "customers" ? "customers" : s.tab === "staff" ? "staff" : undefined,
-    view: s.view === "archived" || s.view === "invites" || s.view === "active" ? s.view : undefined,
+  validateSearch: (s: Record<string, unknown>): { tab?: "staff" | "customers" | undefined; view?: "active" | "archived" | "invites" | undefined } => ({
+    tab: s["tab"] === "customers" ? "customers" : s["tab"] === "staff" ? "staff" : undefined,
+    view: s["view"] === "archived" || s["view"] === "invites" || s["view"] === "active" ? s["view"] : undefined,
   }),
   ssr: false,
   head: () => ({
