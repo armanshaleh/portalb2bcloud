@@ -134,7 +134,7 @@ function BackendMonitors() {
     >
       <div className="space-y-6">
         {config.data?.allowed && (
-          <div className="glass space-y-3 rounded-3xl border p-5">
+          <div className="glass space-y-5 rounded-3xl border p-5">
             <div className="flex items-center gap-2">
               <KeyRound className="h-4 w-4 text-primary" />
               <p className="font-display font-semibold">Uptime Kuma connection</p>
@@ -242,7 +242,7 @@ function BackendMonitors() {
             <DialogDescription>Link a monitor from your Uptime Kuma engine.</DialogDescription>
           </DialogHeader>
           {draft && (
-            <div className="space-y-4">
+            <div className="space-y-5">
               <div className="space-y-2">
                 <Label htmlFor="m-name">Name</Label>
                 <Input id="m-name" value={draft.name} placeholder="Core Switch DC-1" onChange={(e) => setDraft({ ...draft, name: e.target.value })} />

@@ -149,20 +149,20 @@ function NewTicketDialog({ open, onClose }: { open: boolean; onClose: () => void
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-h-[90vh] max-w-xl overflow-y-auto">
         <DialogHeader><DialogTitle>New ticket</DialogTitle></DialogHeader>
-        <div className="space-y-4">
-          <div className="space-y-1.5">
+        <div className="space-y-5">
+          <div className="space-y-2">
             <Label>Category</Label>
             <Select value={category} onValueChange={(v) => { setCategory(v as Cat); setDetails({}); }}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>{Object.entries(CATEGORY_LABEL).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}</SelectContent>
             </Select>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label htmlFor="t-subj">Subject</Label>
             <Input id="t-subj" value={subject} onChange={(e) => setSubject(e.target.value)} maxLength={200} />
           </div>
           {fields.map((f) => (
-            <div key={f.key} className="space-y-1.5">
+            <div key={f.key} className="space-y-2">
               <Label>{FIELD_LABEL[f.key]}</Label>
               {f.multiline ? (
                 <Textarea rows={2} value={details[f.key] ?? ""} onChange={(e) => setDetails({ ...details, [f.key]: e.target.value })} maxLength={1000} />
@@ -174,7 +174,7 @@ function NewTicketDialog({ open, onClose }: { open: boolean; onClose: () => void
           {category === "GOODS_OUT" && (
             <UploadField docType="AUTHORIZATION_LETTER" label="Authorization letter" required value={file} onChange={setFile} />
           )}
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label htmlFor="t-desc">Description</Label>
             <Textarea id="t-desc" rows={4} value={description} onChange={(e) => setDescription(e.target.value)} maxLength={4000} />
           </div>

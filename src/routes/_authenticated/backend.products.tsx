@@ -152,11 +152,11 @@ function Products() {
           </div>
         </section>
 
-        <section className="glass space-y-3 rounded-3xl border p-5">
+        <section className="glass space-y-5 rounded-3xl border p-5">
           <h2 className="font-display font-semibold">Pro-rata calculator</h2>
           <div className="grid max-w-lg gap-2 sm:grid-cols-2">
-            <div className="space-y-2.5"><Label>Monthly price</Label><Input type="number" value={calc.monthly} onChange={(e) => setCalc({ ...calc, monthly: e.target.value })} /></div>
-            <div className="space-y-2.5"><Label>Activation date</Label><Input type="date" value={calc.date} onChange={(e) => setCalc({ ...calc, date: e.target.value })} /></div>
+            <div className="space-y-2"><Label>Monthly price</Label><Input type="number" value={calc.monthly} onChange={(e) => setCalc({ ...calc, monthly: e.target.value })} /></div>
+            <div className="space-y-2"><Label>Activation date</Label><Input type="date" value={calc.date} onChange={(e) => setCalc({ ...calc, date: e.target.value })} /></div>
           </div>
           {pr !== null && <p className="text-sm">First-month charge: <span className="font-semibold">{formatIDR(pr)}</span></p>}
         </section>

@@ -77,25 +77,25 @@ function UserOrders() {
   return (
     <AppShell variant="client" title="Order service" subtitle="Request new services" email={identity.email}>
       <div className="mx-auto grid max-w-6xl gap-5 lg:grid-cols-[340px_1fr]">
-        <div className="glass space-y-3 rounded-3xl border p-5">
+        <div className="glass space-y-5 rounded-3xl border p-5">
           <p className="font-semibold">New order</p>
           {!verified && <p className="text-xs text-muted-foreground">Ordering opens once your account is verified.</p>}
-          <div className="space-y-2.5"><Label>Service</Label>
+          <div className="space-y-2"><Label>Service</Label>
             <Select value={form.product_id} onValueChange={(v) => setForm({ ...form, product_id: v })}>
               <SelectTrigger><SelectValue placeholder="Select a service" /></SelectTrigger>
               <SelectContent>{(products.data ?? []).map((p) => <SelectItem key={p.id} value={p.id}>{p.name} · {formatIDR(p.unit_price)}/mo</SelectItem>)}</SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-2.5"><Label>Quantity</Label><Input type="number" min={1} max={1000} value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} /></div>
-            <div className="space-y-2.5"><Label>Billing</Label>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2"><Label>Quantity</Label><Input type="number" min={1} max={1000} value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} /></div>
+            <div className="space-y-2"><Label>Billing</Label>
               <Select value={form.billing_cycle} onValueChange={(v) => setForm({ ...form, billing_cycle: v as (typeof CYCLES)[number] })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>{CYCLES.map((c) => <SelectItem key={c} value={c}>{c.toLowerCase()}</SelectItem>)}</SelectContent>
               </Select>
             </div>
           </div>
-          <div className="space-y-2.5"><Label>Notes</Label><Textarea value={form.notes} maxLength={1000} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
+          <div className="space-y-2"><Label>Notes</Label><Textarea value={form.notes} maxLength={1000} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></div>
           <Button className="w-full" disabled={busy || !verified} onClick={() => void submit()}>
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShoppingCart className="h-4 w-4" />} Submit order
           </Button>

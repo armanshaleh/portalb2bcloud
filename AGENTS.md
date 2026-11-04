@@ -16,7 +16,7 @@
 - Email + password sign-in only (user decision — no social providers). KYC-created
   accounts are created with `email_confirm: true` because staff verification gates
   real use; the auth-setting global auto-confirm stays off.
-- Invitation-only: staff create single-use invitations (`client_invitations`, only a SHA-256 hash of the token is stored); `/register?token=` is the only sign-up path and `registerCustomer` rejects any request without an open, matching invitation.
+- Invitation-only (managed in Users → Customers → Invitations; old /backend/invitations redirects): staff create single-use invitations (`client_invitations`, only a SHA-256 hash of the token is stored); `/register?token=` is the only sign-up path and `registerCustomer` rejects any request without an open, matching invitation.
 - Registration is a server function (`registerCustomer`, zod-validated) that
   creates the auth user with the service-role client, re-checks MIME/extension/size
   (10 MB), uploads files under `{user_id}/{uuid}.{ext}` in the private

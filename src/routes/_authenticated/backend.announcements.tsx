@@ -86,9 +86,9 @@ function StaffAnnouncements() {
   return (
     <AppShell variant="staff" title="Announcements" subtitle="Broadcast official updates to customers" email={identity.email}>
       <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-[380px_1fr]">
-        <section className="glass h-fit space-y-4 rounded-3xl border p-5">
+        <section className="glass h-fit space-y-5 rounded-3xl border p-5">
           <h2 className="font-display font-semibold">New announcement</h2>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label>Category</Label>
             <Select value={category} onValueChange={(v) => setCategory(v as Cat)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
@@ -99,11 +99,11 @@ function StaffAnnouncements() {
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label htmlFor="a-title">Title</Label>
             <Input id="a-title" value={title} onChange={(e) => setTitle(e.target.value)} maxLength={150} />
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label htmlFor="a-body">Message</Label>
             <Textarea id="a-body" rows={6} value={body} onChange={(e) => setBody(e.target.value)} maxLength={4000} />
           </div>

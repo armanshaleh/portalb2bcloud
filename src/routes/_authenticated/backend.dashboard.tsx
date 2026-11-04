@@ -279,7 +279,7 @@ function BackendDashboard() {
                         <TableHead>Type</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Registered</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                        <TableHead className="text-center">Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -293,7 +293,7 @@ function BackendDashboard() {
                           </TableCell>
                           <TableCell>{statusBadge(c.status)}</TableCell>
                           <TableCell className="text-muted-foreground">{formatDateTime(c.created_at)}</TableCell>
-                          <TableCell className="space-x-2 text-right">
+                          <TableCell><div className="flex items-center justify-center gap-2">
                             <Button size="sm" variant="outline" onClick={() => setSelectedId(c.id)}>
                               Review
                             </Button>
@@ -317,6 +317,7 @@ function BackendDashboard() {
                                 Suspend
                               </Button>
                             ) : null}
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}

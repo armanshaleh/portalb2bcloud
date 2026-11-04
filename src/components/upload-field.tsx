@@ -35,7 +35,7 @@ export function UploadField({ docType, label, required, disabled, value, onChang
   }
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-2">
       <Label>
         {label}
         {required ? <span className="text-destructive"> *</span> : null}
