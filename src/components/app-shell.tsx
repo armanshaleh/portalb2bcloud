@@ -17,6 +17,7 @@ import {
   Receipt,
   Megaphone,
   Users,
+  ScrollText,
   Moon,
   Sun,
   type LucideIcon,
@@ -29,7 +30,7 @@ import { NotificationBell } from "@/components/notification-bell";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type NavItem = {
-  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements" | "/backend/billing" | "/user/billing" | "/backend/tickets" | "/user/tickets" | "/backend/products" | "/backend/orders" | "/backend/contracts" | "/backend/reports" | "/user/orders" | "/user/contracts" | "/backend/users";
+  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements" | "/backend/billing" | "/user/billing" | "/backend/tickets" | "/user/tickets" | "/backend/products" | "/backend/orders" | "/backend/contracts" | "/backend/reports" | "/user/orders" | "/user/contracts" | "/backend/users" | "/backend/audit-logs";
   label: string;
   icon: LucideIcon;
 };
@@ -46,6 +47,7 @@ const STAFF_NAV: NavItem[] = [
   { to: "/backend/tickets", label: "Tickets", icon: LifeBuoy },
   { to: "/backend/monitors", label: "Network monitor", icon: Activity },
   { to: "/backend/announcements", label: "Announcements", icon: Megaphone },
+  { to: "/backend/audit-logs", label: "Audit logs", icon: ScrollText },
 ];
 
 const CLIENT_NAV: NavItem[] = [

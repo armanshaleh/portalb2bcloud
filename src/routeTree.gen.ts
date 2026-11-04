@@ -16,6 +16,7 @@ import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedBackendAnnouncementsRouteImport } from './routes/_authenticated/backend.announcements'
+import { Route as AuthenticatedBackendAuditLogsRouteImport } from './routes/_authenticated/backend.audit-logs'
 import { Route as AuthenticatedBackendBillingRouteImport } from './routes/_authenticated/backend.billing'
 import { Route as AuthenticatedBackendContractsRouteImport } from './routes/_authenticated/backend.contracts'
 import { Route as AuthenticatedBackendDashboardRouteImport } from './routes/_authenticated/backend.dashboard'
@@ -69,6 +70,12 @@ const AuthenticatedBackendAnnouncementsRoute =
   AuthenticatedBackendAnnouncementsRouteImport.update({
     id: '/backend/announcements',
     path: '/backend/announcements',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedBackendAuditLogsRoute =
+  AuthenticatedBackendAuditLogsRouteImport.update({
+    id: '/backend/audit-logs',
+    path: '/backend/audit-logs',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedBackendBillingRoute =
@@ -191,6 +198,7 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/backend/announcements': typeof AuthenticatedBackendAnnouncementsRoute
+  '/backend/audit-logs': typeof AuthenticatedBackendAuditLogsRoute
   '/backend/billing': typeof AuthenticatedBackendBillingRoute
   '/backend/contracts': typeof AuthenticatedBackendContractsRoute
   '/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
@@ -218,6 +226,7 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/backend/announcements': typeof AuthenticatedBackendAnnouncementsRoute
+  '/backend/audit-logs': typeof AuthenticatedBackendAuditLogsRoute
   '/backend/billing': typeof AuthenticatedBackendBillingRoute
   '/backend/contracts': typeof AuthenticatedBackendContractsRoute
   '/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
@@ -247,6 +256,7 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/backend/announcements': typeof AuthenticatedBackendAnnouncementsRoute
+  '/_authenticated/backend/audit-logs': typeof AuthenticatedBackendAuditLogsRoute
   '/_authenticated/backend/billing': typeof AuthenticatedBackendBillingRoute
   '/_authenticated/backend/contracts': typeof AuthenticatedBackendContractsRoute
   '/_authenticated/backend/dashboard': typeof AuthenticatedBackendDashboardRoute
@@ -276,6 +286,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/backend/announcements'
+    | '/backend/audit-logs'
     | '/backend/billing'
     | '/backend/contracts'
     | '/backend/dashboard'
@@ -303,6 +314,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/backend/announcements'
+    | '/backend/audit-logs'
     | '/backend/billing'
     | '/backend/contracts'
     | '/backend/dashboard'
@@ -331,6 +343,7 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/_authenticated/backend/announcements'
+    | '/_authenticated/backend/audit-logs'
     | '/_authenticated/backend/billing'
     | '/_authenticated/backend/contracts'
     | '/_authenticated/backend/dashboard'
@@ -412,6 +425,13 @@ declare module '@tanstack/react-router' {
       path: '/backend/announcements'
       fullPath: '/backend/announcements'
       preLoaderRoute: typeof AuthenticatedBackendAnnouncementsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/backend/audit-logs': {
+      id: '/_authenticated/backend/audit-logs'
+      path: '/backend/audit-logs'
+      fullPath: '/backend/audit-logs'
+      preLoaderRoute: typeof AuthenticatedBackendAuditLogsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/backend/billing': {
@@ -552,6 +572,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedBackendAnnouncementsRoute: typeof AuthenticatedBackendAnnouncementsRoute
+  AuthenticatedBackendAuditLogsRoute: typeof AuthenticatedBackendAuditLogsRoute
   AuthenticatedBackendBillingRoute: typeof AuthenticatedBackendBillingRoute
   AuthenticatedBackendContractsRoute: typeof AuthenticatedBackendContractsRoute
   AuthenticatedBackendDashboardRoute: typeof AuthenticatedBackendDashboardRoute
@@ -574,6 +595,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedBackendAnnouncementsRoute:
     AuthenticatedBackendAnnouncementsRoute,
+  AuthenticatedBackendAuditLogsRoute: AuthenticatedBackendAuditLogsRoute,
   AuthenticatedBackendBillingRoute: AuthenticatedBackendBillingRoute,
   AuthenticatedBackendContractsRoute: AuthenticatedBackendContractsRoute,
   AuthenticatedBackendDashboardRoute: AuthenticatedBackendDashboardRoute,
