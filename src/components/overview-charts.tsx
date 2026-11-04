@@ -19,7 +19,7 @@ function lastSixMonths() {
 
 function compact(v: number) {
   if (v >= 1e9) return `${(v / 1e9).toFixed(1)}M`;
-  if (v >= 1e6) return `${Math.round(v / 1e6)}jt`;
+  if (v >= 1e6) return `${Number((v / 1e6).toFixed(1))}jt`;
   if (v >= 1e3) return `${Math.round(v / 1e3)}rb`;
   return String(v);
 }
@@ -160,7 +160,7 @@ export function OverviewCharts({ variant }: { variant: "staff" | "client" }) {
                 <XAxis type="number" hide allowDecimals={false} />
                 <YAxis type="category" dataKey="name" width={90} tickLine={false} axisLine={false} fontSize={11} />
                 <Tooltip content={<GlassTooltip />} cursor={{ fillOpacity: 0.05 }} />
-                <Bar dataKey="value" name="Tickets" fill="var(--color-primary)" radius={8} />
+                <Bar dataKey="value" name="Tickets" fill="var(--color-primary)" radius={8} maxBarSize={28} />
               </BarChart>
             </ChartContainer>
           )}
