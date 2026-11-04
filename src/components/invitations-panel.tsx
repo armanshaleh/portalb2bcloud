@@ -17,7 +17,7 @@ function inviteState(i: InvitationRow) {
   if (i.accepted_at) return { label: "Accepted", cls: "bg-success/15 text-success" };
   if (i.revoked_at) return { label: "Revoked", cls: "bg-muted text-muted-foreground" };
   if (new Date(i.expires_at).getTime() < Date.now()) return { label: "Expired", cls: "bg-destructive/15 text-destructive" };
-  return { label: "Open", cls: "bg-primary/15 text-primary" };
+  return { label: "Awaiting sign-up", cls: "bg-primary/15 text-primary" };
 }
 
 export function InvitationsPanel({ toolbar }: { toolbar?: React.ReactNode }) {
@@ -95,7 +95,7 @@ export function InvitationsPanel({ toolbar }: { toolbar?: React.ReactNode }) {
                     </p>
                   </div>
                   <span className={cn("rounded-full px-2.5 py-1 text-xs font-semibold", st.cls)}>{st.label}</span>
-                  {st.label === "Open" && (
+                  {st.label === "Awaiting sign-up" && (
                     <Button variant="ghost" size="sm" onClick={() => void handleRevoke(i.id)}>
                       Revoke
                     </Button>

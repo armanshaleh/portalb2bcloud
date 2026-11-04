@@ -126,18 +126,18 @@ function BackendMonitors() {
       title="Network monitor"
       subtitle="Uptime Kuma engine · customers only see monitors you assign"
       email={identity.email}
-      actions={
-        <Button size="sm" onClick={() => setDraft(EMPTY)}>
-          <Plus /> Add monitor
-        </Button>
-      }
     >
       <div className="space-y-6">
         {config.data?.allowed && (
           <div className="glass space-y-5 rounded-3xl border p-5">
-            <div className="flex items-center gap-2">
-              <KeyRound className="h-4 w-4 text-primary" />
-              <p className="font-display font-semibold">Uptime Kuma connection</p>
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <KeyRound className="h-4 w-4 text-primary" />
+                <p className="font-display font-semibold">Uptime Kuma connection</p>
+              </div>
+              <Button size="sm" onClick={() => setDraft(EMPTY)}>
+                <Plus /> Add monitor
+              </Button>
             </div>
             <p className="text-sm text-muted-foreground">
               In Uptime Kuma, add a <b>Webhook</b> notification (body: <i>application/json</i>), set the URL below,
