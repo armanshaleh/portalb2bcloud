@@ -317,6 +317,7 @@ function BackendDashboard() {
                                 Suspend
                               </Button>
                             ) : null}
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))}
