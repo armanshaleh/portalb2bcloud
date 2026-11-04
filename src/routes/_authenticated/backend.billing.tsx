@@ -102,15 +102,15 @@ function StaffBilling() {
       title="Billing"
       subtitle="Quotations, invoices & POs · IDR"
       email={identity.email}
-      actions={<Button size="sm" onClick={() => setCreating(true)}><Plus className="h-4 w-4" /> New document</Button>}
     >
       <div className="mx-auto max-w-6xl space-y-4">
-        <div className="flex gap-2">
+        <div className="glass flex flex-wrap items-center gap-2 rounded-3xl border px-5 py-3">
           <Button size="sm" variant={tab === "all" ? "default" : "outline"} onClick={() => setTab("all")}>All</Button>
           <Button size="sm" variant={tab === "pending" ? "default" : "outline"} onClick={() => setTab("pending")}>
             Pending approval ({pendingCount})
           </Button>
           <Button size="sm" variant="outline" className="ml-auto" onClick={() => exportCoretax(data)}>Export Coretax CSV</Button>
+          <Button size="sm" onClick={() => setCreating(true)}><Plus className="h-4 w-4" /> New document</Button>
         </div>
         {isLoading ? (
           <div className="flex justify-center py-16"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>

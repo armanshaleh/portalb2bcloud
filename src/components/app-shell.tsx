@@ -241,7 +241,12 @@ export function AppShell({
             </nav>
           </header>
           <main className="p-4 md:py-6 md:pr-3 md:pl-0">
-            {actions && <div className="mx-auto mb-4 flex max-w-6xl flex-wrap items-center justify-end gap-2">{actions}</div>}
+            {actions && (
+              <div className="glass mx-auto mb-4 flex max-w-6xl flex-wrap items-center justify-between gap-3 rounded-3xl border px-5 py-3">
+                <p className="font-display text-sm font-semibold">{title}</p>
+                <div className="flex flex-wrap items-center gap-2">{actions}</div>
+              </div>
+            )}
             {children}
           </main>
         </div>
@@ -252,7 +257,7 @@ export function AppShell({
 
 function Label({ show, children }: { show: boolean; children: ReactNode }) {
   return (
-    <span className={cn("truncate transition-opacity duration-200 ease-out", show ? "opacity-100 delay-100" : "opacity-0")}>
+    <span className={cn("truncate transition-opacity duration-200 ease-out", show ? "opacity-100 delay-100" : "w-0 opacity-0")}>
       {children}
     </span>
   );
