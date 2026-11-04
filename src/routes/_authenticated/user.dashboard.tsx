@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import {
@@ -54,6 +54,7 @@ function statusBadge(status: string) {
 function UserDashboard() {
   const queryClient = useQueryClient();
   const overview = Route.useLoaderData();
+  const router = useRouter();
 
   async function handleSignOut() {
     await queryClient.cancelQueries();
