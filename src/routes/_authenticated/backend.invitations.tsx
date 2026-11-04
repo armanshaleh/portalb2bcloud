@@ -144,7 +144,7 @@ function Invitations() {
           {link ? (
             <div className="space-y-3">
               <div className="flex gap-2">
-                <Input readOnly value={link} className="font-mono text-xs" />
+                <Input readOnly value={link} className="tabular-nums tracking-tight text-xs" />
                 <Button
                   variant="outline"
                   size="icon"

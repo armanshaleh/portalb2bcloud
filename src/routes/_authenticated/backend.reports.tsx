@@ -138,7 +138,7 @@ function Reports() {
                 const c = d.customers as { customer_code: string } | null;
                 return (
                   <tr key={i} className="border-b last:border-0">
-                    <td className="px-4 py-3 font-mono text-xs">{d.doc_number}</td>
+                    <td className="px-4 py-3 tabular-nums tracking-tight text-xs">{d.doc_number}</td>
                     <td className="px-4 py-3">{c?.customer_code}</td>
                     <td className="px-4 py-3 text-xs">{d.status}</td>
                     <td className="px-4 py-3">{formatIDR(d.total)}</td>

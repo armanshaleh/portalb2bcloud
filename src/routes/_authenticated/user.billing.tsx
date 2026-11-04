@@ -46,7 +46,7 @@ function UserBilling() {
 
   return (
     <AppShell variant="client" title="Billing" subtitle="Invoices & documents" email={identity.email}>
-      <div className="mx-auto max-w-5xl space-y-5">
+      <div className="mx-auto max-w-6xl space-y-5">
         <div className="glass rounded-3xl border p-5">
           <p className="text-xs text-muted-foreground">Outstanding invoices</p>
           <p className="font-display text-2xl font-bold">{formatIDR(outstanding)}</p>
@@ -63,7 +63,7 @@ function UserBilling() {
             {data.map((d) => (
               <button key={d.id} type="button" onClick={() => setOpen(d)} className="flex w-full items-center justify-between gap-3 border-b px-5 py-4 text-left last:border-0 hover:bg-card/60">
                 <div className="min-w-0">
-                  <p className="truncate font-mono text-sm">{d.doc_number}</p>
+                  <p className="truncate tabular-nums tracking-tight text-sm">{d.doc_number}</p>
                   <p className="text-xs text-muted-foreground">{DOC_LABEL[d.doc_type]} · due {formatDate(d.due_date)}</p>
                 </div>
                 <div className="flex items-center gap-3">

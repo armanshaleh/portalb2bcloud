@@ -285,7 +285,7 @@ function BackendDashboard() {
                     <TableBody>
                       {filtered.map((c) => (
                         <TableRow key={c.id}>
-                          <TableCell className="font-mono text-xs">{c.customer_code}</TableCell>
+                          <TableCell className="tabular-nums tracking-tight text-xs">{c.customer_code}</TableCell>
                           <TableCell>{c.company_name ?? c.full_name ?? "—"}</TableCell>
                           <TableCell className="text-muted-foreground">{c.verified_email}</TableCell>
                           <TableCell>
@@ -568,7 +568,7 @@ function CustomerCard({ c, onOpen }: { c: CustomerRow; onOpen: () => void }) {
           <div>
             <p className="font-medium">
               {c.company_name ?? c.full_name ?? c.verified_email}{" "}
-              <span className="ml-1 font-mono text-xs text-muted-foreground">{c.customer_code}</span>
+              <span className="ml-1 tabular-nums tracking-tight text-xs text-muted-foreground">{c.customer_code}</span>
             </p>
             <p className="text-xs text-muted-foreground">
               {c.customer_type} · {c.verified_email} · {formatDateTime(c.created_at)}

@@ -179,14 +179,14 @@ export function AppShell({
             {withTip(
               dark ? "Light mode" : "Dark mode",
               <button type="button" onClick={toggle} className={itemClass(false)}>
-                {dark ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
+                {dark ? <Sun className="h-[18px] w-[18px] shrink-0" /> : <Moon className="h-[18px] w-[18px] shrink-0" />}
                 <Label show={!collapsed}>{dark ? "Light mode" : "Dark mode"}</Label>
               </button>,
             )}
             {withTip(
               "Sign out",
               <button type="button" onClick={() => void signOut()} className={itemClass(false)}>
-                <LogOut className="h-[18px] w-[18px]" />
+                <LogOut className="h-[18px] w-[18px] shrink-0" />
                 <Label show={!collapsed}>Sign out</Label>
               </button>,
             )}
@@ -198,7 +198,7 @@ export function AppShell({
                 aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
                 className={itemClass(false)}
               >
-                {collapsed ? <ChevronsRight className="h-[18px] w-[18px]" /> : <ChevronsLeft className="h-[18px] w-[18px]" />}
+                {collapsed ? <ChevronsRight className="h-[18px] w-[18px] shrink-0" /> : <ChevronsLeft className="h-[18px] w-[18px] shrink-0" />}
                 <Label show={!collapsed}>Collapse</Label>
               </button>,
             )}

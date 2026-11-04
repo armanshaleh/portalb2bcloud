@@ -286,7 +286,7 @@ function UserDashboard() {
                   <div className="space-y-2 text-sm">
                     {overview.services.map((s) => (
                       <div key={s.id} className="flex items-center justify-between">
-                        <span className="font-mono text-xs">{s.service_code}</span>
+                        <span className="tabular-nums tracking-tight text-xs">{s.service_code}</span>
                         <span>{s.service_name}</span>
                         <Badge variant="outline">{s.status}</Badge>
                       </div>

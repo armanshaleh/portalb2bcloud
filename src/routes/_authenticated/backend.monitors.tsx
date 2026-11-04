@@ -147,7 +147,7 @@ function BackendMonitors() {
             </p>
             <div className="grid gap-2 md:grid-cols-2">
               <div className="flex items-center gap-2">
-                <Input readOnly value={WEBHOOK_URL} className="font-mono text-xs" />
+                <Input readOnly value={WEBHOOK_URL} className="tabular-nums tracking-tight text-xs" />
                 <Button variant="outline" size="icon" onClick={() => copy(WEBHOOK_URL)} aria-label="Copy URL">
                   <Copy />
                 </Button>
@@ -157,7 +157,7 @@ function BackendMonitors() {
                   readOnly
                   type={showToken ? "text" : "password"}
                   value={config.data.token ?? "not configured"}
-                  className="font-mono text-xs"
+                  className="tabular-nums tracking-tight text-xs"
                   onFocus={() => setShowToken(true)}
                   onBlur={() => setShowToken(false)}
                 />
@@ -299,7 +299,7 @@ function BackendMonitors() {
                   }}
                 />
                 <span className="text-sm">{c.label}</span>
-                <span className="ml-auto font-mono text-xs text-muted-foreground">{c.code}</span>
+                <span className="ml-auto tabular-nums tracking-tight text-xs text-muted-foreground">{c.code}</span>
               </label>
             ))}
           </div>

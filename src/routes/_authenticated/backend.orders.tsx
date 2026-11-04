@@ -65,7 +65,7 @@ function BackendOrders() {
 
   return (
     <AppShell variant="staff" title="Pre-orders" subtitle="Superuser approval" email={identity.email}>
-      <div className="mx-auto max-w-5xl space-y-4">
+      <div className="mx-auto max-w-6xl space-y-4">
         <Tabs value={tab} onValueChange={(v) => setTab(v as keyof typeof BADGE)}>
           <TabsList>
             <TabsTrigger value="PENDING_APPROVAL">Pending</TabsTrigger>
@@ -88,7 +88,7 @@ function BackendOrders() {
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-medium">{(o.products as { name: string } | null)?.name} × {o.quantity} · {o.billing_cycle.toLowerCase()}</p>
                     <p className="text-xs text-muted-foreground">{c?.customer_code} · {c?.company_name ?? c?.full_name} · {formatDate(o.created_at)}{o.notes ? ` · ${o.notes}` : ""}</p>
-                    {doc?.doc_number && <p className="font-mono text-xs text-primary">{doc.doc_number}</p>}
+                    {doc?.doc_number && <p className="tabular-nums tracking-tight text-xs text-primary">{doc.doc_number}</p>}
                   </div>
                   <Badge variant={BADGE[o.status as keyof typeof BADGE]}>{o.status.replace("_", " ").toLowerCase()}</Badge>
                   {isSu && o.status === "PENDING_APPROVAL" && (

@@ -114,7 +114,7 @@ export function TicketThread({ ticket, staff }: { ticket: Ticket; staff: boolean
       {ticket.epass_code && (
         <div className="rounded-2xl border border-success/30 bg-success/10 p-3 text-sm">
           <p className="text-xs text-muted-foreground">E-Pass code (show at DC security)</p>
-          <p className="font-mono text-lg font-bold tracking-widest text-success">{ticket.epass_code}</p>
+          <p className="tabular-nums tracking-tight text-lg font-bold tracking-widest text-success">{ticket.epass_code}</p>
         </div>
       )}
       {ticket.attachment_path && (

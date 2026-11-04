@@ -112,7 +112,7 @@ function Products() {
             <div className="divide-y rounded-2xl border">
               {(products.data ?? []).map((p) => (
                 <div key={p.id} className="flex items-center justify-between gap-3 px-4 py-3 text-sm">
-                  <div><span className="font-mono">{p.code}</span> · {p.name} <span className="text-xs text-muted-foreground">({p.category})</span></div>
+                  <div><span className="tabular-nums tracking-tight">{p.code}</span> · {p.name} <span className="text-xs text-muted-foreground">({p.category})</span></div>
                   <div className="flex items-center gap-3">
                     <span>{formatIDR(p.unit_price)} / mo · setup {formatIDR(p.setup_fee)}</span>
                     <button type="button" onClick={() => void toggle(p.id, p.is_active)}>

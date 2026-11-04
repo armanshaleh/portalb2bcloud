@@ -71,7 +71,7 @@ function UserTickets() {
       email={identity.email}
       actions={<Button size="sm" onClick={() => setCreating(true)}><Plus className="h-4 w-4" /> New ticket</Button>}
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto max-w-6xl">
         {isLoading ? (
           <div className="flex justify-center py-16"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
         ) : data.length === 0 ? (

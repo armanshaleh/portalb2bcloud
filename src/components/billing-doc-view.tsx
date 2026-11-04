@@ -67,7 +67,7 @@ export function BillingDocView({ doc }: { doc: BillingDoc }) {
         </div>
         <div className="text-right">
           <p className="text-sm font-semibold uppercase tracking-wide">{DOC_LABEL[doc.doc_type]}</p>
-          <p className="font-mono text-xs">{doc.doc_number}</p>
+          <p className="tabular-nums tracking-tight text-xs">{doc.doc_number}</p>
           <div className="mt-1"><StatusBadge status={doc.status} /></div>
         </div>
       </div>
