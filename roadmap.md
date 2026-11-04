@@ -34,3 +34,9 @@ PT Arta Teletama Teknologi ("Wise Cloud — Built with Trust.", document prefix 
 - [x] Lifecycle automation: reminders H-7/H-3, overdue H+1, auto-suspend H+7, auto-terminate H+30
 - [x] Coretax DJP: VAT 12% on DPP 11% (11/12 × subtotal), e-Meterai Rp 10.000 when DPP > Rp 10.000.000
 - [x] Coretax CSV export; contracts tab with confidential watermark; uptime monitor
+
+## Phase 4 — Ops extras
+- [x] Audit log explorer (/backend/audit-logs)
+- [ ] App emails (invoice issued, E-Pass, verification) — waiting on sender email domain setup
+- [ ] Service inventory: rack / U position / IP / VLAN
+- [ ] Client self-service PIC contacts
