@@ -39,4 +39,4 @@ PT Arta Teletama Teknologi ("Wise Cloud — Built with Trust.", document prefix 
 - [x] Audit log explorer (/backend/audit-logs)
 - [ ] App emails (invoice issued, E-Pass, verification) — waiting on sender email domain setup
 - [ ] Service inventory: rack / U position / IP / VLAN
-- [ ] Client self-service PIC contacts
+- [x] Client self-service PIC contacts
