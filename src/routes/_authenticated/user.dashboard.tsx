@@ -17,6 +17,7 @@ import { getMyIdentity } from "@/lib/identity.functions";
 import { getMyCustomerOverview } from "@/lib/client.functions";
 import { BRAND } from "@/lib/brand";
 import { AppShell } from "@/components/app-shell";
+import { OverviewCharts } from "@/components/overview-charts";
 import { formatDate, formatFileSize } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -91,6 +92,7 @@ function UserDashboard() {
           </Card>
         ) : (
           <>
+            {customer.status === "VERIFIED" && <OverviewCharts variant="client" />}
             {/* Status banner */}
             {customer.status === "PENDING_VERIFICATION" && (
               <Card className="border-warning/40 bg-warning/5">

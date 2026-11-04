@@ -34,7 +34,7 @@ export function NotificationBell() {
         <button
           type="button"
           aria-label="Notifications"
-          className="relative flex h-9 w-9 items-center justify-center rounded-xl border transition-all duration-500 ease-spring hover:bg-card/70"
+          className="relative flex h-9 w-9 items-center justify-center rounded-xl border transition-colors duration-200 ease-out hover:bg-card/70"
         >
           <Bell className="h-4 w-4" />
           {unread > 0 && (
@@ -44,16 +44,16 @@ export function NotificationBell() {
           )}
         </button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="glass w-80 rounded-2xl p-0">
+      <PopoverContent align="end" side="bottom" sideOffset={10} collisionPadding={12} className="glass w-[min(22rem,calc(100vw-1.5rem))] overflow-hidden rounded-2xl p-0">
         <div className="flex items-center justify-between border-b px-4 py-3">
-          <p className="text-sm font-semibold">Notifications</p>
+          <p className="text-sm font-semibold">Notifications{unread > 0 && <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] text-primary">{unread} new</span>}</p>
           {unread > 0 && (
             <button type="button" onClick={() => void markAll()} className="text-xs text-primary">
               Mark all read
             </button>
           )}
         </div>
-        <div className="max-h-96 overflow-y-auto">
+        <div className="max-h-[60vh] overflow-y-auto overscroll-contain">
           {data.length === 0 ? (
             <p className="px-4 py-8 text-center text-sm text-muted-foreground">No notifications yet.</p>
           ) : (
@@ -61,7 +61,7 @@ export function NotificationBell() {
               <Link
                 key={n.id}
                 to={(n.link ?? "/user/dashboard") as "/user/dashboard"}
-                className={cn("block border-b px-4 py-3 last:border-0 hover:bg-card/60", !n.read_at && "bg-primary/5")}
+                className={cn("block border-b px-4 py-3 transition-colors duration-150 ease-out last:border-0 hover:bg-card/60", !n.read_at && "bg-primary/5")}
               >
                 <p className="text-sm font-medium">{n.title}</p>
                 {n.body && <p className="line-clamp-2 text-xs text-muted-foreground">{n.body}</p>}
