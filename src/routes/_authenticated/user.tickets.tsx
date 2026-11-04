@@ -69,18 +69,21 @@ function UserTickets() {
       title="Support tickets"
       subtitle="Support, datacenter visits & goods in/out"
       email={identity.email}
-      actions={<Button size="sm" onClick={() => setCreating(true)}><Plus className="h-4 w-4" /> New ticket</Button>}
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="glass mx-auto max-w-6xl overflow-hidden rounded-3xl border">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/50 px-5 py-4">
+          <p className="font-display text-sm font-semibold">My tickets</p>
+          <Button size="sm" onClick={() => setCreating(true)}><Plus className="h-4 w-4" /> New ticket</Button>
+        </div>
         {isLoading ? (
           <div className="flex justify-center py-16"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
         ) : data.length === 0 ? (
-          <div className="glass flex flex-col items-center gap-3 rounded-3xl border py-16 text-center">
+          <div className="flex flex-col items-center gap-3 py-16 text-center">
             <LifeBuoy className="h-8 w-8 text-primary" />
             <p className="font-medium">No tickets yet.</p>
           </div>
         ) : (
-          <div className="glass overflow-hidden rounded-3xl border">
+          <div>
             {data.map((t) => (
               <button key={t.id} type="button" onClick={() => setView(t)} className="flex w-full items-center justify-between gap-3 border-b px-5 py-4 text-left last:border-0 hover:bg-card/60">
                 <div className="min-w-0">

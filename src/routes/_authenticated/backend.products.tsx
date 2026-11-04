@@ -107,12 +107,12 @@ function Products() {
             <Input type="number" placeholder="Monthly price" value={form.unit_price} onChange={(e) => setForm({ ...form, unit_price: e.target.value })} />
             <Input type="number" placeholder="Setup fee" value={form.setup_fee} onChange={(e) => setForm({ ...form, setup_fee: e.target.value })} />
           </div>
-          <div className="flex justify-end border-t border-border/40 pt-4"><Button size="sm" onClick={() => void addProduct()}><Plus className="h-4 w-4" /> Add product</Button></div>
+          <div className="flex justify-start border-t border-border/40 pt-4"><Button size="sm" onClick={() => void addProduct()}><Plus className="h-4 w-4" /> Add product</Button></div>
           {products.isLoading ? <Loader2 className="h-5 w-5 animate-spin text-primary" /> : (
             <div className="divide-y rounded-2xl border">
               {(products.data ?? []).map((p) => (
                 <div key={p.id} className="flex items-center justify-between gap-3 px-4 py-3 text-sm">
-                  <div><span className="font-mono">{p.code}</span> · {p.name} <span className="text-xs text-muted-foreground">({p.category})</span></div>
+                  <div><span className="tabular-nums tracking-tight">{p.code}</span> · {p.name} <span className="text-xs text-muted-foreground">({p.category})</span></div>
                   <div className="flex items-center gap-3">
                     <span>{formatIDR(p.unit_price)} / mo · setup {formatIDR(p.setup_fee)}</span>
                     <button type="button" onClick={() => void toggle(p.id, p.is_active)}>
@@ -139,7 +139,7 @@ function Products() {
             <Input type="number" placeholder="Price" value={price.unit_price} onChange={(e) => setPrice({ ...price, unit_price: e.target.value })} />
             <Input type="number" placeholder="Setup fee" value={price.setup_fee} onChange={(e) => setPrice({ ...price, setup_fee: e.target.value })} />
           </div>
-          <div className="flex justify-end border-t border-border/40 pt-4"><Button size="sm" onClick={() => void savePrice()}>Save private price</Button></div>
+          <div className="flex justify-start border-t border-border/40 pt-4"><Button size="sm" onClick={() => void savePrice()}>Save private price</Button></div>
           <div className="divide-y rounded-2xl border">
             {(prices.data ?? []).map((p) => (
               <div key={p.id} className="flex items-center justify-between px-4 py-3 text-sm">

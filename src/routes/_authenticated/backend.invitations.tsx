@@ -88,13 +88,17 @@ function Invitations() {
       title="Invitations"
       subtitle="Portal access is by invitation only"
       email={identity.email}
-      actions={
-        <Button size="sm" onClick={() => setOpen(true)}>
-          <Plus /> Invite client
-        </Button>
-      }
     >
-      <div className="glass overflow-hidden rounded-3xl border">
+      <div className="glass mx-auto max-w-6xl overflow-hidden rounded-3xl border">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/50 px-5 py-4">
+          <div>
+            <p className="font-display text-sm font-semibold">Client invitations</p>
+            <p className="text-xs text-muted-foreground">{invitations.length} total</p>
+          </div>
+          <Button size="sm" onClick={() => setOpen(true)}>
+            <Plus /> Invite client
+          </Button>
+        </div>
         {isLoading ? (
           <div className="flex justify-center py-16">
             <Loader2 className="h-6 w-6 animate-spin text-primary" />
@@ -144,7 +148,7 @@ function Invitations() {
           {link ? (
             <div className="space-y-3">
               <div className="flex gap-2">
-                <Input readOnly value={link} className="font-mono text-xs" />
+                <Input readOnly value={link} className="tabular-nums tracking-tight text-xs" />
                 <Button
                   variant="outline"
                   size="icon"

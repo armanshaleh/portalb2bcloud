@@ -121,7 +121,7 @@ function StaffBilling() {
             {shown.map((d) => (
               <button key={d.id} type="button" onClick={() => setView(d)} className="flex w-full items-center justify-between gap-3 border-b px-5 py-4 text-left last:border-0 hover:bg-card/60">
                 <div className="min-w-0">
-                  <p className="truncate font-mono text-sm">{d.doc_number}</p>
+                  <p className="truncate tabular-nums tracking-tight text-sm">{d.doc_number}</p>
                   <p className="truncate text-xs text-muted-foreground">
                     {DOC_LABEL[d.doc_type]} · {d.customers?.company_name ?? d.customers?.full_name} ({d.customers?.customer_code}) · {formatDate(d.issue_date)}
                   </p>

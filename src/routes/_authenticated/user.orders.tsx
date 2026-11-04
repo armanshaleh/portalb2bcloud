@@ -76,7 +76,7 @@ function UserOrders() {
 
   return (
     <AppShell variant="client" title="Order service" subtitle="Request new services" email={identity.email}>
-      <div className="mx-auto grid max-w-5xl gap-5 lg:grid-cols-[340px_1fr]">
+      <div className="mx-auto grid max-w-6xl gap-5 lg:grid-cols-[340px_1fr]">
         <div className="glass space-y-3 rounded-3xl border p-5">
           <p className="font-semibold">New order</p>
           {!verified && <p className="text-xs text-muted-foreground">Ordering opens once your account is verified.</p>}

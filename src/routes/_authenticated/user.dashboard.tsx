@@ -5,7 +5,7 @@ import {
   Building2,
   CircleAlert,
   Clock,
-  ExternalLink,
+  CheckCircle2,
   FileText,
   Landmark,
   LogOut,
@@ -92,6 +92,15 @@ function UserDashboard() {
           </Card>
         ) : (
           <>
+            {customer.status === "VERIFIED" && (
+              <div className="glass flex items-center gap-3 rounded-2xl border border-success/30 bg-success/5 px-4 py-3">
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-success" />
+                <p className="text-sm">
+                  <span className="font-medium text-success">Account verified &amp; active</span>
+                  <span className="text-muted-foreground"> · Customer ID <span className="tabular-nums font-medium text-foreground">{customer.customer_code}</span> · Full portal access granted.</span>
+                </p>
+              </div>
+            )}
             {customer.status === "VERIFIED" && <OverviewCharts variant="client" />}
             {/* Status banner */}
             {customer.status === "PENDING_VERIFICATION" && (
@@ -131,24 +140,9 @@ function UserDashboard() {
                     <p className="font-medium text-destructive">Account suspended</p>
                     <p className="text-sm text-muted-foreground">
                       Services are paused and overdue invoices block re-activation. Raise a
-                      re-activation ticket with our billing team (ticket system arrives in the
-                      next update) or contact {BRAND.name} support.
+                      re-activation ticket from Support tickets or contact {BRAND.name} support.
                     </p>
                   </div>
-                </CardContent>
-              </Card>
-            )}
-            {customer.status === "VERIFIED" && (
-              <Card className="border-success/40 bg-success/5">
-                <CardContent className="flex items-center gap-3 p-4">
-                  <ExternalLink className="h-5 w-5 text-success" />
-                  <p className="text-sm">
-                    <span className="font-medium text-success">Account active.</span>{" "}
-                    <span className="text-muted-foreground">
-                      Customer ID {customer.customer_code}. Billing and tickets arrive in the
-                      next update.
-                    </span>
-                  </p>
                 </CardContent>
               </Card>
             )}
@@ -285,18 +279,14 @@ function UserDashboard() {
                 ) : (
                   <div className="space-y-2 text-sm">
                     {overview.services.map((s) => (
-                      <div key={s.id} className="flex items-center justify-between">
-                        <span className="font-mono text-xs">{s.service_code}</span>
-                        <span>{s.service_name}</span>
-                        <Badge variant="outline">{s.status}</Badge>
+                      <div key={s.id} className="grid grid-cols-[8rem_1fr_auto] items-center gap-3">
+                        <span className="tabular-nums tracking-tight text-xs text-muted-foreground">{s.service_code}</span>
+                        <span className="truncate">{s.service_name}</span>
+                        <Badge variant="outline" className="justify-self-end">{s.status}</Badge>
                       </div>
                     ))}
                   </div>
                 )}
-                <Separator className="my-4" />
-                <p className="text-center text-xs text-muted-foreground">
-                  Invoices, tickets and contracts arrive in the next update.
-                </p>
               </CardContent>
             </Card>
           </>

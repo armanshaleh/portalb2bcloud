@@ -113,9 +113,9 @@ function Reports() {
   return (
     <AppShell variant="staff" title="Reports" subtitle="Revenue & receivables" email={identity.email}>
       <div className="mx-auto max-w-6xl space-y-5">
-        <div className="glass flex flex-wrap items-end gap-3 rounded-3xl border p-5">
-          <div className="space-y-1.5"><Label>From</Label><Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} /></div>
-          <div className="space-y-1.5"><Label>To</Label><Input type="date" value={to} onChange={(e) => setTo(e.target.value)} /></div>
+        <div className="glass flex flex-wrap items-center gap-4 rounded-3xl border px-5 py-4">
+          <div className="flex items-center gap-2"><Label className="text-sm text-muted-foreground">From</Label><Input type="date" className="w-44" value={from} onChange={(e) => setFrom(e.target.value)} /></div>
+          <div className="flex items-center gap-2"><Label className="text-sm text-muted-foreground">To</Label><Input type="date" className="w-44" value={to} onChange={(e) => setTo(e.target.value)} /></div>
           <Button className="ml-auto" disabled={busy || docs.isLoading} onClick={() => void exportXlsx()}>
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />} Export Excel
           </Button>
@@ -138,7 +138,7 @@ function Reports() {
                 const c = d.customers as { customer_code: string } | null;
                 return (
                   <tr key={i} className="border-b last:border-0">
-                    <td className="px-4 py-3 font-mono text-xs">{d.doc_number}</td>
+                    <td className="px-4 py-3 tabular-nums tracking-tight text-xs">{d.doc_number}</td>
                     <td className="px-4 py-3">{c?.customer_code}</td>
                     <td className="px-4 py-3 text-xs">{d.status}</td>
                     <td className="px-4 py-3">{formatIDR(d.total)}</td>
