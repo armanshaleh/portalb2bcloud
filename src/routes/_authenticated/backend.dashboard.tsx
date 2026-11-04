@@ -30,6 +30,7 @@ import {
 } from "@/lib/staff.functions";
 import { BRAND } from "@/lib/brand";
 import { AppShell } from "@/components/app-shell";
+import { OverviewCharts } from "@/components/overview-charts";
 import { formatDateTime } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -181,6 +182,7 @@ function BackendDashboard() {
     >
       <main>
         <div className="space-y-6">
+          <OverviewCharts variant="staff" />
           {/* Stats */}
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Card>

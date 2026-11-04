@@ -36,27 +36,28 @@ type NavItem = {
 const STAFF_NAV: NavItem[] = [
   { to: "/backend/dashboard", label: "Customers", icon: LayoutDashboard },
   { to: "/backend/invitations", label: "Invitations", icon: Mail },
-  { to: "/backend/monitors", label: "Network monitor", icon: Activity },
+  { to: "/backend/orders", label: "Pre-orders", icon: ShoppingCart },
   { to: "/backend/billing", label: "Billing", icon: Receipt },
   { to: "/backend/products", label: "Products & pricing", icon: Package },
-  { to: "/backend/orders", label: "Pre-orders", icon: ShoppingCart },
   { to: "/backend/contracts", label: "Contracts", icon: FileSignature },
   { to: "/backend/reports", label: "Reports", icon: BarChart3 },
   { to: "/backend/tickets", label: "Tickets", icon: LifeBuoy },
+  { to: "/backend/monitors", label: "Network monitor", icon: Activity },
   { to: "/backend/announcements", label: "Announcements", icon: Megaphone },
 ];
 
 const CLIENT_NAV: NavItem[] = [
   { to: "/user/dashboard", label: "Overview", icon: LayoutDashboard },
-  { to: "/user/network", label: "Network status", icon: Activity },
-  { to: "/user/billing", label: "Billing", icon: Receipt },
   { to: "/user/orders", label: "Order service", icon: ShoppingCart },
+  { to: "/user/billing", label: "Billing", icon: Receipt },
   { to: "/user/contracts", label: "Contracts", icon: FileSignature },
   { to: "/user/tickets", label: "Support tickets", icon: LifeBuoy },
+  { to: "/user/network", label: "Network status", icon: Activity },
   { to: "/user/announcements", label: "Announcements", icon: Megaphone },
 ];
 
-const SPRING = "transition-all duration-500 ease-spring";
+const SPRING = "transition-colors duration-200 ease-out";
+const SMOOTH = "duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none";
 
 export function useTheme() {
   const [dark, setDark] = useState(false);
@@ -115,10 +116,8 @@ export function AppShell({
 
   const itemClass = (active: boolean) =>
     cn(
-      "group flex items-center gap-3 rounded-2xl text-sm font-medium",
+      "group flex h-11 w-full items-center gap-3 overflow-hidden whitespace-nowrap rounded-2xl px-[15px] text-sm font-medium",
       SPRING,
-      "liquid shadow-none",
-      collapsed ? "h-12 w-12 justify-center" : "h-11 px-3",
       active
         ? "bg-gradient-brand text-primary-foreground shadow-elevated"
         : "text-muted-foreground hover:bg-card/70 hover:text-sidebar-accent-foreground hover:backdrop-blur-md",
@@ -141,17 +140,17 @@ export function AppShell({
       <div className="min-h-screen ">
         <aside
           className={cn(
-            "fixed inset-y-3 left-3 z-30 hidden flex-col rounded-3xl border border-sidebar-border glass md:flex",
-            SPRING,
-            collapsed ? "w-20 items-center" : "w-64",
+            "fixed inset-y-3 left-3 z-30 hidden flex-col overflow-hidden rounded-3xl border border-sidebar-border glass transition-[width] will-change-[width] md:flex",
+            SMOOTH,
+            collapsed ? "w-[76px]" : "w-64",
           )}
         >
-          <div className={cn("flex items-center gap-3 py-5", collapsed ? "justify-center" : "px-5")}>
+          <div className="flex items-center gap-3 overflow-hidden whitespace-nowrap px-[18px] py-5">
             <div className="bg-gradient-brand flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl shadow-elevated">
               <Building2 className="h-5 w-5 text-primary-foreground" />
             </div>
-            {!collapsed && (
-              <div className="min-w-0">
+            {(
+              <div className={cn("min-w-0 transition-opacity", SMOOTH, collapsed ? "opacity-0" : "opacity-100")}>
                 <p className="font-display text-sm font-bold leading-tight">{BRAND.name}</p>
                 <p className="truncate text-[10px] text-muted-foreground">{BRAND.legalName}</p>
                 <p className="text-[10px] italic text-primary">{BRAND.tagline}</p>
@@ -159,7 +158,7 @@ export function AppShell({
             )}
           </div>
 
-          <nav className={cn("flex-1 space-y-1.5 py-2", collapsed ? "px-0" : "px-3")}>
+          <nav className="flex-1 space-y-1.5 overflow-y-auto overflow-x-hidden px-3 py-2">
             {nav.map((item) => {
               const active = pathname.startsWith(item.to);
               return (
@@ -168,7 +167,7 @@ export function AppShell({
                     item.label,
                     <Link to={item.to} className={itemClass(active)}>
                       <item.icon className="h-[18px] w-[18px] shrink-0" />
-                      {!collapsed && <span>{item.label}</span>}
+                      <Label show={!collapsed}>{item.label}</Label>
                     </Link>,
                   )}
                 </div>
@@ -176,19 +175,19 @@ export function AppShell({
             })}
           </nav>
 
-          <div className={cn("space-y-1.5 border-t border-sidebar-border py-3", collapsed ? "px-0" : "px-3")}>
+          <div className="space-y-1.5 border-t border-sidebar-border px-3 py-3">
             {withTip(
               dark ? "Light mode" : "Dark mode",
-              <button type="button" onClick={toggle} className={cn(itemClass(false), "w-full")}>
+              <button type="button" onClick={toggle} className={itemClass(false)}>
                 {dark ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
-                {!collapsed && <span>{dark ? "Light mode" : "Dark mode"}</span>}
+                <Label show={!collapsed}>{dark ? "Light mode" : "Dark mode"}</Label>
               </button>,
             )}
             {withTip(
               "Sign out",
-              <button type="button" onClick={() => void signOut()} className={cn(itemClass(false), "w-full")}>
+              <button type="button" onClick={() => void signOut()} className={itemClass(false)}>
                 <LogOut className="h-[18px] w-[18px]" />
-                {!collapsed && <span>Sign out</span>}
+                <Label show={!collapsed}>Sign out</Label>
               </button>,
             )}
             {withTip(
@@ -197,16 +196,16 @@ export function AppShell({
                 type="button"
                 onClick={toggleCollapsed}
                 aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-                className={cn(itemClass(false), "w-full")}
+                className={itemClass(false)}
               >
                 {collapsed ? <ChevronsRight className="h-[18px] w-[18px]" /> : <ChevronsLeft className="h-[18px] w-[18px]" />}
-                {!collapsed && <span>Collapse</span>}
+                <Label show={!collapsed}>Collapse</Label>
               </button>,
             )}
           </div>
         </aside>
 
-        <div className={cn(SPRING, collapsed ? "md:pl-[6.5rem]" : "md:pl-[17.5rem]")}>
+        <div className={cn("transition-[padding-left]", SMOOTH, collapsed ? "md:pl-[6.25rem]" : "md:pl-[17.5rem]")}>
           <header className="sticky top-0 z-20 px-4 pt-3 md:pr-3 md:pl-0">
             <div className="glass flex items-center justify-between gap-3 rounded-2xl border px-5 py-3">
               <div className="min-w-0">
@@ -215,24 +214,7 @@ export function AppShell({
               </div>
               <div className="flex items-center gap-2 text-sm">
                 {email && <span className="hidden text-muted-foreground lg:inline">{email}</span>}
-                {actions}
                 <NotificationBell />
-                <button
-                  type="button"
-                  onClick={toggle}
-                  aria-label="Toggle theme"
-                  className={cn("flex h-9 w-9 items-center justify-center rounded-xl border md:hidden", SPRING)}
-                >
-                  {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void signOut()}
-                  aria-label="Sign out"
-                  className={cn("flex h-9 w-9 items-center justify-center rounded-xl border md:hidden", SPRING)}
-                >
-                  <LogOut className="h-4 w-4" />
-                </button>
               </div>
             </div>
             {/* Mobile nav pills */}
@@ -250,11 +232,28 @@ export function AppShell({
                   <item.icon className="h-3.5 w-3.5" /> {item.label}
                 </Link>
               ))}
+              <button type="button" onClick={toggle} aria-label="Toggle theme" className={cn("glass flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium text-muted-foreground", SPRING)}>
+                {dark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />} {dark ? "Light" : "Dark"}
+              </button>
+              <button type="button" onClick={() => void signOut()} className={cn("glass flex shrink-0 items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-medium text-muted-foreground", SPRING)}>
+                <LogOut className="h-3.5 w-3.5" /> Sign out
+              </button>
             </nav>
           </header>
-          <main className="p-4 md:py-6 md:pr-3 md:pl-0">{children}</main>
+          <main className="p-4 md:py-6 md:pr-3 md:pl-0">
+            {actions && <div className="mx-auto mb-4 flex max-w-6xl flex-wrap items-center justify-end gap-2">{actions}</div>}
+            {children}
+          </main>
         </div>
       </div>
     </TooltipProvider>
+  );
+}
+
+function Label({ show, children }: { show: boolean; children: ReactNode }) {
+  return (
+    <span className={cn("truncate transition-opacity duration-200 ease-out", show ? "opacity-100 delay-100" : "opacity-0")}>
+      {children}
+    </span>
   );
 }
