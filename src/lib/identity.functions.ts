@@ -9,7 +9,7 @@ export type MyIdentity = {
 };
 
 /** Identity + role lookup for the signed-in user (roles live only in user_roles). */
-export const getMyIdentity = createServerFn({ method: "GET" })
+const fetchMyIdentity = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<MyIdentity> => {
     const { supabase, userId } = context;
@@ -28,3 +28,18 @@ export const getMyIdentity = createServerFn({ method: "GET" })
       isStaff: roles.some((r) => r === "superuser" || r === "admin" || r === "operator"),
     };
   });
+
+/** Retries transient network drops (e.g. server reload) before giving up. */
+export async function getMyIdentity(): Promise<MyIdentity> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 4; attempt++) {
+    try {
+      return await fetchMyIdentity();
+    } catch (e) {
+      lastError = e;
+      if (!(e instanceof TypeError)) throw e;
+      await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+    }
+  }
+  throw lastError;
+}

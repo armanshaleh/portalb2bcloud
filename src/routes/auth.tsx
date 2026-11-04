@@ -37,7 +37,7 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthPage() {
-  const identityFn = useServerFn(getMyIdentity);
+  const identityFn = getMyIdentity;
   const bootstrapFn = useServerFn(bootstrapSuperuser);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
