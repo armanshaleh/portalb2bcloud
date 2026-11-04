@@ -231,14 +231,14 @@ function CreateDialog({
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader><DialogTitle>New billing document</DialogTitle></DialogHeader>
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label>Type</Label>
             <Select value={docType} onValueChange={(v) => setDocType(v as DocType)}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>{Object.entries(DOC_LABEL).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}</SelectContent>
             </Select>
           </div>
-          <div className="space-y-1.5 sm:col-span-2">
+          <div className="space-y-2 sm:col-span-2">
             <Label>Customer (verified)</Label>
             <Select value={customerId} onValueChange={setCustomerId}>
               <SelectTrigger><SelectValue placeholder="Select customer" /></SelectTrigger>
@@ -247,7 +247,7 @@ function CreateDialog({
               </SelectContent>
             </Select>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <Label htmlFor="due">Due date</Label>
             <Input id="due" type="date" value={due} onChange={(e) => setDue(e.target.value)} />
           </div>

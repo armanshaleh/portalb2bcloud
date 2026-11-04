@@ -208,7 +208,7 @@ function UsersPage() {
             <DialogTitle>Add staff</DialogTitle>
             <DialogDescription>The account is active immediately. Share the password securely.</DialogDescription>
           </DialogHeader>
-          <div className="space-y-3">
+          <div className="space-y-5">
             <div className="space-y-2"><Label>Full name</Label><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></div>
             <div className="space-y-2"><Label>Email</Label><Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></div>
             <div className="space-y-2">
@@ -243,7 +243,7 @@ function UsersPage() {
             <DialogTitle>Reset password</DialogTitle>
             <DialogDescription>{pwTarget?.email}</DialogDescription>
           </DialogHeader>
-          <div className="space-y-3">
+          <div className="space-y-5">
             <div className="space-y-2">
               <Label>New password</Label>
               <div className="flex gap-2">
