@@ -5,7 +5,7 @@ import {
   Building2,
   CircleAlert,
   Clock,
-  ExternalLink,
+  CheckCircle2,
   FileText,
   Landmark,
   LogOut,
@@ -92,6 +92,15 @@ function UserDashboard() {
           </Card>
         ) : (
           <>
+            {customer.status === "VERIFIED" && (
+              <div className="glass flex items-center gap-3 rounded-2xl border border-success/30 bg-success/5 px-4 py-3">
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-success" />
+                <p className="text-sm">
+                  <span className="font-medium text-success">Account verified &amp; active</span>
+                  <span className="text-muted-foreground"> · Customer ID <span className="tabular-nums font-medium text-foreground">{customer.customer_code}</span> · Full portal access granted.</span>
+                </p>
+              </div>
+            )}
             {customer.status === "VERIFIED" && <OverviewCharts variant="client" />}
             {/* Status banner */}
             {customer.status === "PENDING_VERIFICATION" && (
