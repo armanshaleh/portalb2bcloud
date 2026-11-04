@@ -6,7 +6,6 @@ import {
   BadgeCheck,
   Building2,
   CircleUserRound,
-  Clock,
   FileText,
   Landmark,
   Loader2,
@@ -236,7 +235,6 @@ function BackendDashboard() {
                 )}
               </TabsTrigger>
               <TabsTrigger value="users">All users</TabsTrigger>
-              <TabsTrigger value="approvals">Pending approvals</TabsTrigger>
             </TabsList>
 
             <TabsContent value="queue" className="mt-4 space-y-3">
@@ -279,7 +277,7 @@ function BackendDashboard() {
                         <TableHead>Type</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Registered</TableHead>
-                        <TableHead className="text-center">Actions</TableHead>
+                        <TableHead>Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -293,7 +291,7 @@ function BackendDashboard() {
                           </TableCell>
                           <TableCell>{statusBadge(c.status)}</TableCell>
                           <TableCell className="text-muted-foreground">{formatDateTime(c.created_at)}</TableCell>
-                          <TableCell><div className="flex items-center justify-center gap-2">
+                          <TableCell><div className="flex items-center gap-2">
                             <Button size="sm" variant="outline" onClick={() => setSelectedId(c.id)}>
                               Review
                             </Button>
@@ -334,18 +332,6 @@ function BackendDashboard() {
               </Card>
             </TabsContent>
 
-            <TabsContent value="approvals" className="mt-4">
-              <Card>
-                <CardContent className="flex flex-col items-center gap-2 py-12 text-center">
-                  <Clock className="h-8 w-8 text-muted-foreground" />
-                  <p className="font-medium">Pending approvals arrive in Phase 2</p>
-                  <p className="max-w-sm text-sm text-muted-foreground">
-                    Quotations, invoices and pre-orders created by admins/operators will queue
-                    here for superuser review, approve and reject with revision notes.
-                  </p>
-                </CardContent>
-              </Card>
-            </TabsContent>
           </Tabs>
         </div>
       </main>
