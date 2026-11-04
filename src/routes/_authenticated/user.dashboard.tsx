@@ -18,6 +18,7 @@ import { getMyCustomerOverview } from "@/lib/client.functions";
 import { BRAND } from "@/lib/brand";
 import { AppShell } from "@/components/app-shell";
 import { OverviewCharts } from "@/components/overview-charts";
+import { ContactsEditor } from "@/components/contacts-editor";
 import { formatDate, formatFileSize } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -189,8 +190,11 @@ function UserDashboard() {
               {/* Contacts + bank */}
               <div className="space-y-6">
                 <Card>
-                  <CardHeader>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0">
                     <CardTitle className="font-display text-lg">Contacts</CardTitle>
+                    {customer && customer.customer_type === "ENT" && (
+                      <ContactsEditor customerId={customer.id} contacts={overview.contacts} onSaved={() => void router.invalidate()} />
+                    )}
                   </CardHeader>
                   <CardContent className="space-y-2 text-sm">
                     {overview.contacts.map((ct) => (
