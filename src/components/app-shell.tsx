@@ -8,7 +8,6 @@ import {
   ChevronsRight,
   LayoutDashboard,
   LogOut,
-  Mail,
   LifeBuoy,
   Package,
   ShoppingCart,
@@ -30,32 +29,32 @@ import { NotificationBell } from "@/components/notification-bell";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type NavItem = {
-  to: "/backend/dashboard" | "/backend/invitations" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements" | "/backend/billing" | "/user/billing" | "/backend/tickets" | "/user/tickets" | "/backend/products" | "/backend/orders" | "/backend/contracts" | "/backend/reports" | "/user/orders" | "/user/contracts" | "/backend/users" | "/backend/audit-logs";
+  to: "/backend/dashboard" | "/backend/monitors" | "/user/dashboard" | "/user/network" | "/backend/announcements" | "/user/announcements" | "/backend/billing" | "/user/billing" | "/backend/tickets" | "/user/tickets" | "/backend/products" | "/backend/orders" | "/backend/contracts" | "/backend/reports" | "/user/orders" | "/user/contracts" | "/backend/users" | "/backend/audit-logs";
   label: string;
   icon: LucideIcon;
+  section?: string;
 };
 
 const STAFF_NAV: NavItem[] = [
-  { to: "/backend/dashboard", label: "Customers", icon: LayoutDashboard },
-  { to: "/backend/invitations", label: "Invitations", icon: Mail },
-  { to: "/backend/users", label: "Users", icon: Users },
-  { to: "/backend/orders", label: "Pre-orders", icon: ShoppingCart },
-  { to: "/backend/billing", label: "Billing", icon: Receipt },
+  { to: "/backend/dashboard", label: "Overview", icon: LayoutDashboard },
+  { to: "/backend/users", label: "Users & clients", icon: Users, section: "Clients" },
+  { to: "/backend/orders", label: "Pre-orders", icon: ShoppingCart, section: "Services & sales" },
   { to: "/backend/products", label: "Products & pricing", icon: Package },
   { to: "/backend/contracts", label: "Contracts", icon: FileSignature },
+  { to: "/backend/billing", label: "Billing", icon: Receipt, section: "Finance" },
   { to: "/backend/reports", label: "Reports", icon: BarChart3 },
-  { to: "/backend/tickets", label: "Tickets", icon: LifeBuoy },
+  { to: "/backend/tickets", label: "Tickets", icon: LifeBuoy, section: "Operations & NOC" },
   { to: "/backend/monitors", label: "Network monitor", icon: Activity },
   { to: "/backend/announcements", label: "Announcements", icon: Megaphone },
-  { to: "/backend/audit-logs", label: "Audit logs", icon: ScrollText },
+  { to: "/backend/audit-logs", label: "Audit logs", icon: ScrollText, section: "System" },
 ];
 
 const CLIENT_NAV: NavItem[] = [
   { to: "/user/dashboard", label: "Overview", icon: LayoutDashboard },
-  { to: "/user/orders", label: "Order service", icon: ShoppingCart },
-  { to: "/user/billing", label: "Billing", icon: Receipt },
-  { to: "/user/contracts", label: "Contracts", icon: FileSignature },
-  { to: "/user/tickets", label: "Support tickets", icon: LifeBuoy },
+  { to: "/user/orders", label: "Order service", icon: ShoppingCart, section: "Services" },
+  { to: "/user/contracts", label: "Legal contracts", icon: FileSignature },
+  { to: "/user/billing", label: "Billing & invoices", icon: Receipt, section: "Finance" },
+  { to: "/user/tickets", label: "Support & DC tickets", icon: LifeBuoy, section: "Support" },
   { to: "/user/network", label: "Network status", icon: Activity },
   { to: "/user/announcements", label: "Announcements", icon: Megaphone },
 ];
@@ -167,6 +166,13 @@ export function AppShell({
               const active = pathname.startsWith(item.to);
               return (
                 <div key={item.to}>
+                  {item.section && (
+                    <div className="flex h-7 items-end overflow-hidden px-[15px] pb-1">
+                      <span className={cn("whitespace-nowrap text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70 transition-opacity", SMOOTH, collapsed ? "opacity-0" : "opacity-100")}>
+                        {item.section}
+                      </span>
+                    </div>
+                  )}
                   {withTip(
                     item.label,
                     <Link to={item.to} className={itemClass(active)}>

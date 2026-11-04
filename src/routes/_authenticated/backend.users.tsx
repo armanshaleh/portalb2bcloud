@@ -16,6 +16,7 @@ import {
 } from "@/lib/users.functions";
 import { formatDateTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { InvitationsPanel } from "@/components/invitations-panel";
 import { AppShell } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +26,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/_authenticated/backend/users")({
+  validateSearch: (s: Record<string, unknown>): { tab?: "staff" | "customers"; view?: "active" | "archived" | "invites" } => ({
+    tab: s.tab === "customers" ? "customers" : s.tab === "staff" ? "staff" : undefined,
+    view: s.view === "archived" || s.view === "invites" || s.view === "active" ? s.view : undefined,
+  }),
   ssr: false,
   head: () => ({
     meta: [
@@ -71,7 +76,9 @@ function UsersPage() {
   const [archTarget, setArchTarget] = useState<{ id: string; code: string; archive: boolean } | null>(null);
   const [confirmCode, setConfirmCode] = useState("");
   const [busy, setBusy] = useState(false);
-  const [showArchived, setShowArchived] = useState(false);
+  const search = Route.useSearch();
+  const [view, setView] = useState<"active" | "archived" | "invites">(search.view ?? "active");
+  const showArchived = view === "archived";
 
   async function run<T extends { ok: boolean; error?: string }>(p: Promise<T>, msg: string) {
     setBusy(true);
@@ -90,13 +97,22 @@ function UsersPage() {
   }
 
   const staff = data?.staff ?? [];
+  const pills = (
+    <div className="flex gap-1.5">
+      {(["active", "invites", "archived"] as const).map((v) => (
+        <Button key={v} size="sm" variant={view === v ? "secondary" : "ghost"} onClick={() => setView(v)}>
+          {v === "active" ? "Active" : v === "invites" ? "Invitations" : "Archived"}
+        </Button>
+      ))}
+    </div>
+  );
   const customers = (data?.customers ?? []).filter((c) => (showArchived ? c.archivedAt : !c.archivedAt));
   const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/reset-password` : "";
 
   return (
     <AppShell variant="staff" title="Users" subtitle="Staff accounts · passwords · customer archive" email={identity.email}>
       <div className="mx-auto max-w-6xl">
-        <Tabs defaultValue="staff">
+        <Tabs defaultValue={search.tab ?? (search.view ? "customers" : "staff")}>
           <TabsList className="mb-4">
             <TabsTrigger value="staff">Staff & operators</TabsTrigger>
             <TabsTrigger value="customers">Customers</TabsTrigger>
@@ -155,12 +171,10 @@ function UsersPage() {
           </TabsContent>
 
           <TabsContent value="customers">
+            {view === "invites" ? <InvitationsPanel toolbar={pills} /> : (
             <div className="glass overflow-hidden rounded-3xl border">
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/50 px-5 py-4">
-                <div className="flex gap-1.5">
-                  <Button size="sm" variant={showArchived ? "ghost" : "secondary"} onClick={() => setShowArchived(false)}>Active</Button>
-                  <Button size="sm" variant={showArchived ? "secondary" : "ghost"} onClick={() => setShowArchived(true)}>Archived</Button>
-                </div>
+                {pills}
                 <p className="text-xs text-muted-foreground">{customers.length} customers</p>
               </div>
               {customers.length === 0 ? (
@@ -198,6 +212,7 @@ function UsersPage() {
                 </ul>
               )}
             </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>
