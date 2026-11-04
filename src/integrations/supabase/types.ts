@@ -542,6 +542,8 @@ export type Database = {
       customers: {
         Row: {
           akta_path: string | null
+          archived_at: string | null
+          archived_by: string | null
           company_name: string | null
           created_at: string
           customer_code: string
@@ -564,6 +566,8 @@ export type Database = {
         }
         Insert: {
           akta_path?: string | null
+          archived_at?: string | null
+          archived_by?: string | null
           company_name?: string | null
           created_at?: string
           customer_code: string
@@ -586,6 +590,8 @@ export type Database = {
         }
         Update: {
           akta_path?: string | null
+          archived_at?: string | null
+          archived_by?: string | null
           company_name?: string | null
           created_at?: string
           customer_code?: string

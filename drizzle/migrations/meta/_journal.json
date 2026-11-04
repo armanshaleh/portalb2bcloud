@@ -43,6 +43,13 @@
       "when": 1793691141393,
       "tag": "0005_preorders_contracts",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793825404553,
+      "tag": "0006_customer_archive",
+      "breakpoints": true
     }
   ]
 }
