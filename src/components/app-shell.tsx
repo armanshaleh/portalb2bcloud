@@ -257,7 +257,7 @@ export function AppShell({
 
 function Label({ show, children }: { show: boolean; children: ReactNode }) {
   return (
-    <span className={cn("truncate transition-opacity duration-200 ease-out", show ? "opacity-100 delay-100" : "w-0 opacity-0")}>
+    <span className={cn("truncate transition-opacity duration-200 ease-out", show ? "opacity-100 delay-100" : "hidden")}>
       {children}
     </span>
   );
