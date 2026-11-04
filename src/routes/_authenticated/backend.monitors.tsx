@@ -175,6 +175,15 @@ function BackendMonitors() {
           </div>
         )}
 
+        {config.data && !config.data.allowed && (
+          <div className="glass flex items-center justify-between gap-3 rounded-3xl border p-5">
+            <p className="font-display font-semibold">Monitors</p>
+            <Button size="sm" onClick={() => setDraft(EMPTY)}>
+              <Plus /> Add monitor
+            </Button>
+          </div>
+        )}
+
         {isLoading ? (
           <div className="flex justify-center py-20">
             <Loader2 className="h-6 w-6 animate-spin text-primary" />
