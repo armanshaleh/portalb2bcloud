@@ -12,4 +12,6 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Pre-bundle chart lib so first chart load doesn't re-optimize deps (duplicate React crash).
+  vite: { optimizeDeps: { include: ["recharts"] } },
 });
