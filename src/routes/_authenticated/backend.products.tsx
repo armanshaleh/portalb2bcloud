@@ -107,7 +107,7 @@ function Products() {
             <Input type="number" placeholder="Monthly price" value={form.unit_price} onChange={(e) => setForm({ ...form, unit_price: e.target.value })} />
             <Input type="number" placeholder="Setup fee" value={form.setup_fee} onChange={(e) => setForm({ ...form, setup_fee: e.target.value })} />
           </div>
-          <div className="flex justify-start border-t border-border/40 pt-4"><Button size="sm" onClick={() => void addProduct()}><Plus className="h-4 w-4" /> Add product</Button></div>
+          <div className="-mt-1 flex justify-start"><Button size="sm" onClick={() => void addProduct()}><Plus className="h-4 w-4" /> Add product</Button></div>
           {products.isLoading ? <Loader2 className="h-5 w-5 animate-spin text-primary" /> : (
             <div className="divide-y rounded-2xl border">
               {(products.data ?? []).map((p) => (
@@ -139,7 +139,7 @@ function Products() {
             <Input type="number" placeholder="Price" value={price.unit_price} onChange={(e) => setPrice({ ...price, unit_price: e.target.value })} />
             <Input type="number" placeholder="Setup fee" value={price.setup_fee} onChange={(e) => setPrice({ ...price, setup_fee: e.target.value })} />
           </div>
-          <div className="flex justify-start border-t border-border/40 pt-4"><Button size="sm" onClick={() => void savePrice()}>Save private price</Button></div>
+          <div className="-mt-1 flex justify-start"><Button size="sm" onClick={() => void savePrice()}>Save private price</Button></div>
           <div className="divide-y rounded-2xl border">
             {(prices.data ?? []).map((p) => (
               <div key={p.id} className="flex items-center justify-between px-4 py-3 text-sm">
@@ -155,8 +155,8 @@ function Products() {
         <section className="glass space-y-3 rounded-3xl border p-5">
           <h2 className="font-display font-semibold">Pro-rata calculator</h2>
           <div className="grid max-w-lg gap-2 sm:grid-cols-2">
-            <div className="space-y-1.5"><Label>Monthly price</Label><Input type="number" value={calc.monthly} onChange={(e) => setCalc({ ...calc, monthly: e.target.value })} /></div>
-            <div className="space-y-1.5"><Label>Activation date</Label><Input type="date" value={calc.date} onChange={(e) => setCalc({ ...calc, date: e.target.value })} /></div>
+            <div className="space-y-2.5"><Label>Monthly price</Label><Input type="number" value={calc.monthly} onChange={(e) => setCalc({ ...calc, monthly: e.target.value })} /></div>
+            <div className="space-y-2.5"><Label>Activation date</Label><Input type="date" value={calc.date} onChange={(e) => setCalc({ ...calc, date: e.target.value })} /></div>
           </div>
           {pr !== null && <p className="text-sm">First-month charge: <span className="font-semibold">{formatIDR(pr)}</span></p>}
         </section>

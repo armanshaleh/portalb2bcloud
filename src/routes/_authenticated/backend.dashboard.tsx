@@ -443,12 +443,10 @@ function BackendDashboard() {
                 <p className="mb-2 font-medium">Contacts</p>
                 <div className="space-y-1">
                   {detail.data.contacts.map((ct) => (
-                    <div key={ct.id} className="flex justify-between text-muted-foreground">
-                      <span>
-                        <Badge variant="outline" className="mr-2 text-[10px]">{ct.contact_type}</Badge>
-                        {ct.name} · {ct.position ?? "—"}
-                      </span>
-                      <span>{ct.email}{ct.phone ? ` · ${ct.phone}` : ""}</span>
+                    <div key={ct.id} className="grid grid-cols-[6rem_1fr_auto] items-center gap-3 text-muted-foreground">
+                      <Badge variant="outline" className="w-full justify-center text-[10px]">{ct.contact_type}</Badge>
+                      <span className="truncate">{ct.name} · {ct.position ?? "—"}</span>
+                      <span className="text-right">{ct.email}{ct.phone ? ` · ${ct.phone}` : ""}</span>
                     </div>
                   ))}
                 </div>
