@@ -194,14 +194,12 @@ function UserDashboard() {
                   </CardHeader>
                   <CardContent className="space-y-2 text-sm">
                     {overview.contacts.map((ct) => (
-                      <div key={ct.id} className="flex items-center justify-between">
-                        <span>
-                          <Badge variant="outline" className="mr-2 text-[10px]">
-                            {ct.contact_type}
-                          </Badge>
-                          {ct.name}
-                        </span>
-                        <span className="text-muted-foreground">{ct.email}</span>
+                      <div key={ct.id} className="grid grid-cols-[6rem_1fr_auto] items-center gap-3">
+                        <Badge variant="outline" className="w-full justify-center text-[10px]">
+                          {ct.contact_type}
+                        </Badge>
+                        <span className="truncate">{ct.name}</span>
+                        <span className="text-right text-muted-foreground">{ct.email}</span>
                       </div>
                     ))}
                     {overview.contacts.length === 0 && (

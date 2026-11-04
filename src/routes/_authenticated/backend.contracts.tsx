@@ -94,22 +94,22 @@ function BackendContracts() {
       <div className="mx-auto grid max-w-6xl gap-5 lg:grid-cols-[360px_1fr]">
         <div className="glass space-y-3 rounded-3xl border p-5">
           <p className="font-semibold">Upload contract</p>
-          <div className="space-y-1.5"><Label>Customer</Label>
+          <div className="space-y-2.5"><Label>Customer</Label>
             <Select value={form.customerId} onValueChange={(v) => setForm({ ...form, customerId: v })}>
               <SelectTrigger><SelectValue placeholder="Select customer" /></SelectTrigger>
               <SelectContent>{(customers.data ?? []).map((c) => <SelectItem key={c.id} value={c.id}>{c.customer_code} · {c.company_name ?? c.full_name}</SelectItem>)}</SelectContent>
             </Select>
           </div>
-          <div className="space-y-1.5"><Label>Title</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} maxLength={200} /></div>
-          <div className="space-y-1.5"><Label>Type</Label>
+          <div className="space-y-2.5"><Label>Title</Label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} maxLength={200} /></div>
+          <div className="space-y-2.5"><Label>Type</Label>
             <Select value={form.contractType} onValueChange={(v) => setForm({ ...form, contractType: v as (typeof TYPES)[number] })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>{TYPES.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
             </Select>
           </div>
           <div className="grid grid-cols-2 gap-2">
-            <div className="space-y-1.5"><Label>Start</Label><Input type="date" value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} /></div>
-            <div className="space-y-1.5"><Label>End</Label><Input type="date" value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })} /></div>
+            <div className="space-y-2.5"><Label>Start</Label><Input type="date" value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} /></div>
+            <div className="space-y-2.5"><Label>End</Label><Input type="date" value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })} /></div>
           </div>
           <UploadField docType="OTHER" label="File (PDF/JPG/PNG, max 10 MB)" value={file} onChange={setFile} disabled={busy} />
           <Button className="w-full" disabled={busy} onClick={() => void submit()}>
