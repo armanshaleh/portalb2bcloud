@@ -40,3 +40,10 @@ PT Arta Teletama Teknologi ("Wise Cloud — Built with Trust.", document prefix 
 - [ ] App emails (invoice issued, E-Pass, verification) — waiting on sender email domain setup
 - [ ] Service inventory: rack / U position / IP / VLAN
 - [x] Client self-service PIC contacts
+
+## Full functional QA — 5 November 2026
+- [ ] Test staff navigation and actions with an authenticated session.
+- [ ] Test invitations, IND/ENT registration, sign-in and customer verification using isolated QA records.
+- [ ] Test customer orders, billing, uploads, contracts, contacts, tickets, monitors and notifications.
+- [ ] Test user management, role restrictions, reports, audit logs and lifecycle rules.
+- [ ] Fix confirmed failures, run regression tests and record remaining external blockers.
