@@ -18,7 +18,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "Portal B2B"
+const SITE_NAME = "Wise Cloud"
 const ROOT_DOMAIN = "artawise.com"
 
 // Sample data for preview mode ONLY (not used in actual email sending).
