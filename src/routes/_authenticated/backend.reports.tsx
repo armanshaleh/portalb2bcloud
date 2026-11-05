@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { getMyIdentity } from "@/lib/identity.functions";
+import { reportTotals } from "@/lib/report-totals";
 import { formatDate, formatIDR } from "@/lib/format";
 import { AppShell } from "@/components/app-shell";
 import { Button } from "@/components/ui/button";
@@ -59,14 +60,7 @@ function Reports() {
   });
 
   const stats = useMemo(() => {
-    const inv = (docs.data ?? []).filter((d) => d.doc_type === "INV" && d.status !== "CANCELLED" && d.status !== "REJECTED");
-    const sum = (arr: typeof inv) => arr.reduce((s, d) => s + Number(d.total), 0);
-    return {
-      invoiced: sum(inv),
-      paid: sum(inv.filter((d) => d.status === "PAID")),
-      outstanding: sum(inv.filter((d) => d.status !== "PAID")),
-      vat: inv.reduce((s, d) => s + Number(d.vat), 0),
-    };
+    return reportTotals(docs.data ?? []);
   }, [docs.data]);
 
   async function exportXlsx() {

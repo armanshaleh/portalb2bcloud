@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
+import { validateUpload } from "@/lib/file-validation";
 
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const ALLOWED_MIME = ["image/jpeg", "image/png", "application/pdf"] as const;
@@ -49,7 +50,7 @@ export const registerCustomerSchema = z.object({
     accountNumber: z.string().trim().min(1).max(64),
     accountName: z.string().trim().min(1).max(160),
   }),
-  documents: z.array(documentSchema).min(1).max(8),
+  documents: z.array(documentSchema).min(1).max(8).refine((docs) => new Set(docs.map((d) => d.docType)).size === docs.length, "Duplicate document types are not allowed."),
 });
 
 export type RegisterCustomerInput = z.infer<typeof registerCustomerSchema>;
@@ -113,13 +114,14 @@ export const registerCustomer = createServerFn({ method: "POST" })
         return { ok: false, error: "A required verification document is missing." };
       }
     }
-    if (data.customerType === "ENT" && (!data.companyName || !data.npwpNumber)) {
-      return { ok: false, error: "Corporate registration requires company name and NPWP." };
+    if (data.customerType === "ENT" && (!data.companyName || !data.npwpNumber || !data.nibNumber || !data.kemenkumhamSk || !data.directorName || !data.directorKtpNumber || !data.technicalContact)) {
+      return { ok: false, error: "Complete corporate identity and both contacts are required." };
     }
     if (data.customerType === "IND" && (!data.fullName || !data.ktpNumber)) {
       return { ok: false, error: "Personal registration requires full name and KTP." };
     }
 
+    try { data.documents.forEach(validateUpload); } catch (e) { return { ok: false, error: e instanceof Error ? e.message : "Invalid document." }; }
     const { data: created, error: createError } = await supabaseAdmin.auth.admin.createUser({
       email: data.email.toLowerCase(),
       password: data.password,
@@ -138,16 +140,19 @@ export const registerCustomer = createServerFn({ method: "POST" })
     }
     const user = created.user;
 
+    let rollbackCustomerId: string | null = null;
+    const uploadedPaths: string[] = [];
     try {
       // Upload documents under the user's own folder with UUID names
       const docRows: Database["public"]["Tables"]["legal_documents"]["Insert"][] = [];
       for (const doc of data.documents) {
         const path = `${user.id}/${crypto.randomUUID()}.${mimeExtension(doc.mimeType)}`;
-        const bytes = base64ToBytes(doc.dataBase64);
+        const bytes = validateUpload(doc);
         const { error: uploadError } = await supabaseAdmin.storage
           .from("legal-documents")
           .upload(path, bytes, { contentType: doc.mimeType, upsert: false });
         if (uploadError) throw new Error("upload");
+        uploadedPaths.push(path);
         docRows.push({
           customer_id: "", // set after the customer row is created
           doc_type: doc.docType,
@@ -181,9 +186,11 @@ export const registerCustomer = createServerFn({ method: "POST" })
       if (customerError || !customer) throw new Error("customer");
 
       const customerId = customer.id as string;
-      await supabaseAdmin.from("legal_documents").insert(
+      rollbackCustomerId = customerId;
+      const { error: documentError } = await supabaseAdmin.from("legal_documents").insert(
         docRows.map((row) => ({ ...row, customer_id: customerId })),
       );
+      if (documentError) throw new Error("documents");
 
       const contactRows: Database["public"]["Tables"]["customer_contacts"]["Insert"][] = [];
       if (data.customerType === "ENT") {
@@ -215,9 +222,10 @@ export const registerCustomer = createServerFn({ method: "POST" })
           position: "Owner",
         });
       }
-      await supabaseAdmin.from("customer_contacts").insert(contactRows);
+      const { error: contactError } = await supabaseAdmin.from("customer_contacts").insert(contactRows);
+      if (contactError) throw new Error("contacts");
 
-      await supabaseAdmin.from("bank_accounts").insert({
+      const { error: bankError } = await supabaseAdmin.from("bank_accounts").insert({
         customer_id: customerId,
         account_type: data.customerType === "ENT" ? "CORPORATE" : "PERSONAL",
         bank_name: data.bankAccount.bankName,
@@ -225,8 +233,9 @@ export const registerCustomer = createServerFn({ method: "POST" })
         account_name: data.bankAccount.accountName,
         is_primary: true,
       });
+      if (bankError) throw new Error("bank");
 
-      await supabaseAdmin.from("audit_logs").insert({
+      const { error: auditError } = await supabaseAdmin.from("audit_logs").insert({
         actor_id: user.id,
         actor_email: data.email.toLowerCase(),
         action: "customer.registered",
@@ -234,14 +243,22 @@ export const registerCustomer = createServerFn({ method: "POST" })
         entity_id: customerId,
         details: { customer_code: customer.customer_code, customer_type: data.customerType },
       });
+      if (auditError) throw new Error("audit");
 
-      await supabaseAdmin
+      const { data: accepted, error: acceptError } = await supabaseAdmin
         .from("client_invitations")
         .update({ accepted_at: new Date().toISOString() })
-        .eq("id", invite.id);
+        .eq("id", invite.id).is("accepted_at", null).is("revoked_at", null).gt("expires_at", new Date().toISOString()).select("id").maybeSingle();
+      if (acceptError || !accepted) throw new Error("invitation");
 
       return { ok: true, customerCode: customer.customer_code as string };
     } catch {
+      if (rollbackCustomerId) {
+        await supabaseAdmin.from("audit_logs").delete().eq("entity_id", rollbackCustomerId).eq("action", "customer.registered");
+        for (const table of ["legal_documents", "customer_contacts", "bank_accounts"] as const) await supabaseAdmin.from(table).delete().eq("customer_id", rollbackCustomerId);
+        await supabaseAdmin.from("customers").delete().eq("id", rollbackCustomerId);
+      }
+      if (uploadedPaths.length) await supabaseAdmin.storage.from("legal-documents").remove(uploadedPaths);
       // Full rollback: remove uploaded files and the just-created auth user
       try {
         const { data: listed } = await supabaseAdmin.storage.from("legal-documents").list(user.id);

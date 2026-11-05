@@ -57,6 +57,7 @@ import {
 
 export const Route = createFileRoute("/_authenticated/backend/dashboard")({
   ssr: false,
+  head: () => ({ meta: [{ title: "Customer overview · Wise Cloud Backend" }, { name: "description", content: "Customer verification, account status and operational overview." }, { property: "og:title", content: "Customer overview · Wise Cloud Backend" }, { property: "og:description", content: "Wise Cloud customer verification and operational overview." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   beforeLoad: async () => {
     const identity = await getMyIdentity();
     if (!identity.isStaff) throw redirect({ to: "/user/dashboard" });
@@ -101,7 +102,7 @@ function BackendDashboard() {
 
   const detail = useQuery({
     queryKey: ["customer-detail", selectedId],
-    queryFn: () => detailFn({ data: { customerId: selectedId! } }),
+    queryFn: () => { if (!selectedId) throw new Error("Select a customer."); return detailFn({ data: { customerId: selectedId } }); },
     enabled: Boolean(selectedId),
   });
 
@@ -119,13 +120,13 @@ function BackendDashboard() {
   const verified = customers.filter((c) => c.status === "VERIFIED");
   const suspended = customers.filter((c) => c.status === "SUSPENDED");
 
-  async function handleStatus(action: StatusAction, note?: string) {
-    if (!selectedId) return;
+  async function handleStatus(action: StatusAction, note?: string, targetId = selectedId) {
+    if (!targetId) return;
     setActionBusy(true);
     const payload =
       note === undefined
-        ? { customerId: selectedId, action }
-        : { customerId: selectedId, action, note };
+        ? { customerId: targetId, action }
+        : { customerId: targetId, action, note };
     const res = await statusFn({ data: payload });
     setActionBusy(false);
     if (!res.ok) {
@@ -300,7 +301,7 @@ function BackendDashboard() {
                                 size="sm"
                                 variant="outline"
                                 disabled={actionBusy}
-                                onClick={() => void handleStatus("reactivate")}
+                                onClick={() => void handleStatus("reactivate", undefined, c.id)}
                               >
                                 Unsuspend
                               </Button>
@@ -310,7 +311,7 @@ function BackendDashboard() {
                                 variant="outline"
                                 className="text-destructive"
                                 disabled={actionBusy}
-                                onClick={() => void handleStatus("suspend")}
+                                onClick={() => void handleStatus("suspend", undefined, c.id)}
                               >
                                 Suspend
                               </Button>

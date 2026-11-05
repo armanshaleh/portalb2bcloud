@@ -58,28 +58,32 @@ export const Route = createFileRoute("/api/public/uptime/webhook")({
         }
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-        const { data: monitor } = await supabaseAdmin
+        const { data: monitor, error: lookupError } = await supabaseAdmin
           .from("network_monitors")
           .select("id")
           .eq("kuma_monitor_id", kumaId)
           .maybeSingle();
+        if (lookupError) return new Response("Monitor lookup failed", { status: 500 });
         if (!monitor) return Response.json({ ok: true, ignored: "unlinked monitor" });
 
         const status = KUMA_STATUS[body.heartbeat.status as 0 | 1 | 2 | 3];
         const latency = typeof body.heartbeat.ping === "number" ? body.heartbeat.ping : null;
         const checkedAt = parseKumaTime(body.heartbeat.time);
 
-        await supabaseAdmin.from("monitor_heartbeats").insert({
+        const { error: heartbeatError } = await supabaseAdmin.from("monitor_heartbeats").insert({
           monitor_id: monitor.id,
           status,
           latency_ms: latency,
           message: body.heartbeat.msg?.slice(0, 500) ?? null,
           checked_at: checkedAt,
         });
-        await supabaseAdmin
+        if (heartbeatError) return new Response("Heartbeat save failed", { status: 500 });
+        const { error: updateError } = await supabaseAdmin
           .from("network_monitors")
           .update({ status, last_latency_ms: latency, last_checked_at: checkedAt })
-          .eq("id", monitor.id);
+          .eq("id", monitor.id)
+          .or(`last_checked_at.is.null,last_checked_at.lte.${checkedAt}`);
+        if (updateError) return new Response("Monitor update failed", { status: 500 });
 
         return Response.json({ ok: true });
       },

@@ -1102,6 +1102,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      account_enabled: { Args: { _user_id: string }; Returns: boolean }
+      apply_billing_stage: {
+        Args: { _body: string; _id: string; _stage: string; _title: string }
+        Returns: boolean
+      }
       can_view_monitor: { Args: { _monitor_id: string }; Returns: boolean }
       has_role: {
         Args: {
@@ -1112,6 +1117,21 @@ export type Database = {
       }
       is_staff: { Args: { _user_id: string }; Returns: boolean }
       owns_customer: { Args: { _customer_id: string }; Returns: boolean }
+      replace_monitor_assignments: {
+        Args: { _customer_ids: string[]; _monitor_id: string }
+        Returns: undefined
+      }
+      review_preorder_atomic: {
+        Args: {
+          _action: string
+          _actor: string
+          _id: string
+          _items: Json
+          _note: string
+          _totals: Json
+        }
+        Returns: Json
+      }
     }
     Enums: {
       announcement_category:

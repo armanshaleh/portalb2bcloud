@@ -27,6 +27,7 @@ import { Separator } from "@/components/ui/separator";
 
 export const Route = createFileRoute("/_authenticated/user/dashboard")({
   ssr: false,
+  head: () => ({ meta: [{ title: "Account overview · Wise Cloud Portal" }, { name: "description", content: "Your Wise Cloud account, services, documents and contacts." }, { property: "og:title", content: "Account overview · Wise Cloud Portal" }, { property: "og:description", content: "Your Wise Cloud account and service overview." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   beforeLoad: async () => {
     const identity = await getMyIdentity();
     if (identity.isStaff) throw redirect({ to: "/backend/dashboard" });

@@ -110,8 +110,8 @@ export const transitionBillingDocument = createServerFn({ method: "POST" })
       patch = { status: "CANCELLED" };
     }
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("billing_documents").update(patch as never).eq("id", data.id);
-    if (error) throw new Error("Could not update document.");
+    const { data: updated, error } = await supabaseAdmin.from("billing_documents").update(patch as never).eq("id", data.id).eq("status", doc.status).select("id").maybeSingle();
+    if (error || !updated) throw new Error("Document changed; refresh before trying again.");
     await supabaseAdmin.from("audit_logs").insert({
       actor_id: context.userId,
       action: `billing.${data.action}`,

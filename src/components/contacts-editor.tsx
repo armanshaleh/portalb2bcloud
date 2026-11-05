@@ -59,7 +59,7 @@ export function ContactsEditor({ customerId, contacts, onSaved }: { customerId: 
     onSaved();
   }
 
-  const set = (t: string, k: keyof Form, v: string) => setForms((f) => ({ ...f, [t]: { ...f[t]!, [k]: v } }));
+  const set = (t: string, k: keyof Form, v: string) => setForms((f) => ({ ...f, [t]: { ...(f[t] ?? toForm()), [k]: v } }));
 
   return (
     <>

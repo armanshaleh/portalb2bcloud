@@ -50,6 +50,20 @@
       "when": 1793825404553,
       "tag": "0006_customer_archive",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793866223596,
+      "tag": "0007_qa_access_ticket_integrity",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793866406413,
+      "tag": "0008_qa_atomic_workflows",
+      "breakpoints": true
     }
   ]
 }

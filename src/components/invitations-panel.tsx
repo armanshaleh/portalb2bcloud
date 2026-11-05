@@ -35,11 +35,14 @@ export function InvitationsPanel({ toolbar }: { toolbar?: React.ReactNode }) {
 
   async function handleCreate() {
     setBusy(true);
+    try {
     const res = await createFn({ data: { email, customerType: type, displayName: name } });
     setBusy(false);
     if (!res.ok) return void toast.error(res.error);
     setLink(`${window.location.origin}/register?token=${res.token}`);
     void refetch();
+    } catch { toast.error("Could not create the invitation. Please try again."); }
+    finally { setBusy(false); }
   }
 
   function reset() {

@@ -12,13 +12,26 @@ const TTL_MS = 4 * 60 * 60 * 1000;
 export function setRememberFlag(remember: boolean) {
   try {
     localStorage.setItem(REMEMBER_KEY, remember ? "1" : "0");
+    localStorage.setItem(LAST_ACTIVE_KEY, String(Date.now()));
   } catch {
     /* storage unavailable */
   }
 }
 
 export function watchSessionWindow(client: SupabaseClient): () => void {
+  let signingOut = false;
+  function expired() {
+    try {
+      const last = Number(localStorage.getItem(LAST_ACTIVE_KEY) ?? 0);
+      if (localStorage.getItem(REMEMBER_KEY) === "0" && last && Date.now() - last >= TTL_MS) {
+        if (!signingOut) { signingOut = true; void client.auth.signOut(); }
+        return true;
+      }
+    } catch { /* storage unavailable */ }
+    return false;
+  }
   function touch() {
+    if (expired()) return;
     try {
       localStorage.setItem(LAST_ACTIVE_KEY, String(Date.now()));
     } catch {
@@ -26,27 +39,18 @@ export function watchSessionWindow(client: SupabaseClient): () => void {
     }
   }
 
-  try {
-    const remember = localStorage.getItem(REMEMBER_KEY);
-    const last = Number(localStorage.getItem(LAST_ACTIVE_KEY) ?? 0);
-    if (remember === "0" && last && Date.now() - last > TTL_MS) {
-      localStorage.removeItem(REMEMBER_KEY);
-      localStorage.removeItem(LAST_ACTIVE_KEY);
-      void client.auth.signOut();
-      return () => {};
-    }
-  } catch {
-    /* storage unavailable */
-  }
-
-  touch();
-  const interval = window.setInterval(touch, 60_000);
+  if (expired()) return () => {};
+  if (!localStorage.getItem(LAST_ACTIVE_KEY)) touch();
+  const interval = window.setInterval(expired, 60_000);
   const onVisible = () => {
-    if (!document.hidden) touch();
+    if (!document.hidden) expired();
   };
+  const events = ["pointerdown", "keydown", "scroll", "touchstart"] as const;
+  events.forEach((event) => window.addEventListener(event, touch, { passive: true }));
   document.addEventListener("visibilitychange", onVisible);
   return () => {
     window.clearInterval(interval);
+    events.forEach((event) => window.removeEventListener(event, touch));
     document.removeEventListener("visibilitychange", onVisible);
   };
 }

@@ -4,17 +4,14 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 type Ctx = { supabase: import("@supabase/supabase-js").SupabaseClient; userId: string };
 
-async function myRoles(ctx: Ctx) {
-  const { data } = await ctx.supabase.from("user_roles").select("role").eq("user_id", ctx.userId);
-  return (data ?? []).map((r) => r.role as string);
-}
-
 /** User management is limited to superuser and admin. */
 async function assertManager(ctx: Ctx) {
-  const roles = await myRoles(ctx);
-  const superuser = roles.includes("superuser");
-  if (!superuser && !roles.includes("admin")) throw new Error("Forbidden: admin role required.");
-  return { superuser };
+  const [{ data: superuser }, { data: admin }] = await Promise.all([
+    ctx.supabase.rpc("has_role", { _user_id: ctx.userId, _role: "superuser" }),
+    ctx.supabase.rpc("has_role", { _user_id: ctx.userId, _role: "admin" }),
+  ]);
+  if (!superuser && !admin) throw new Error("Forbidden: admin role required.");
+  return { superuser: Boolean(superuser) };
 }
 
 export type StaffUser = { userId: string; email: string; name: string; roles: string[]; createdAt: string; lastSignIn: string | null };
@@ -130,8 +127,18 @@ export const sendResetLink = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((i: unknown) => z.object({ email: z.string().email(), redirectTo: z.string().url() }).parse(i))
   .handler(async ({ context, data }) => {
-    await assertManager(context as Ctx);
+    const { superuser } = await assertManager(context as Ctx);
+    const { data: roleRows, error: roleError } = await context.supabase.from("user_roles").select("user_id,role");
+    if (roleError) throw new Error("Could not check account permissions.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (!superuser) {
+      for (const row of roleRows ?? []) {
+        if (row.role !== "superuser" && row.role !== "admin") continue;
+        const { data: target } = await supabaseAdmin.auth.admin.getUserById(row.user_id);
+        if (target.user?.email?.toLowerCase() === data.email.toLowerCase())
+          await guardTarget(context as Ctx, superuser, row.user_id);
+      }
+    }
     const { error } = await supabaseAdmin.auth.resetPasswordForEmail(data.email, { redirectTo: data.redirectTo });
     if (error) return { ok: false as const, error: error.message };
     return { ok: true as const };
@@ -157,17 +164,23 @@ export const archiveCustomer = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertManager(context as Ctx);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: c } = await supabaseAdmin.from("customers").select("id, user_id").eq("id", data.customerId).maybeSingle();
+    const { data: c } = await supabaseAdmin.from("customers").select("id, user_id, archived_at, archived_by").eq("id", data.customerId).maybeSingle();
     if (!c) return { ok: false as const, error: "Customer not found." };
     const now = new Date().toISOString();
-    await supabaseAdmin
+    const { error: archiveError } = await supabaseAdmin
       .from("customers")
       .update(data.archive ? { archived_at: now, archived_by: context.userId } : { archived_at: null, archived_by: null })
       .eq("id", c.id);
+    if (archiveError) return { ok: false as const, error: "Could not update the customer archive." };
     if (data.archive) {
-      await supabaseAdmin.from("user_services").update({ status: "SUSPENDED", suspended_at: now }).eq("customer_id", c.id).eq("status", "ACTIVE");
+      const { error: serviceError } = await supabaseAdmin.from("user_services").update({ status: "SUSPENDED", suspended_at: now }).eq("customer_id", c.id).eq("status", "ACTIVE");
+      if (serviceError) return { ok: false as const, error: "Customer access is blocked, but service suspension failed. Retry the archive." };
     }
-    await supabaseAdmin.auth.admin.updateUserById(c.user_id, { ban_duration: data.archive ? "876000h" : "none" });
+    const { error: banError } = await supabaseAdmin.auth.admin.updateUserById(c.user_id, { ban_duration: data.archive ? "876000h" : "none" });
+    if (banError) {
+      if (!data.archive) await supabaseAdmin.from("customers").update({ archived_at: c.archived_at, archived_by: c.archived_by }).eq("id", c.id);
+      return { ok: false as const, error: "Could not update login access. Retry the operation." };
+    }
     await supabaseAdmin.from("audit_logs").insert({
       actor_id: context.userId, action: data.archive ? "CUSTOMER_ARCHIVED" : "CUSTOMER_RESTORED", entity_type: "customer", entity_id: c.id,
     });

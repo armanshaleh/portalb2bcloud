@@ -73,9 +73,10 @@ export function TicketThread({ ticket, staff }: { ticket: Ticket; staff: boolean
   async function send() {
     if (!body.trim()) return;
     const { data: u } = await supabase.auth.getUser();
+    if (!u.user || ticket.status === "CLOSED") return;
     const { error } = await supabase
       .from("ticket_messages")
-      .insert({ ticket_id: ticket.id, body: body.trim(), is_staff: staff, author_id: u.user!.id });
+      .insert({ ticket_id: ticket.id, body: body.trim(), is_staff: staff, author_id: u.user.id });
     if (error) {
       toast.error(error.message);
       return;
@@ -85,8 +86,9 @@ export function TicketThread({ ticket, staff }: { ticket: Ticket; staff: boolean
   }
 
   async function openFile() {
+    if (!ticket.attachment_path) return;
     try {
-      const { url } = await fileFn({ data: { path: ticket.attachment_path! } });
+      const { url } = await fileFn({ data: { path: ticket.attachment_path } });
       window.open(url, "_blank", "noopener");
     } catch {
       toast.error("File not available.");
@@ -111,7 +113,7 @@ export function TicketThread({ ticket, staff }: { ticket: Ticket; staff: boolean
           ))}
         </dl>
       )}
-      {ticket.epass_code && (
+      {ticket.epass_code && ticket.status === "APPROVED" && (
         <div className="rounded-2xl border border-success/30 bg-success/10 p-3 text-sm">
           <p className="text-xs text-muted-foreground">E-Pass code (show at DC security)</p>
           <p className="tabular-nums tracking-tight text-lg font-bold tracking-widest text-success">{ticket.epass_code}</p>
