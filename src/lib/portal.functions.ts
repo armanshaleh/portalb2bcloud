@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { validateUpload } from "@/lib/file-validation";
 
 const MAX = 10 * 1024 * 1024;
 const fileSchema = z.object({
@@ -12,10 +13,7 @@ const fileSchema = z.object({
 type FileIn = z.infer<typeof fileSchema>;
 
 async function storeFile(userId: string, file: FileIn) {
-  const binary = atob(file.dataBase64);
-  if (binary.length > MAX) throw new Error("File exceeds 10 MB.");
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  const bytes = validateUpload(file);
   const ext = file.mimeType === "application/pdf" ? "pdf" : file.mimeType === "image/png" ? "png" : "jpg";
   const path = `${userId}/${crypto.randomUUID()}.${ext}`;
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -87,7 +85,10 @@ export const createTicket = createServerFn({ method: "POST" })
       })
       .select("ticket_no")
       .single();
-    if (error || !t) throw new Error("Could not open ticket.");
+    if (error || !t) {
+      if (stored) { const { supabaseAdmin } = await import("@/integrations/supabase/client.server"); await supabaseAdmin.storage.from("legal-documents").remove([stored.path]); }
+      throw new Error("Could not open ticket.");
+    }
     return t;
   });
 

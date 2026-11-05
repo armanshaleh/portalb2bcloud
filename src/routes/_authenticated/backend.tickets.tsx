@@ -59,7 +59,8 @@ function StaffTickets() {
   const shown = filter === "ALL" ? data : data.filter((t) => t.status === filter);
 
   async function setStatus(t: Ticket, status: "IN_PROGRESS" | "APPROVED" | "REJECTED" | "CLOSED") {
-    const patch: { status: typeof status; epass_code?: string } = { status };
+    const patch: { status: typeof status; epass_code?: string | null } = { status };
+    if (status !== "APPROVED") patch.epass_code = null;
     if (status === "APPROVED" && t.category === "VISIT_DC" && !t.epass_code) patch.epass_code = makeEpass();
     const { error } = await supabase.from("tickets").update(patch).eq("id", t.id);
     if (error) return void toast.error(error.message);
