@@ -119,26 +119,17 @@ export const reviewPreOrder = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!po || po.status !== "PENDING_APPROVAL") throw new Error("Pre-order is no longer pending.");
     const customer = po.customers as { customer_type: "ENT" | "IND"; user_id: string };
-    const now = new Date().toISOString();
-    if (data.action === "reject") {
-      await supabaseAdmin.from("pre_orders").update({ status: "REJECTED", review_note: data.note ?? null, reviewed_by: context.userId, reviewed_at: now }).eq("id", po.id);
-      await supabaseAdmin.from("notifications").insert({ user_id: customer.user_id, title: "Pre-order rejected", body: data.note ?? null, link: "/user/orders" });
-      return { ok: true };
-    }
     const product = po.products as { name: string; unit_price: number; setup_fee: number };
     const { data: custom } = await supabaseAdmin
       .from("customer_prices").select("unit_price, setup_fee").eq("customer_id", po.customer_id).eq("product_id", po.product_id).maybeSingle();
     const { computeTotals, preOrderLines } = await import("@/lib/billing-calc");
     const items = preOrderLines(product.name, Number(custom?.unit_price ?? product.unit_price), Number(custom?.setup_fee ?? product.setup_fee), po.quantity, po.billing_cycle);
-    const { data: doc, error } = await supabaseAdmin
-      .from("billing_documents")
-      .insert({ doc_type: "QUO", customer_id: po.customer_id, notes: `From pre-order. ${po.notes ?? ""}`.trim(), created_by: context.userId, due_date: null, ...computeTotals(items, customer.customer_type) })
-      .select("id, doc_number").single();
-    if (error || !doc) throw new Error("Could not create quotation.");
-    await supabaseAdmin.from("billing_items").insert(items.map((i, idx) => ({ document_id: doc.id, ...i, amount: Math.round(i.quantity * i.unit_price), sort_order: idx })));
-    await supabaseAdmin.from("pre_orders").update({ status: "APPROVED", quotation_id: doc.id, review_note: data.note ?? null, reviewed_by: context.userId, reviewed_at: now }).eq("id", po.id);
-    await supabaseAdmin.from("notifications").insert({ user_id: customer.user_id, title: "Pre-order approved", body: `Quotation ${doc.doc_number ?? ""} is being prepared.`, link: "/user/orders" });
-    return { ok: true, docNumber: doc.doc_number };
+    const { data: result, error } = await supabaseAdmin.rpc("review_preorder_atomic", {
+      _id: data.id, _action: data.action, _actor: context.userId, _note: data.note ?? "",
+      _items: items, _totals: computeTotals(items, customer.customer_type),
+    });
+    if (error) throw new Error("Could not review pre-order; refresh its current status.");
+    return result as { ok: boolean; docNumber?: string };
   });
 
 /** Staff upload a confidential contract into the customer's private folder. */

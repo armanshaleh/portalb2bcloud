@@ -104,7 +104,8 @@ export const listAllMonitors = createServerFn({ method: "GET" })
     const views = await buildViews(context.supabase, monitors ?? []);
     return {
       monitors: views.map((v) => {
-        const raw = (monitors ?? []).find((m) => m.id === v.id)!;
+        const raw = (monitors ?? []).find((m) => m.id === v.id);
+        if (!raw) throw new Error("Monitor not found.");
         return {
           ...v,
           kuma_monitor_id: raw.kuma_monitor_id,
@@ -168,29 +169,10 @@ export const setMonitorAssignments = createServerFn({ method: "POST" })
   )
   .handler(async ({ context, data }) => {
     await assertStaff(context as Ctx);
-    const { data: current } = await context.supabase
-      .from("monitor_assignments")
-      .select("customer_id")
-      .eq("monitor_id", data.monitorId);
-    const have = new Set((current ?? []).map((r) => r.customer_id));
-    const want = new Set(data.customerIds);
-    const toRemove = [...have].filter((id) => !want.has(id));
-    const toAdd = [...want].filter((id) => !have.has(id));
-    if (toRemove.length) {
-      const { error } = await context.supabase
-        .from("monitor_assignments")
-        .delete()
-        .eq("monitor_id", data.monitorId)
-        .in("customer_id", toRemove);
-      if (error) return { ok: false };
-    }
-    if (toAdd.length) {
-      const { error } = await context.supabase
-        .from("monitor_assignments")
-        .insert(toAdd.map((customer_id) => ({ monitor_id: data.monitorId, customer_id })));
-      if (error) return { ok: false };
-    }
-    return { ok: true };
+    const { error } = await context.supabase.rpc("replace_monitor_assignments", {
+      _monitor_id: data.monitorId, _customer_ids: [...new Set(data.customerIds)],
+    });
+    return { ok: !error };
   });
 
 /** Superuser-only: the webhook token to paste into Uptime Kuma's notification headers. */

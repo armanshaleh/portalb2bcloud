@@ -29,25 +29,12 @@ export const Route = createFileRoute("/api/public/cron/billing-lifecycle")({
         for (const d of docs ?? []) {
           const stage = nextStage(d.due_date as string, today, d.lifecycle_stage);
           if (!stage) continue;
-          const userId = (d.customers as { user_id: string } | null)?.user_id;
-          if (userId) {
-            await supabaseAdmin.from("notifications").insert({
-              user_id: userId,
-              title: COPY[stage].title,
-              body: COPY[stage].body(d.doc_number ?? "Invoice"),
-              link: "/user/billing",
-            });
-          }
-          if (stage === "SUSPEND_7") {
-            await supabaseAdmin.from("customers").update({ status: "SUSPENDED" }).eq("id", d.customer_id);
-            await supabaseAdmin.from("user_services").update({ status: "SUSPENDED", suspended_at: today.toISOString() }).eq("customer_id", d.customer_id).eq("status", "ACTIVE");
-          }
-          if (stage === "TERMINATE_30") {
-            await supabaseAdmin.from("user_services").update({ status: "TERMINATED", terminated_at: today.toISOString() }).eq("customer_id", d.customer_id).neq("status", "TERMINATED");
-          }
-          await supabaseAdmin.from("billing_documents").update({ lifecycle_stage: stage }).eq("id", d.id);
-          await supabaseAdmin.from("audit_logs").insert({ action: `lifecycle.${stage}`, entity_type: "billing_document", entity_id: d.id });
-          applied += 1;
+          const { data: changed, error: stageError } = await supabaseAdmin.rpc("apply_billing_stage", {
+            _id: d.id, _stage: stage, _title: COPY[stage].title,
+            _body: COPY[stage].body(d.doc_number ?? "Invoice"),
+          });
+          if (stageError) return Response.json({ ok: false, applied }, { status: 500 });
+          if (changed) applied += 1;
         }
         return Response.json({ ok: true, applied });
       },
