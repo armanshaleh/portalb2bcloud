@@ -1102,6 +1102,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      account_enabled: { Args: { _user_id: string }; Returns: boolean }
       can_view_monitor: { Args: { _monitor_id: string }; Returns: boolean }
       has_role: {
         Args: {
