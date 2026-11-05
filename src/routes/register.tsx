@@ -131,7 +131,7 @@ function RegisterPage() {
         fullName: res.customerType === "IND" ? res.displayName : f.fullName,
       }));
       setInvite({ state: "ok", displayName: res.displayName });
-    });
+    }).catch(() => setInvite({ state: "invalid", error: "Could not check the invitation. Please refresh to try again." }));
   }, [token, lookupFn]);
 
   const set = (key: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -179,6 +179,7 @@ function RegisterPage() {
         size: d.size,
         dataBase64: d.dataBase64,
       }));
+    try {
     const result = await registerFn({
       data: {
         inviteToken: token ?? "",
@@ -222,6 +223,11 @@ function RegisterPage() {
       return;
     }
     setDone(result.customerCode);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Registration failed. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (invite.state !== "ok" && !done) {

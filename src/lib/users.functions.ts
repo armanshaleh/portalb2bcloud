@@ -157,17 +157,23 @@ export const archiveCustomer = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     await assertManager(context as Ctx);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data: c } = await supabaseAdmin.from("customers").select("id, user_id").eq("id", data.customerId).maybeSingle();
+    const { data: c } = await supabaseAdmin.from("customers").select("id, user_id, archived_at, archived_by").eq("id", data.customerId).maybeSingle();
     if (!c) return { ok: false as const, error: "Customer not found." };
     const now = new Date().toISOString();
-    await supabaseAdmin
+    const { error: archiveError } = await supabaseAdmin
       .from("customers")
       .update(data.archive ? { archived_at: now, archived_by: context.userId } : { archived_at: null, archived_by: null })
       .eq("id", c.id);
+    if (archiveError) return { ok: false as const, error: "Could not update the customer archive." };
     if (data.archive) {
-      await supabaseAdmin.from("user_services").update({ status: "SUSPENDED", suspended_at: now }).eq("customer_id", c.id).eq("status", "ACTIVE");
+      const { error: serviceError } = await supabaseAdmin.from("user_services").update({ status: "SUSPENDED", suspended_at: now }).eq("customer_id", c.id).eq("status", "ACTIVE");
+      if (serviceError) return { ok: false as const, error: "Customer access is blocked, but service suspension failed. Retry the archive." };
     }
-    await supabaseAdmin.auth.admin.updateUserById(c.user_id, { ban_duration: data.archive ? "876000h" : "none" });
+    const { error: banError } = await supabaseAdmin.auth.admin.updateUserById(c.user_id, { ban_duration: data.archive ? "876000h" : "none" });
+    if (banError) {
+      if (!data.archive) await supabaseAdmin.from("customers").update({ archived_at: c.archived_at, archived_by: c.archived_by }).eq("id", c.id);
+      return { ok: false as const, error: "Could not update login access. Retry the operation." };
+    }
     await supabaseAdmin.from("audit_logs").insert({
       actor_id: context.userId, action: data.archive ? "CUSTOMER_ARCHIVED" : "CUSTOMER_RESTORED", entity_type: "customer", entity_id: c.id,
     });
