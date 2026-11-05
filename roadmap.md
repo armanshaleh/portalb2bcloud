@@ -42,8 +42,12 @@ PT Arta Teletama Teknologi ("Wise Cloud — Built with Trust.", document prefix 
 - [x] Client self-service PIC contacts
 
 ## Full functional QA — 5 November 2026
-- [ ] Test staff navigation and actions with an authenticated session.
-- [ ] Test invitations, IND/ENT registration, sign-in and customer verification using isolated QA records.
-- [ ] Test customer orders, billing, uploads, contracts, contacts, tickets, monitors and notifications.
-- [ ] Test user management, role restrictions, reports, audit logs and lifecycle rules.
-- [ ] Fix confirmed failures, run regression tests and record remaining external blockers.
+- [x] Open all staff and customer menus with authenticated sessions; no blank screens observed.
+- [x] Test IND/ENT invitation → registration → sign-in → verification, including single-use invitation rejection.
+- [x] Test order creation/approval/readback, invoice creation/approval/send/readback, payment-proof upload, contract upload/watermarked viewing, PIC save/reload, general ticket/reply, monitor assigned/unassigned visibility, and notification mark-read.
+- [x] Test operator creation/password reset/disable/enable, customer password reset/archive/restore, customer denial of staff pages, audit readback, Excel/Coretax downloads, and 24 regression tests.
+- [x] Fix confirmed persistence, session, reporting and access defects; latest preview build passed. QA customers archived and temporary operator disabled; labelled QA financial history retained.
+
+### QA coverage limitations
+- Full role-by-role negative tests, every DC ticket category/E-Pass, every billing document/reject/paid branch, password-reset email delivery, live cron effects, announcement publishing, and real heartbeat delivery are not fully end-to-end verified. The current pass must not be described as exhaustive.
+- External email delivery awaits sender domain; real Uptime Kuma connection remains intentionally deferred.
