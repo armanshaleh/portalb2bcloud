@@ -4,17 +4,14 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 type Ctx = { supabase: import("@supabase/supabase-js").SupabaseClient; userId: string };
 
-async function myRoles(ctx: Ctx) {
-  const { data } = await ctx.supabase.from("user_roles").select("role").eq("user_id", ctx.userId);
-  return (data ?? []).map((r) => r.role as string);
-}
-
 /** User management is limited to superuser and admin. */
 async function assertManager(ctx: Ctx) {
-  const roles = await myRoles(ctx);
-  const superuser = roles.includes("superuser");
-  if (!superuser && !roles.includes("admin")) throw new Error("Forbidden: admin role required.");
-  return { superuser };
+  const [{ data: superuser }, { data: admin }] = await Promise.all([
+    ctx.supabase.rpc("has_role", { _user_id: ctx.userId, _role: "superuser" }),
+    ctx.supabase.rpc("has_role", { _user_id: ctx.userId, _role: "admin" }),
+  ]);
+  if (!superuser && !admin) throw new Error("Forbidden: admin role required.");
+  return { superuser: Boolean(superuser) };
 }
 
 export type StaffUser = { userId: string; email: string; name: string; roles: string[]; createdAt: string; lastSignIn: string | null };
@@ -130,8 +127,18 @@ export const sendResetLink = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((i: unknown) => z.object({ email: z.string().email(), redirectTo: z.string().url() }).parse(i))
   .handler(async ({ context, data }) => {
-    await assertManager(context as Ctx);
+    const { superuser } = await assertManager(context as Ctx);
+    const { data: roleRows, error: roleError } = await context.supabase.from("user_roles").select("user_id,role");
+    if (roleError) throw new Error("Could not check account permissions.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    if (!superuser) {
+      for (const row of roleRows ?? []) {
+        if (row.role !== "superuser" && row.role !== "admin") continue;
+        const { data: target } = await supabaseAdmin.auth.admin.getUserById(row.user_id);
+        if (target.user?.email?.toLowerCase() === data.email.toLowerCase())
+          await guardTarget(context as Ctx, superuser, row.user_id);
+      }
+    }
     const { error } = await supabaseAdmin.auth.resetPasswordForEmail(data.email, { redirectTo: data.redirectTo });
     if (error) return { ok: false as const, error: error.message };
     return { ok: true as const };
