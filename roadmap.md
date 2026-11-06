@@ -51,3 +51,7 @@ PT Arta Teletama Teknologi ("Wise Cloud — Built with Trust.", document prefix 
 ### QA coverage limitations
 - Full role-by-role negative tests, every DC ticket category/E-Pass, every billing document/reject/paid branch, password-reset email delivery, live cron effects, announcement publishing, and real heartbeat delivery are not fully end-to-end verified. The current pass must not be described as exhaustive.
 - External email delivery awaits sender domain; real Uptime Kuma connection remains intentionally deferred.
+
+## Docker self-hosting preparation
+- [x] Add Dockerfile and env.example with safe build-time/public and runtime/private configuration.
+- [x] Document Docker usage and verify configuration with targeted tests; actual image build/start requires a Docker-enabled host (not available in the editor).

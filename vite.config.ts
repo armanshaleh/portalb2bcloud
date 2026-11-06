@@ -7,6 +7,10 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  // Docker selects Node; preserve Lovable's deployment target otherwise.
+  nitro: process.env["NITRO_PRESET"]
+    ? { preset: process.env["NITRO_PRESET"] }
+    : true,
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this

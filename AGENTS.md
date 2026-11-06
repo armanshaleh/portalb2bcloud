@@ -49,3 +49,4 @@
 - Validate private upload signatures and decoded byte lengths through the shared upload validator; caller metadata alone cannot establish file safety.
 - Database access helpers check current account eligibility, and ticket triggers validate required details and revoke inactive E-Passes; direct API calls must respect the same rules as forms.
 - Pre-order review, monitor assignment replacement and billing lifecycle effects use transactional database functions so partial failures cannot advance workflow state.
+- Docker self-hosting selects Nitro's Node preset through NITRO_PRESET and copies the entire output plus production dependencies; public VITE configuration is build-time only and private credentials are runtime-only to avoid baking secrets into images.
